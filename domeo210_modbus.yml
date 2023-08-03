@@ -1,0 +1,594 @@
+coils:
+- comments: null
+  data:
+  - count: 0
+    value: NOT INSTALLED
+  - count: 1
+    value: INSTALLED
+  default: 0
+  description: PRE-HEATING BATTERY
+  mode: R/W
+  register_number: 2
+- comments: null
+  data:
+  - count: 0
+    value: NOT INSTALLED
+  - count: 1
+    value: INSTALLED
+  default: 0
+  description: POST-HEATING BATTERY
+  mode: R/W
+  register_number: 3
+- comments: null
+  data:
+  - count: 0
+    value: 'NO'
+  - count: 1
+    value: NC
+  default: 0
+  description: SENSE OF SWITCH
+  mode: R/W
+  register_number: 4
+- comments: null
+  data:
+  - count: 0
+    value: STANDARD+ABSENCE
+  - count: 1
+    value: ALLEMAGNE+STANDBY
+  default: 0
+  description: SELECTION OF VERSION
+  mode: R/W
+  register_number: 6
+- comments: 'STANDBY OR ABSENCE ACCORDING TO
+
+    SELECTED VERSION'
+  data:
+  - count: 0
+    value: STANBY/ABSENCE ON
+  - count: 1
+    value: STANBY/ABSENCE OFF
+  default: 0
+  description: ACTIVATION MODE STANBY/ABSENCE
+  mode: R/W
+  register_number: 7
+- comments: null
+  data:
+  - count: 0
+    value: ACTIVED
+  - count: 1
+    value: DESACTIVED
+  default: 0
+  description: BYPASS AUTO CONTROL
+  mode: R/W
+  register_number: 8
+- comments: null
+  data:
+  - count: 0
+    value: DESACTIVED
+  - count: 1
+    value: ACTIVED
+  default: 0
+  description: MANUAL BYPASS
+  mode: R/W
+  register_number: 9
+- comments: null
+  data:
+  - count: 0
+    value: ACTIVED
+  - count: 1
+    value: ERROR RESET
+  default: null
+  description: RESET FILTER ALARM
+  mode: W
+  register_number: 12
+- comments: null
+  data:
+  - count: 0
+    value: ACTIVED
+  - count: 1
+    value: ERROR
+  default: null
+  description: RESET FACTORY PARAMETERS
+  mode: W
+  register_number: 13
+discrete_inputs:
+- comments: SELECTED VERSION
+  data:
+  - count: 0
+    value: STANDARD+ABSENCE
+  - count: 1
+    value: ALLEMAGNE+STANDBY
+  default: null
+  description: VERSION
+  mode: R
+  register_number: 1
+- comments: 'NO=NORMALLY OPEN - NC=NORMALLY
+
+    CLOSED'
+  data:
+  - count: 0
+    value: 'NO'
+  - count: 1
+    value: NC
+  default: null
+  description: FREE CONTACT
+  mode: R
+  register_number: 2
+- comments: null
+  data:
+  - count: 0
+    value: DESACTIVED
+  - count: 1
+    value: ACTIVED
+  default: null
+  description: DEFROOST MODE
+  mode: R
+  register_number: 5
+- comments: null
+  data:
+  - count: 0
+    value: OK
+  - count: 1
+    value: ERROR
+  default: null
+  description: EXTRACT MOTOR STATE
+  mode: R
+  register_number: 6
+- comments: null
+  data:
+  - count: 0
+    value: OK
+  - count: 1
+    value: ERROR
+  default: null
+  description: IMPUT MOTOR STATE
+  mode: R
+  register_number: 7
+- comments: null
+  data:
+  - count: 0
+    value: OK
+  - count: 1
+    value: ERROR
+  default: null
+  description: INSIDE TEMPERATURE SENSOR STATE  (Tint)
+  mode: R
+  register_number: 10
+- comments: null
+  data:
+  - count: 0
+    value: OK
+  - count: 1
+    value: ERROR
+  default: null
+  description: OUTSIDE TEMPERATURE SENSOR STATE (Tout)
+  mode: R
+  register_number: 11
+- comments: null
+  data:
+  - count: 0
+    value: OK
+  - count: 1
+    value: ERROR
+  default: null
+  description: EXTRACT TEMPERATURE SENSOR STATE (Text)
+  mode: R
+  register_number: 12
+- comments: null
+  data:
+  - count: 0
+    value: OK
+  - count: 1
+    value: ERROR
+  default: null
+  description: IMPUT TEMPERATURE SENSOR STATE(Timp)
+  mode: R
+  register_number: 13
+- comments: null
+  data:
+  - count: 0
+    value: 'OFF'
+  - count: 1
+    value: 'ON'
+  default: null
+  description: ALARM FILTERS STATE
+  mode: R
+  register_number: 14
+holding_registers:
+- comments: AFTER MODIFICATION, TO CONFIRM SWITCH OFF AND SWITCH ON THE MACHINE.
+  data:
+  - count: 1-247
+    value: null
+  default: 1
+  description: MODBUS NETWORK NUDE
+  mode: R/W
+  register_number: 0
+- comments: ''
+  data:
+  - count: 5
+    value: 4800
+  - count: 6
+    value: 9600
+  - count: 8
+    value: 19200
+  - count: 10
+    value: 38400
+  default: 19200
+  description: MODBUS NETWORK BAUDRATE
+  mode: R/W
+  register_number: 1
+- comments: null
+  data:
+  - count: "-15\u2026+15"
+    value: STEP OF  1 %
+  default: 0
+  description: UNBALANCE AIRFLOW SELECTION
+  mode: R/W
+  register_number: 8
+- comments: null
+  data:
+  - count: "60\u2026150"
+    value: M3/H
+  default: null
+  description: LOW AIRFLOW SETTING
+  mode: R/W
+  register_number: 9
+- comments: null
+  data:
+  - count: "120\u2026210"
+    value: M3/H
+  default: null
+  description: TEMPORISED 1/2H BOOST AIRFLOW SETTING
+  mode: R/W
+  register_number: 10
+- comments: null
+  data:
+  - count: "120\u2026210"
+    value: M3/H
+  default: null
+  description: FREECOOLING AIRFLOW SETTING
+  mode: R/W
+  register_number: 11
+- comments: null
+  data:
+  - count: 0
+    value: LOW
+  - count: 1
+    value: MEDIUM (GERMAN VERSION)/BOOST (STANDARD VERSION)
+  - count: 2
+    value: HIGH  (GERMAN VERSION)
+  default: 0
+  description: AIRFLOW SET
+  mode: R/W
+  register_number: 15
+- comments: null
+  data:
+  - count: "60\u2026[(Maximum set\n0-10V)-5m3/h]"
+    value: null
+  default: 60
+  description: MINIMUM SET  0-10V
+  mode: R/W
+  register_number: 16
+- comments: null
+  data:
+  - count: "[(Minimum set 0-10V)+5m3/h]\u20262\n10"
+    value: null
+  default: 210
+  description: MAXIMUM SETTING  0-10V
+  mode: R/W
+  register_number: 17
+- comments: null
+  data:
+  - count: "11\u202620"
+    value: "\xBAC"
+  default: 12
+  description: 'BYPASS AUTO: Text MINI'
+  mode: R/W
+  register_number: 22
+- comments: null
+  data:
+  - count: "21\u202630"
+    value: "\xBAC"
+  default: 24
+  description: 'BYPASS AUTO: Tint MINI'
+  mode: R/W
+  register_number: 23
+- comments: null
+  data:
+  - count: 1-24
+    value: HOURS
+  default: 8
+  description: TIMER MANUAL BYPASS
+  mode: R/W
+  register_number: 24
+- comments: null
+  data:
+  - count: "-15\u20265"
+    value: "\xBAC"
+  default: null
+  description: "PRE-HEATING BATTERY T\xBA ON"
+  mode: R/W
+  register_number: 25
+- comments: null
+  data:
+  - count: "-5\u202610"
+    value: "\xBAC"
+  default: null
+  description: "PRE-HEATING BATTERY T\xBA OFF"
+  mode: R/W
+  register_number: 26
+- comments: null
+  data:
+  - count: "1\u202610"
+    value: "\xBAC"
+  default: null
+  description: "PRE-HEATING BATTERY CONSTANT T\xBA"
+  mode: R/W
+  register_number: 27
+- comments: null
+  data:
+  - count: "12\u202630"
+    value: "\xBAC"
+  default: null
+  description: "POST-HEATING BATTERY CONSTANT T\xBA"
+  mode: R/W
+  register_number: 28
+- comments: null
+  data:
+  - count: 1-24
+    value: MONTH
+  default: null
+  description: TIMER FILTER ALARM SET
+  mode: R/W
+  register_number: 31
+input_registers:
+- comments: null
+  data:
+  - count: 0-999
+    value: SOFTWARE VERSION
+  default: null
+  description: SOFTWARE VERSION MAIN ELECTRONIC
+  mode: R
+  register_number: 6
+- comments: null
+  data:
+  - count: 0-999
+    value: SOFTWARE VERSION
+  default: null
+  description: SOFTWARE VERSION REMOTE CONTROL
+  mode: R
+  register_number: 7
+- comments: null
+  data:
+  - count: 0-999
+    value: SOFTWARE VERSION
+  default: null
+  description: SOFTWARE VERSION PROGRAMMATION UNIT
+  mode: R
+  register_number: 8
+- comments: HEAT RECOVERY UNITS WITH THE SAME ELECTRONIC BOARD
+  data:
+  - count: 0
+    value: 'D2EC: DOMEO 210 FL'
+  - count: 1
+    value: 'D2HU: DOMEO 210 + HYGRO SENSOR'
+  - count: 2
+    value: 'D2FL: DOMEO 210 CONSTANT AIRFLOW FL'
+  - count: 3
+    value: 'D2RF: DOMEO 210 CONSTANT AIRFLOW RADIO'
+  - count: 4
+    value: 'DHY: DOMEO HYGRO'
+  - count: 5
+    value: 'F2FL: FLEXEO 210 FL'
+  - count: 6
+    value: 'F3FL: FLEXEO 325 FL'
+  - count: 7
+    value: 'F2RF: FLEXEO 210 CONSTANT AIRFLOW RADIO'
+  - count: 8
+    value: 'F3RF: FLEXEO 325 CONSTANT AIRFLOW RADIO'
+  - count: 9
+    value: 'C3Q: CAD HE MINI/IDEO 300 CONSTANT AIRFLOW'
+  - count: 10
+    value: 'C4Q: CAD HE MINI/IDEO 450 CONSTANT AIRFLOW'
+  - count: 11
+    value: 'C3P: CAD HE MINI/IDEO 300 CONSTANT PRESSURE'
+  - count: 12
+    value: 'C4P: CAD HE MINI/IDEO 450 CONSTANT PRESSURE'
+  - count: 13
+    value: 'C3LC: CAD HE MINI/IDEO 300 CONSTANT SPEED'
+  - count: 14
+    value: 'C4LC: CAD HE MINI/IDEO 450 CONSTANT SPEED'
+  default: null
+  description: TYPE OF HEAT RECOVERY
+  mode: R
+  register_number: 9
+- comments: null
+  data:
+  - count: 0
+    value: CONSTANT PRESSURE
+  - count: 1
+    value: CONSTANT AIRFLOW
+  - count: 2
+    value: CONSTANT SPEED
+  - count: 3
+    value: PROPORTIONNAL BY HUMIDITY
+  - count: 4
+    value: PROPORTIONNAL BY 0-10V
+  - count: 5
+    value: SWITCH (ON/OFF)
+  default: null
+  description: TYPE OF CONTROL
+  mode: R
+  register_number: 10
+- comments: null
+  data:
+  - count: null
+    value: '% (POSITIVE OR NEGATIVE)'
+  default: null
+  description: DEPHASAGE DES DEBITS
+  mode: R
+  register_number: 12
+- comments: null
+  data:
+  - count: null
+    value: M3/H OR L/S
+  default: null
+  description: LOW AIRFLOW
+  mode: R
+  register_number: 13
+- comments: null
+  data:
+  - count: null
+    value: M3/H OR L/S
+  default: null
+  description: TEMPORIZED BOOST
+  mode: R
+  register_number: 14
+- comments: null
+  data:
+  - count: null
+    value: M3/H OR L/S
+  default: null
+  description: FREE COOLING
+  mode: R
+  register_number: 15
+- comments: null
+  data:
+  - count: null
+    value: M3/H OR L/S
+  default: null
+  description: CURRENT AIRFLOW
+  mode: R
+  register_number: 16
+- comments: null
+  data:
+  - count: 0-10000
+    value: mV
+  default: null
+  description: POWER 0-10V
+  mode: R
+  register_number: 17
+- comments: null
+  data:
+  - count: 0-3500
+    value: RPM
+  default: null
+  description: EXTRACT MOTOR SPEED
+  mode: R
+  register_number: 19
+- comments: null
+  data:
+  - count: 0-3500
+    value: RPM
+  default: null
+  description: INPUT MOTOR SPEED
+  mode: R
+  register_number: 20
+- comments: null
+  data:
+  - count: "-30\xBAC / +50\xBAC"
+    value: "INSIDE TEMPERATURE  (\xBAC)"
+  default: null
+  description: TEMPERATURE Tint
+  mode: R
+  register_number: 21
+- comments: null
+  data:
+  - count: "-30\xBAC / +50\xBAC"
+    value: "OUTSIDE TEMPERATURE(\xBAC)"
+  default: null
+  description: TEMPERATURE Tout
+  mode: R
+  register_number: 22
+- comments: null
+  data:
+  - count: "-30\xBAC / +50\xBAC"
+    value: "EXTRACT TEMPERATURE  (\xBAC)"
+  default: null
+  description: TEMPERATURE Text
+  mode: R
+  register_number: 23
+- comments: null
+  data:
+  - count: "-30\xBAC / +50\xBAC"
+    value: "INPUT TEMPERATURE (\xBAC)"
+  default: null
+  description: TEMPERATURE Timp
+  mode: R
+  register_number: 24
+- comments: null
+  data:
+  - count: 0
+    value: DESACTIVED
+  - count: 1
+    value: ACTIVED
+  - count: 2
+    value: ERROR
+  default: null
+  description: STATE OF BYPASS
+  mode: R
+  register_number: 25
+- comments: null
+  data:
+  - count: 0
+    value: 'OFF'
+  - count: 1
+    value: 'ON'
+  - count: 2
+    value: ERROR
+  default: null
+  description: STATE OF PRE-HEATING BATTERY
+  mode: R
+  register_number: 26
+- comments: null
+  data:
+  - count: 0
+    value: 'OFF'
+  - count: 1
+    value: 'ON'
+  - count: 2
+    value: ERROR
+  default: null
+  description: STATE OF PROST-HEATING BATTERY
+  mode: R
+  register_number: 27
+- comments: null
+  data:
+  - count: 1-24
+    value: MONTH
+  default: null
+  description: FILTER ALARM
+  mode: R
+  register_number: 36
+- comments: null
+  data:
+  - count: "-30,0\u2026+50,0"
+    value: "INCOMING TEMPERATURE PRE-HEATING BATTERY (\xBAC)"
+  default: null
+  description: TEMPERATURE Tin PRE-HEATING BATTERY
+  mode: R
+  register_number: 37
+- comments: null
+  data:
+  - count: "-30,0\u2026+50,0"
+    value: "OUTPUT TEMPERATURE PRE-HEATING BATTERY (\xBAC)"
+  default: null
+  description: TEMPERATURE Tout PRE-HEATING BATTERY
+  mode: R
+  register_number: 38
+- comments: null
+  data:
+  - count: "-30,0\u2026+50,0"
+    value: "INCOMING TEMPERATURE POST-HEATING BATTERY (\xBAC)"
+  default: null
+  description: TEMPERATURE Tin POST-HEATING BATTERY
+  mode: R
+  register_number: 39
+- comments: null
+  data:
+  - count: "-30,0\u2026+50,0"
+    value: "OUTPUT TEMPERATURE POST-HEATING BATTERY (\xBAC)"
+  default: null
+  description: TEMPERATURE Tout POST-HEATING BATTERY
+  mode: R
+  register_number: 40
