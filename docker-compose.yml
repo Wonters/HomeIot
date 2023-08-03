@@ -7,9 +7,9 @@ services:
     environment:
       - DOMEO_IP=192.168.1.97
       - DOMEO_PORT=8899
-      - MONGO_ADDRESS = "mongodb://db:6567"
+      - MONGO_ADDRESS=mongodb://db:27017
     ports:
-      - "9000:9000"
+      - "0.0.0.0:80:80"
     depends_on:
       - db
   db:
@@ -21,7 +21,8 @@ services:
     ports:
       - "0.0.0.0:3000:3000"
     environment:
-      - GF_INSTALL_PLUGINS=grafana-clock-panel, grafana-simple-json-datasource
+      - GF_INSTALL_PLUGINS=marcusolsson-json-datasource, gapit-htmlgraphics-panel, cloudspout-button-panel
     volumes:
       - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/main.yaml
       - ./grafana/dashboards:/var/lib/grafana/dashboards

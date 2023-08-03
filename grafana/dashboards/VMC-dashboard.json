@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -636,7 +635,7 @@
         "orientation": "center",
         "text": "STANDBY",
         "type": "header",
-        "url": "http://127.0.0.1:9000/change/standby",
+        "url": "http://$backend_ip/change/standby",
         "variant": "custom"
       },
       "transparent": true,
@@ -665,7 +664,7 @@
         "orientation": "center",
         "text": "BYPASS",
         "type": "header",
-        "url": "http://127.0.0.1:9000/change/bypass",
+        "url": "http://$backend_ip/change/bypass",
         "variant": "custom"
       },
       "targets": [
@@ -703,7 +702,7 @@
         "orientation": "center",
         "text": "BOOST",
         "type": "header",
-        "url": "http://127.0.0.1:9000/change/boost",
+        "url": "http://$backend_ip/change/boost",
         "variant": "custom"
       },
       "targets": [
@@ -768,7 +767,7 @@
         "dynamicHtmlGraphics": false,
         "dynamicProps": false,
         "html": "<div style=\"text-align: center;\">\n  <select name=\"flow\" id=\"flow\">\n    <option value=\"60\"> 60</option>\n    <option value=\"80\"> 80</option>\n    <option value=\"100\"> 100</option>\n    <option value=\"120\"> 120</option>\n    <option value=\"150\"> 150</option>\n  </select>\n  <button id=\"save\"> save</button>  \n</div>\n\n",
-        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://127.0.0.1:9000/change/airflow?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
+        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://127.0.0.1/change/airflow?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
         "onInitOnResize": false,
         "onRender": "",
         "overflow": "visible",
@@ -852,7 +851,7 @@
         "dynamicHtmlGraphics": false,
         "dynamicProps": false,
         "html": "<div style=\"text-align: center;\">\n  <select name=\"flow\" id=\"flow\">\n    <option value=\"120\"> 120</option>\n    <option value=\"140\"> 140</option>\n    <option value=\"160\"> 160</option>\n    <option value=\"180\"> 180</option>\n    <option value=\"210\"> 210</option>\n  </select>\n  <button id=\"save\"> save</button>  \n</div>\n\n",
-        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://127.0.0.1:9000/change/boost_setting?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
+        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://127.0.0.1/change/boost_setting?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
         "onInitOnResize": false,
         "onRender": "",
         "overflow": "visible",
@@ -936,7 +935,7 @@
         "dynamicHtmlGraphics": false,
         "dynamicProps": false,
         "html": "<div style=\"text-align: center;\">\n  <div class=\"box\" id=\"low-airflow\"> </div>\n  <div>\n  <select name=\"flow\" id=\"flow\">\n    <option value=\"-15\"> -15</option>\n    <option value=\"-10\"> -10</option>\n    <option value=\"-5\"> -5</option>\n    <option value=\"0\"> 0</option>\n    <option value=\"5\"> 5</option>\n    <option value=\"10\"> 10</option>\n    <option value=\"15\"> 15</option>\n  </select>\n  <button class=\"btn btn-primary\" id=\"save\"> save</button>\n  </div>\n</div>\n\n",
-        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://127.0.0.1:9000/change/unbalance_flow?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
+        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://127.0.0.1/change/unbalance_flow?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
         "onInitOnResize": false,
         "onRender": "",
         "overflow": "visible",
@@ -2188,16 +2187,24 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "hide": 2,
+        "name": "backend_ip",
+        "query": "127.0.0.1",
+        "skipUrlSync": false,
+        "type": "constant"
+      }
+    ]
   },
   "time": {
-    "from": "2023-08-03T12:02:00.000Z",
-    "to": "2023-08-03T12:10:40.000Z"
+    "from": "now-30m",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "VMC",
   "uid": "d1c73097-ae80-4d6f-93c7-7c126b0b8bbe",
-  "version": 24,
+  "version": 1,
   "weekStart": ""
 }

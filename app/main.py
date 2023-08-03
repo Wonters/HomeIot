@@ -1,12 +1,9 @@
 import json
-import time
-from pymodbus.exceptions import ConnectionException
 from fastapi import FastAPI
-from functools import lru_cache
 from fastapi.responses import Response
 from pymongo.collection import ObjectId
 from datetime import datetime
-from app.domeo import save, retrieve, connect_mongo, connect_modbus, switch_coil, request_domeo
+from domeo import connect_mongo, connect_modbus, switch_coil, request_domeo
 
 app = FastAPI()
 

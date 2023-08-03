@@ -1,0 +1,9 @@
+apiVersion: 1
+
+datasources:
+  - name: vmc server
+    uid: c6aeabb4-fd15-4497-8376-858c08b0d22c
+    type: marcusolsson-json-datasource
+    access: proxy
+    url: http://server:80
+
