@@ -81,7 +81,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$[*].register"
+              "jsonPath": "$[*].value"
             },
             {
               "jsonPath": "$[*].date",
@@ -102,44 +102,7 @@
         }
       ],
       "title": "INPUT TEMPERATURE",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "temperature °C",
-            "binary": {
-              "left": "register",
-              "operator": "/",
-              "reducer": "sum",
-              "right": "10"
-            },
-            "mode": "reduceRow",
-            "reduce": {
-              "include": [
-                "register"
-              ],
-              "reducer": "lastNotNull"
-            },
-            "replaceFields": true
-          }
-        },
-        {
-          "id": "calculateField",
-          "options": {
-            "binary": {
-              "left": "temperature °C",
-              "operator": "/",
-              "reducer": "sum",
-              "right": "10"
-            },
-            "mode": "binary",
-            "reduce": {
-              "reducer": "sum"
-            },
-            "replaceFields": true
-          }
-        }
-      ],
+      "transformations": [],
       "type": "stat"
     },
     {
@@ -201,7 +164,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$[*].register"
+              "jsonPath": "$[*].value"
             },
             {
               "jsonPath": "$[*].date",
@@ -222,44 +185,7 @@
         }
       ],
       "title": "EXTRACT TEMPERATURE",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "temperature °C",
-            "binary": {
-              "left": "register",
-              "operator": "/",
-              "reducer": "sum",
-              "right": "10"
-            },
-            "mode": "reduceRow",
-            "reduce": {
-              "include": [
-                "register"
-              ],
-              "reducer": "lastNotNull"
-            },
-            "replaceFields": true
-          }
-        },
-        {
-          "id": "calculateField",
-          "options": {
-            "binary": {
-              "left": "temperature °C",
-              "operator": "/",
-              "reducer": "sum",
-              "right": "10"
-            },
-            "mode": "binary",
-            "reduce": {
-              "reducer": "sum"
-            },
-            "replaceFields": true
-          }
-        }
-      ],
+      "transformations": [],
       "type": "stat"
     },
     {
@@ -321,7 +247,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$[*].register"
+              "jsonPath": "$[*].value"
             },
             {
               "jsonPath": "$[*].date",
@@ -342,44 +268,7 @@
         }
       ],
       "title": "OUTSITE TEMPERATURE",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "temperature °C",
-            "binary": {
-              "left": "register",
-              "operator": "/",
-              "reducer": "sum",
-              "right": "10"
-            },
-            "mode": "reduceRow",
-            "reduce": {
-              "include": [
-                "register"
-              ],
-              "reducer": "lastNotNull"
-            },
-            "replaceFields": true
-          }
-        },
-        {
-          "id": "calculateField",
-          "options": {
-            "binary": {
-              "left": "temperature °C",
-              "operator": "/",
-              "reducer": "sum",
-              "right": "10"
-            },
-            "mode": "binary",
-            "reduce": {
-              "reducer": "sum"
-            },
-            "replaceFields": true
-          }
-        }
-      ],
+      "transformations": [],
       "type": "stat"
     },
     {
@@ -441,7 +330,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$[*].register"
+              "jsonPath": "$[*].value"
             },
             {
               "jsonPath": "$[*].date",
@@ -462,35 +351,244 @@
         }
       ],
       "title": "INSIDE TEMPERATURE",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 210,
+          "min": 120,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 5
+      },
+      "id": 31,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "/^value$/",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].value",
+              "type": "string"
+            }
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "name",
+              "TYPE OF CONTROL"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/metrics"
+        }
+      ],
+      "title": "TYPE OF CONTROL",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 210,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 0,
+        "y": 10
+      },
+      "id": 26,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].value"
+            }
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "name",
+              "CURRENT AIRFLOW"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/metrics"
+        }
+      ],
+      "title": "CURRENT AIRFLOW",
+      "transformations": [],
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 210,
+          "min": 120,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "%"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 3,
+        "y": 10
+      },
+      "id": 30,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].value"
+            }
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "name",
+              "DEPHASAGE DES DEBITS"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/metrics"
+        }
+      ],
+      "title": "DEPHASAGE DES DEBITS",
       "transformations": [
         {
           "id": "calculateField",
           "options": {
-            "alias": "temperature °C",
             "binary": {
-              "left": "register",
+              "left": "value",
               "operator": "/",
               "reducer": "sum",
-              "right": "10"
-            },
-            "mode": "reduceRow",
-            "reduce": {
-              "include": [
-                "register"
-              ],
-              "reducer": "lastNotNull"
-            },
-            "replaceFields": true
-          }
-        },
-        {
-          "id": "calculateField",
-          "options": {
-            "binary": {
-              "left": "temperature °C",
-              "operator": "/",
-              "reducer": "sum",
-              "right": "10"
+              "right": "100"
             },
             "mode": "binary",
             "reduce": {
@@ -508,7 +606,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 5
+        "y": 15
       },
       "id": 11,
       "panels": [],
@@ -525,7 +623,7 @@
         "h": 4,
         "w": 3,
         "x": 0,
-        "y": 6
+        "y": 16
       },
       "id": 8,
       "options": {
@@ -554,7 +652,7 @@
         "h": 4,
         "w": 3,
         "x": 3,
-        "y": 6
+        "y": 16
       },
       "id": 16,
       "options": {
@@ -568,6 +666,44 @@
         "text": "BYPASS",
         "type": "header",
         "url": "http://127.0.0.1:9000/change/bypass",
+        "variant": "custom"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "-- Mixed --"
+          },
+          "refId": "A"
+        }
+      ],
+      "transparent": true,
+      "type": "cloudspout-button-panel"
+    },
+    {
+      "datasource": {
+        "type": "mixed",
+        "uid": "-- Mixed --"
+      },
+      "description": "",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 6,
+        "y": 16
+      },
+      "id": 24,
+      "options": {
+        "backgroundColor": "#2d876445",
+        "contentType": "application/json",
+        "foregroundColor": "dark-green",
+        "icon": "wrap-text",
+        "isAuth": false,
+        "method": "GET",
+        "orientation": "center",
+        "text": "BOOST",
+        "type": "header",
+        "url": "http://127.0.0.1:9000/change/boost",
         "variant": "custom"
       },
       "targets": [
@@ -613,8 +749,8 @@
       "gridPos": {
         "h": 4,
         "w": 4,
-        "x": 6,
-        "y": 6
+        "x": 9,
+        "y": 16
       },
       "handleMetric": {},
       "id": 19,
@@ -668,6 +804,90 @@
     },
     {
       "datasource": {
+        "type": "mixed",
+        "uid": "-- Mixed --"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 13,
+        "y": 16
+      },
+      "handleMetric": {},
+      "id": 27,
+      "links": [],
+      "maxDataPoints": 3,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "codeData": "{\n  \"text\": \"Random text\"\n}",
+        "css": "* {\n  font-family: Open Sans;\n}\n\nbutton{\n  margin: 5px;\n  padding: 10px;\n  padding-left: 30px;\n  padding-right: 30px;\n  border-radius: 5px;\n  background-color: #5f6983;\n}\n\nbutton:hover {\n      background-color:#002ead;\n      transition: 0.7s;\n  }\n\nselect{\n  margin: 5px;\n  padding: 5px;\n  padding-left: 10px;\n  padding-right: 10px;\n  border-radius: 3px;\n}\n",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "<div style=\"text-align: center;\">\n  <select name=\"flow\" id=\"flow\">\n    <option value=\"120\"> 120</option>\n    <option value=\"140\"> 140</option>\n    <option value=\"160\"> 160</option>\n    <option value=\"180\"> 180</option>\n    <option value=\"210\"> 210</option>\n  </select>\n  <button id=\"save\"> save</button>  \n</div>\n\n",
+        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://127.0.0.1:9000/change/boost_setting?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
+        "onInitOnResize": false,
+        "onRender": "",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull",
+            "last",
+            "firstNotNull",
+            "first",
+            "min",
+            "max",
+            "mean",
+            "sum",
+            "count",
+            "range",
+            "delta",
+            "step",
+            "diff",
+            "logmin",
+            "allIsZero",
+            "allIsNull",
+            "diffperc"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "useGrafanaScrollbar": true
+      },
+      "pluginVersion": "10.0.3",
+      "title": "TEMPORISED 1/2H BOOST AIRFLOW SETTING",
+      "type": "gapit-htmlgraphics-panel"
+    },
+    {
+      "datasource": {
         "type": "datasource",
         "uid": "-- Mixed --"
       },
@@ -697,8 +917,8 @@
       "gridPos": {
         "h": 4,
         "w": 4,
-        "x": 10,
-        "y": 6
+        "x": 17,
+        "y": 16
       },
       "handleMetric": {},
       "id": 23,
@@ -781,7 +1001,7 @@
         "h": 7,
         "w": 3,
         "x": 0,
-        "y": 10
+        "y": 20
       },
       "id": 21,
       "options": {
@@ -798,7 +1018,7 @@
         "html": "<div style=\"text-align: center;\">\n  <div class=\"box\" id=\"htmlgraphics-text\"> OFF </div>\n</div>\n",
         "onInit": "\n\n\n",
         "onInitOnResize": true,
-        "onRender": "// Sets the value from the first series on every refresh\n\nconst htmlgraphics = htmlNode.getElementById('htmlgraphics-text');\n\nif (htmlgraphics) {\n  values =  data.series[0]?.fields[0].values\n  const status = values[values.length -1];\n\n  if (status === 0) {\n      htmlgraphics.textContent = 'DESACTIVED';\n      htmlgraphics.classList.remove('activate')\n\n  } \n  \n  else {\n    htmlgraphics.textContent = 'ACTIVED';\n    htmlgraphics.classList.add('activate')\n  }\n}\n",
+        "onRender": "// Sets the value from the first series on every refresh\n\nconst htmlgraphics = htmlNode.getElementById('htmlgraphics-text');\n\nif (htmlgraphics) {\n  values =  data.series[0]?.fields[0].values\n  const status = values[values.length -1];\n\n  if (status) {\n    htmlgraphics.textContent = 'ACTIVED';\n    htmlgraphics.classList.add('activate')\n  } \n  \n  else {\n    htmlgraphics.textContent = 'DESACTIVED';\n    htmlgraphics.classList.remove('activate')\n  }\n}\n",
         "overflow": "visible",
         "panelupdateOnMount": false,
         "reduceOptions": {
@@ -885,7 +1105,7 @@
         "h": 7,
         "w": 3,
         "x": 3,
-        "y": 10
+        "y": 20
       },
       "id": 20,
       "options": {
@@ -902,7 +1122,7 @@
         "html": "<div style=\"text-align: center;\">\n  <div class=\"box\" id=\"htmlgraphics-text\"> OFF </div>\n</div>\n",
         "onInit": "\n\n\n",
         "onInitOnResize": true,
-        "onRender": "// Sets the value from the first series on every refresh\nconst htmlgraphics = htmlNode.getElementById('htmlgraphics-text');\n\nif (htmlgraphics) {\n  values =  data.series[0]?.fields[0].values\n  const status = values[values.length -1];\n  htmlgraphics.textContent = status;\n\n  if (status === 'DESACTIVED') {\n        htmlgraphics.classList.remove('activate')\n  } \n  \n  else if(status === 'ACTIVED'){\n    htmlgraphics.classList.add('activate')\n  }\n  \n  else {\n    htmlgraphics.classList.add('error')\n  }\n}\n",
+        "onRender": "// Sets the value from the first series on every refresh\nconst htmlgraphics = htmlNode.getElementById('htmlgraphics-text');\n\nif (htmlgraphics) {\n  values =  data.series[0]?.fields[0].values\n  const status = values[values.length -1];\n  htmlgraphics.textContent = status;\n\n  if (status === 'DESACTIVED') {\n        htmlgraphics.classList.remove('activate')\n  } \n  \n  else if(status === 'ACTIVED'){\n    htmlgraphics.classList.add('activate')\n  }\n  \n  else {\n    htmlgraphics.classList.add('error')\n    htmlgraphics.classList.remove('activate')\n  }\n}\n",
         "overflow": "visible",
         "panelupdateOnMount": false,
         "reduceOptions": {
@@ -963,6 +1183,133 @@
         "type": "marcusolsson-json-datasource",
         "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
       },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 6,
+        "y": 20
+      },
+      "id": 25,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "codeData": "{\n  \"text\": \"Random text\"\n}",
+        "css": "* {\n  font-family: Open Sans;\n}\n\n.box {\n  border: solid #555 2px;\n  border-radius: 10px;\n  padding: 10px 20px;\n}\n\n.activate {\n  border: solid green;\n  color: green;\n}\n\n.error {\n  border: red;\n  color: red;\n}\n",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "<div style=\"text-align: center;\">\n  <div class=\"box\" id=\"htmlgraphics-text\"> OFF </div>\n</div>\n",
+        "onInit": "\n\n\n",
+        "onInitOnResize": true,
+        "onRender": "// Sets the value from the first series on every refresh\nconst htmlgraphics = htmlNode.getElementById('htmlgraphics-text');\n\nif (htmlgraphics) {\n  values =  data.series[1]?.fields[0].values\n  const status = values[values.length -1];\n\n  if (status === 5) {\n        htmlgraphics.classList.add('activate')\n        htmlgraphics.textContent = 'ACTIVED';\n  } \n  \n  else {\n    htmlgraphics.textContent = 'DEACTIVED';\n    htmlgraphics.classList.remove('activate')\n  }\n}\n",
+        "overflow": "visible",
+        "panelupdateOnMount": false,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull",
+            "last",
+            "firstNotNull",
+            "first",
+            "min",
+            "max",
+            "mean",
+            "sum",
+            "count",
+            "range",
+            "delta",
+            "step",
+            "diff",
+            "logmin",
+            "allIsZero",
+            "allIsNull",
+            "diffperc"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "useGrafanaScrollbar": true
+      },
+      "targets": [
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].value"
+            }
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "name",
+              "AIRFLOW SET"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "AIRFLOW SET (doesnt work)",
+          "urlPath": "/metrics"
+        },
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].register"
+            }
+          ],
+          "hide": false,
+          "method": "GET",
+          "params": [
+            [
+              "name",
+              "TYPE OF CONTROL"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "TYPE OF CONTROL",
+          "urlPath": "/metrics"
+        }
+      ],
+      "title": "BOOST STATUS",
+      "transformations": [],
+      "type": "gapit-htmlgraphics-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -989,8 +1336,8 @@
       "gridPos": {
         "h": 7,
         "w": 4,
-        "x": 6,
-        "y": 10
+        "x": 9,
+        "y": 20
       },
       "id": 22,
       "options": {
@@ -1044,9 +1391,10 @@
           "color": {
             "mode": "thresholds"
           },
+          "displayName": "m3/H",
           "mappings": [],
-          "max": 15,
-          "min": -15,
+          "max": 210,
+          "min": 120,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1055,17 +1403,18 @@
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "locale"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 7,
         "w": 4,
-        "x": 10,
-        "y": 10
+        "x": 13,
+        "y": 20
       },
-      "id": 18,
+      "id": 28,
       "options": {
         "orientation": "auto",
         "reduceOptions": {
@@ -1095,6 +1444,79 @@
           "params": [
             [
               "name",
+              "TEMPORISED 1/2H BOOST AIRFLOW SETTING"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/metrics"
+        }
+      ],
+      "title": "TEMPORISED 1/2H BOOST AIRFLOW SETTING",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 15,
+          "min": -15,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 17,
+        "y": 20
+      },
+      "id": 18,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].value"
+            }
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "name",
               "UNBALANCE AIRFLOW SELECTION"
             ]
           ],
@@ -1113,7 +1535,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 27
       },
       "id": 10,
       "panels": [],
@@ -1144,7 +1566,7 @@
               },
               {
                 "color": "red",
-                "value": 2500
+                "value": 3300
               }
             ]
           }
@@ -1155,7 +1577,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 18
+        "y": 28
       },
       "id": 7,
       "options": {
@@ -1235,7 +1657,7 @@
               },
               {
                 "color": "red",
-                "value": 2500
+                "value": 3300
               }
             ]
           }
@@ -1246,7 +1668,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 18
+        "y": 28
       },
       "id": 15,
       "options": {
@@ -1308,7 +1730,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 24
+        "y": 34
       },
       "id": 4,
       "panels": [],
@@ -1333,16 +1755,16 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 27,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineWidth": 1,
-            "pointSize": 5,
+            "pointSize": 6,
             "scaleDistribution": {
               "type": "linear"
             },
@@ -1353,7 +1775,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "area"
             }
           },
           "mappings": [],
@@ -1366,7 +1788,7 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 35
               }
             ]
           }
@@ -1377,7 +1799,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 35
       },
       "id": 1,
       "options": {
@@ -1402,7 +1824,8 @@
           },
           "fields": [
             {
-              "jsonPath": "$[*].register"
+              "jsonPath": "$[*].value",
+              "name": "tempetature °C"
             },
             {
               "jsonPath": "$[*].date",
@@ -1423,25 +1846,7 @@
         }
       ],
       "title": "INPUT TEMPERATURE",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "temperature °C",
-            "binary": {
-              "left": "register",
-              "operator": "/",
-              "reducer": "sum",
-              "right": "10"
-            },
-            "mode": "binary",
-            "reduce": {
-              "reducer": "sum"
-            },
-            "replaceFields": true
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -1506,7 +1911,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 34
+        "y": 44
       },
       "id": 2,
       "options": {
@@ -1531,7 +1936,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$[*].register"
+              "jsonPath": "$[*].value"
             },
             {
               "jsonPath": "$[*].date",
@@ -1552,25 +1957,7 @@
         }
       ],
       "title": "EXTRACT TEMPERATURE",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "temprature °C",
-            "binary": {
-              "left": "register",
-              "operator": "/",
-              "reducer": "sum",
-              "right": "10"
-            },
-            "mode": "binary",
-            "reduce": {
-              "reducer": "sum"
-            },
-            "replaceFields": true
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -1635,7 +2022,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 41
+        "y": 51
       },
       "id": 3,
       "options": {
@@ -1660,7 +2047,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$[*].register"
+              "jsonPath": "$[*].value"
             },
             {
               "jsonPath": "$[*].date",
@@ -1681,32 +2068,122 @@
         }
       ],
       "title": "OUTSIDE TEMPERATURE",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "temperature °C",
-            "binary": {
-              "left": "register",
-              "operator": "/",
-              "reducer": "sum",
-              "right": "10"
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
             },
-            "mode": "binary",
-            "reduce": {
-              "include": [
-                "register"
-              ],
-              "reducer": "allValues"
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
             },
-            "replaceFields": true
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
           }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 61
+      },
+      "id": 29,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.0.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "c6aeabb4-fd15-4497-8376-858c08b0d22c"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].value"
+            },
+            {
+              "jsonPath": "$[*].date",
+              "language": "jsonpath",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "name",
+              "TEMPERATURE Tint"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/metrics"
         }
       ],
+      "title": "INSIDE TEMPERATURE",
+      "transformations": [],
       "type": "timeseries"
     }
   ],
-  "refresh": "1m",
+  "refresh": false,
   "schemaVersion": 38,
   "style": "dark",
   "tags": [],
@@ -1714,13 +2191,13 @@
     "list": []
   },
   "time": {
-    "from": "now-5m",
-    "to": "now"
+    "from": "2023-08-03T12:02:00.000Z",
+    "to": "2023-08-03T12:10:40.000Z"
   },
   "timepicker": {},
   "timezone": "",
   "title": "VMC",
   "uid": "d1c73097-ae80-4d6f-93c7-7c126b0b8bbe",
-  "version": 21,
+  "version": 24,
   "weekStart": ""
 }

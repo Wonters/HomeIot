@@ -1,0 +1,27 @@
+version: '3.0'
+
+services:
+  server:
+    build:
+      context: .
+    environment:
+      - DOMEO_IP=192.168.1.97
+      - DOMEO_PORT=8899
+      - MONGO_ADDRESS = "mongodb://db:6567"
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+  db:
+    image: mongo:latest
+    ports:
+      - "0.0.0.0:6567:27017"
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "0.0.0.0:3000:3000"
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel, grafana-simple-json-datasource
+    volumes:
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
