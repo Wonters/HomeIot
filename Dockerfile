@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 
 COPY ./app /app
 
-RUN python /app/cron.py
+RUN chmod +x /app/retrieve.sh && python /app/cron.py
