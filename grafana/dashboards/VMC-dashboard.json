@@ -18,6 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -61,6 +62,7 @@
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -68,9 +70,11 @@
           "fields": "",
           "values": false
         },
-        "textMode": "value"
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.2.2",
       "targets": [
         {
           "cacheDurationSeconds": 5,
@@ -101,7 +105,6 @@
         }
       ],
       "title": "INPUT TEMPERATURE",
-      "transformations": [],
       "type": "stat"
     },
     {
@@ -144,6 +147,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -151,9 +155,11 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.2.2",
       "targets": [
         {
           "cacheDurationSeconds": 5,
@@ -184,7 +190,6 @@
         }
       ],
       "title": "EXTRACT TEMPERATURE",
-      "transformations": [],
       "type": "stat"
     },
     {
@@ -227,6 +232,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -234,9 +240,11 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.2.2",
       "targets": [
         {
           "cacheDurationSeconds": 5,
@@ -267,7 +275,6 @@
         }
       ],
       "title": "OUTSITE TEMPERATURE",
-      "transformations": [],
       "type": "stat"
     },
     {
@@ -310,6 +317,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -317,9 +325,11 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.2.2",
       "targets": [
         {
           "cacheDurationSeconds": 5,
@@ -350,7 +360,6 @@
         }
       ],
       "title": "INSIDE TEMPERATURE",
-      "transformations": [],
       "type": "stat"
     },
     {
@@ -392,6 +401,7 @@
         "graphMode": "none",
         "justifyMode": "center",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "last"
@@ -399,9 +409,11 @@
           "fields": "/^value$/",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.2.2",
       "targets": [
         {
           "cacheDurationSeconds": 5,
@@ -428,7 +440,6 @@
         }
       ],
       "title": "TYPE OF CONTROL",
-      "transformations": [],
       "type": "stat"
     },
     {
@@ -465,6 +476,8 @@
       },
       "id": 26,
       "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -474,9 +487,10 @@
           "values": false
         },
         "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.2.2",
       "targets": [
         {
           "cacheDurationSeconds": 5,
@@ -502,7 +516,6 @@
         }
       ],
       "title": "CURRENT AIRFLOW",
-      "transformations": [],
       "type": "gauge"
     },
     {
@@ -544,6 +557,7 @@
         "graphMode": "none",
         "justifyMode": "center",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "last"
@@ -551,9 +565,11 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.2.2",
       "targets": [
         {
           "cacheDurationSeconds": 5,
@@ -614,32 +630,86 @@
     },
     {
       "datasource": {
-        "type": "datasource",
+        "type": "mixed",
         "uid": "-- Mixed --"
       },
       "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 4,
         "w": 3,
         "x": 0,
         "y": 16
       },
+      "handleMetric": {},
       "id": 8,
+      "maxDataPoints": 3,
       "options": {
-        "backgroundColor": "#2d876445",
-        "contentType": "application/json",
-        "foregroundColor": "dark-green",
-        "icon": "capture",
-        "isAuth": false,
-        "method": "GET",
-        "orientation": "center",
-        "text": "STANDBY",
-        "type": "header",
-        "url": "http://$backend_ip/change/standby",
-        "variant": "custom"
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "codeData": "{\n  \"text\": \"Random text\"\n}",
+        "css": "* {\n  font-family: Open Sans;\n}\n\nbutton{\n  margin: 5px;\n  padding: 10px;\n  padding-left: 30px;\n  padding-right: 30px;\n  border-radius: 5px;\n  background-color: #5f6983;\n}\n\nbutton:hover {\n      background-color:#002ead;\n      transition: 0.7s;\n  }\n\nselect{\n  margin: 5px;\n  padding: 5px;\n  padding-left: 10px;\n  padding-right: 10px;\n  border-radius: 3px;\n}\n",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "<div style=\"text-align: center;\">\n  <button id=\"save\"> STANDBY</button>  \n</div>\n\n",
+        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  fetch(`http://192.168.1.67:8000/change/standby`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
+        "onInitOnResize": false,
+        "onRender": "",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull",
+            "last",
+            "firstNotNull",
+            "first",
+            "min",
+            "max",
+            "mean",
+            "sum",
+            "count",
+            "range",
+            "delta",
+            "step",
+            "diff",
+            "logmin",
+            "allIsZero",
+            "allIsNull",
+            "diffperc"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "useGrafanaScrollbar": true
       },
-      "transparent": true,
-      "type": "cloudspout-button-panel"
+      "pluginVersion": "10.0.3",
+      "title": "COMMAND",
+      "type": "gapit-htmlgraphics-panel"
     },
     {
       "datasource": {
@@ -647,37 +717,82 @@
         "uid": "-- Mixed --"
       },
       "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 4,
         "w": 3,
         "x": 3,
         "y": 16
       },
+      "handleMetric": {},
       "id": 16,
+      "maxDataPoints": 3,
       "options": {
-        "backgroundColor": "#2d876445",
-        "contentType": "application/json",
-        "foregroundColor": "dark-green",
-        "icon": "wrap-text",
-        "isAuth": false,
-        "method": "GET",
-        "orientation": "center",
-        "text": "BYPASS",
-        "type": "header",
-        "url": "http://$backend_ip/change/bypass",
-        "variant": "custom"
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "codeData": "{\n  \"text\": \"Random text\"\n}",
+        "css": "* {\n  font-family: Open Sans;\n}\n\nbutton{\n  margin: 5px;\n  padding: 10px;\n  padding-left: 30px;\n  padding-right: 30px;\n  border-radius: 5px;\n  background-color: #5f6983;\n}\n\nbutton:hover {\n      background-color:#002ead;\n      transition: 0.7s;\n  }\n\nselect{\n  margin: 5px;\n  padding: 5px;\n  padding-left: 10px;\n  padding-right: 10px;\n  border-radius: 3px;\n}\n",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "<div style=\"text-align: center;\">\n  <button id=\"save\"> BYPASS</button>  \n</div>\n\n",
+        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  fetch(`http://192.168.1.67:8000/change/bypass`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
+        "onInitOnResize": false,
+        "onRender": "",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull",
+            "last",
+            "firstNotNull",
+            "first",
+            "min",
+            "max",
+            "mean",
+            "sum",
+            "count",
+            "range",
+            "delta",
+            "step",
+            "diff",
+            "logmin",
+            "allIsZero",
+            "allIsNull",
+            "diffperc"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "useGrafanaScrollbar": true
       },
-      "targets": [
-        {
-          "datasource": {
-            "type": "datasource",
-            "uid": "-- Mixed --"
-          },
-          "refId": "A"
-        }
-      ],
-      "transparent": true,
-      "type": "cloudspout-button-panel"
+      "pluginVersion": "10.0.3",
+      "title": "COMMAND",
+      "type": "gapit-htmlgraphics-panel"
     },
     {
       "datasource": {
@@ -685,37 +800,82 @@
         "uid": "-- Mixed --"
       },
       "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 4,
         "w": 3,
         "x": 6,
         "y": 16
       },
+      "handleMetric": {},
       "id": 24,
+      "maxDataPoints": 3,
       "options": {
-        "backgroundColor": "#2d876445",
-        "contentType": "application/json",
-        "foregroundColor": "dark-green",
-        "icon": "wrap-text",
-        "isAuth": false,
-        "method": "GET",
-        "orientation": "center",
-        "text": "BOOST",
-        "type": "header",
-        "url": "http://$backend_ip/change/boost",
-        "variant": "custom"
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "codeData": "{\n  \"text\": \"Random text\"\n}",
+        "css": "* {\n  font-family: Open Sans;\n}\n\nbutton{\n  margin: 5px;\n  padding: 10px;\n  padding-left: 30px;\n  padding-right: 30px;\n  border-radius: 5px;\n  background-color: #5f6983;\n}\n\nbutton:hover {\n      background-color:#002ead;\n      transition: 0.7s;\n  }\n\nselect{\n  margin: 5px;\n  padding: 5px;\n  padding-left: 10px;\n  padding-right: 10px;\n  border-radius: 3px;\n}\n",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "<div style=\"text-align: center;\">\n  <button id=\"save\"> BOOST</button>  \n</div>\n\n",
+        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  fetch(`http://192.168.1.67:8000/change/boost`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
+        "onInitOnResize": false,
+        "onRender": "",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull",
+            "last",
+            "firstNotNull",
+            "first",
+            "min",
+            "max",
+            "mean",
+            "sum",
+            "count",
+            "range",
+            "delta",
+            "step",
+            "diff",
+            "logmin",
+            "allIsZero",
+            "allIsNull",
+            "diffperc"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "useGrafanaScrollbar": true
       },
-      "targets": [
-        {
-          "datasource": {
-            "type": "datasource",
-            "uid": "-- Mixed --"
-          },
-          "refId": "A"
-        }
-      ],
-      "transparent": true,
-      "type": "cloudspout-button-panel"
+      "pluginVersion": "10.0.3",
+      "title": "COMMAND",
+      "type": "gapit-htmlgraphics-panel"
     },
     {
       "datasource": {
@@ -753,7 +913,6 @@
       },
       "handleMetric": {},
       "id": 19,
-      "links": [],
       "maxDataPoints": 3,
       "options": {
         "SVGBaseFix": true,
@@ -837,7 +996,6 @@
       },
       "handleMetric": {},
       "id": 27,
-      "links": [],
       "maxDataPoints": 3,
       "options": {
         "SVGBaseFix": true,
@@ -921,7 +1079,6 @@
       },
       "handleMetric": {},
       "id": 23,
-      "links": [],
       "maxDataPoints": 3,
       "options": {
         "SVGBaseFix": true,
@@ -1070,7 +1227,6 @@
         }
       ],
       "title": "STANBY STATUS",
-      "transformations": [],
       "type": "gapit-htmlgraphics-panel"
     },
     {
@@ -1174,7 +1330,6 @@
         }
       ],
       "title": "BYPASS STATUS",
-      "transformations": [],
       "type": "gapit-htmlgraphics-panel"
     },
     {
@@ -1301,7 +1456,6 @@
         }
       ],
       "title": "BOOST STATUS",
-      "transformations": [],
       "type": "gapit-htmlgraphics-panel"
     },
     {
@@ -1340,6 +1494,8 @@
       },
       "id": 22,
       "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -1349,9 +1505,10 @@
           "values": false
         },
         "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.2.2",
       "targets": [
         {
           "cacheDurationSeconds": 300,
@@ -1415,6 +1572,8 @@
       },
       "id": 28,
       "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -1424,9 +1583,10 @@
           "values": false
         },
         "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.2.2",
       "targets": [
         {
           "cacheDurationSeconds": 5,
@@ -1488,6 +1648,8 @@
       },
       "id": 18,
       "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -1497,9 +1659,10 @@
           "values": false
         },
         "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.2.2",
       "targets": [
         {
           "cacheDurationSeconds": 5,
@@ -1525,7 +1688,6 @@
         }
       ],
       "title": "UNBALANCE AIRFLOW",
-      "transformations": [],
       "type": "gauge"
     },
     {
@@ -1580,6 +1742,8 @@
       },
       "id": 7,
       "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -1589,9 +1753,10 @@
           "values": false
         },
         "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.2.2",
       "targets": [
         {
           "cacheDurationSeconds": 5,
@@ -1671,6 +1836,8 @@
       },
       "id": 15,
       "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -1680,9 +1847,10 @@
           "values": false
         },
         "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "11.2.2",
       "targets": [
         {
           "cacheDurationSeconds": 5,
@@ -1748,11 +1916,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 27,
             "gradientMode": "none",
@@ -1761,6 +1931,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "smooth",
             "lineWidth": 1,
             "pointSize": 6,
@@ -1845,7 +2016,6 @@
         }
       ],
       "title": "INPUT TEMPERATURE",
-      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -1860,11 +2030,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -1873,6 +2045,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1956,7 +2129,6 @@
         }
       ],
       "title": "EXTRACT TEMPERATURE",
-      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -1971,11 +2143,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -1984,6 +2158,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2067,7 +2242,6 @@
         }
       ],
       "title": "OUTSIDE TEMPERATURE",
-      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -2082,11 +2256,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -2095,6 +2271,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2178,13 +2355,11 @@
         }
       ],
       "title": "INSIDE TEMPERATURE",
-      "transformations": [],
       "type": "timeseries"
     }
   ],
   "refresh": "",
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
@@ -2205,6 +2380,6 @@
   "timezone": "",
   "title": "VMC",
   "uid": "d1c73097-ae80-4d6f-93c7-7c126b0b8bbe",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

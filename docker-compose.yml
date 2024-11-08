@@ -20,15 +20,15 @@ services:
       - "0.0.0.0:6567:27017"
     restart: always
     dns: 8.8.8.8
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - "0.0.0.0:3000:3000"
-    environment:
-      - GF_INSTALL_PLUGINS=marcusolsson-json-datasource, gapit-htmlgraphics-panel, cloudspout-button-panel
-    volumes:
-      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
-      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/main.yaml
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
-    restart: always
-    dns: 8.8.8.8
+#  grafana:
+#    image: grafana/grafana:latest
+#    ports:
+#      - "0.0.0.0:3000:3000"
+#    environment:
+#      - GF_INSTALL_PLUGINS=marcusolsson-json-datasource, gapit-htmlgraphics-panel
+#    volumes:
+#      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+#      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/main.yaml
+#      - ./grafana/dashboards:/var/lib/grafana/dashboards
+#    restart: always
+#    dns: 8.8.8.8
