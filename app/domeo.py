@@ -24,7 +24,7 @@ MODBUS_CONFIGFILE = Path(__file__).parent / "config/domeo210_modbus.yml"
 
 @contextmanager
 def connect_modbus() -> ModbusTcpClient:
-    with ModbusTcpClient(host=DOMEO_IP, port=DOMEO_PORT, timeout=2) as client:
+    with ModbusTcpClient(host=DOMEO_IP, port=DOMEO_PORT, timeout=10) as client:
         yield client
 
 
