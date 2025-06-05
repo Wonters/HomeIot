@@ -5,11 +5,12 @@ services:
     build:
       context: .
     environment:
-      - DOMEO_IP=192.168.1.97
+      - DOMEO_IP=192.168.3.11
       - DOMEO_PORT=8899
       - MONGO_ADDRESS=mongodb://db:27017
+      - PORT=8000
     ports:
-      - "0.0.0.0:80:80"
+      - "0.0.0.0:8000:8000"
     depends_on:
       - db
     restart: always
@@ -20,15 +21,16 @@ services:
       - "0.0.0.0:6567:27017"
     restart: always
     dns: 8.8.8.8
-#  grafana:
-#    image: grafana/grafana:latest
-#    ports:
-#      - "0.0.0.0:3000:3000"
-#    environment:
-#      - GF_INSTALL_PLUGINS=marcusolsson-json-datasource, gapit-htmlgraphics-panel
-#    volumes:
-#      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
-#      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/main.yaml
-#      - ./grafana/dashboards:/var/lib/grafana/dashboards
-#    restart: always
-#    dns: 8.8.8.8
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "0.0.0.0:3000:3000"
+    environment:
+      - GF_INSTALL_PLUGINS=marcusolsson-json-datasource, gapit-htmlgraphics-panel, cloudspout-button-panel
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+    volumes:
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/main.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    restart: always
+    dns: 8.8.8.8

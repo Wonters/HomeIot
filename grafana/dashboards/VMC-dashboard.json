@@ -15,7 +15,7 @@
       }
     ]
   },
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 3,
@@ -926,7 +926,7 @@
         "dynamicHtmlGraphics": false,
         "dynamicProps": false,
         "html": "<div style=\"text-align: center;\">\n  <select name=\"flow\" id=\"flow\">\n    <option value=\"60\"> 60</option>\n    <option value=\"80\"> 80</option>\n    <option value=\"100\"> 100</option>\n    <option value=\"120\"> 120</option>\n    <option value=\"150\"> 150</option>\n  </select>\n  <button id=\"save\"> save</button>  \n</div>\n\n",
-        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://192.168.1.210/change/airflow?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
+        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://192.168.1.67:8000/change/airflow?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
         "onInitOnResize": false,
         "onRender": "",
         "overflow": "visible",
@@ -1009,7 +1009,7 @@
         "dynamicHtmlGraphics": false,
         "dynamicProps": false,
         "html": "<div style=\"text-align: center;\">\n  <select name=\"flow\" id=\"flow\">\n    <option value=\"120\"> 120</option>\n    <option value=\"140\"> 140</option>\n    <option value=\"160\"> 160</option>\n    <option value=\"180\"> 180</option>\n    <option value=\"210\"> 210</option>\n  </select>\n  <button id=\"save\"> save</button>  \n</div>\n\n",
-        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://192.168.1.210/change/boost_setting?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
+        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://192.168.1.67:8000/change/boost_setting?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
         "onInitOnResize": false,
         "onRender": "",
         "overflow": "visible",
@@ -1092,7 +1092,7 @@
         "dynamicHtmlGraphics": false,
         "dynamicProps": false,
         "html": "<div style=\"text-align: center;\">\n  <div class=\"box\" id=\"low-airflow\"> </div>\n  <div>\n  <select name=\"flow\" id=\"flow\">\n    <option value=\"-15\"> -15</option>\n    <option value=\"-10\"> -10</option>\n    <option value=\"-5\"> -5</option>\n    <option value=\"0\"> 0</option>\n    <option value=\"5\"> 5</option>\n    <option value=\"10\"> 10</option>\n    <option value=\"15\"> 15</option>\n  </select>\n  <button class=\"btn btn-primary\" id=\"save\"> save</button>\n  </div>\n</div>\n\n",
-        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://192.168.1.210/change/unbalance_flow?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
+        "onInit": "\n\nhtmlNode.getElementById('save').onclick = () => {\n  let value = htmlNode.getElementById('flow').value\n  fetch(`http://192.168.1.67:8000/change/unbalance_flow?value=${value}`).then((rep) => {\n    console.log(rep)\n  })\n};\n\n",
         "onInitOnResize": false,
         "onRender": "",
         "overflow": "visible",
@@ -2366,7 +2366,7 @@
       {
         "hide": 2,
         "name": "backend_ip",
-        "query": "192.168.1.210",
+        "query": "192.168.1.67:8000",
         "skipUrlSync": false,
         "type": "constant"
       }

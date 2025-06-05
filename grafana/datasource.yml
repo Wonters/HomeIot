@@ -5,5 +5,5 @@ datasources:
     uid: c6aeabb4-fd15-4497-8376-858c08b0d22c
     type: marcusolsson-json-datasource
     access: proxy
-    url: http://server:80
+    url: http://server:8000
 
