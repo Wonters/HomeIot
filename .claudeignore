@@ -1,0 +1,25 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Environment / secrets
+.env
+.env.*
+
+# Docker volumes / data
+mongo_data/
+
+# Logs
+*.log
+cron.log
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store

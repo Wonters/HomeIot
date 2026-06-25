@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VMC DOMEO210</title>
+  <style>
+    :root {
+      --bg: #111217;
+      --card: #181b1f;
+      --border: #2d3038;
+      --text: #d0d2d8;
+      --text-dim: #6c7080;
+      --green: #73bf69;
+      --blue: #5794f2;
+      --red: #f2495c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+      padding: 16px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    header h1 { font-size: 1.3rem; letter-spacing: .05em; color: #fff; }
+    #last-update { font-size: .75rem; color: var(--text-dim); }
+
+    .section-label {
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .row { display: grid; gap: 12px; margin-bottom: 20px; }
+    .col-4 { grid-template-columns: repeat(4, 1fr); }
+    .col-3 { grid-template-columns: repeat(3, 1fr); }
+    .col-6 { grid-template-columns: repeat(6, 1fr); }
+
+    @media (max-width: 900px) {
+      .col-4, .col-3 { grid-template-columns: repeat(2, 1fr); }
+      .col-6 { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 500px) {
+      .col-4, .col-3, .col-6 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+    .card-title {
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    .card-value { font-size: 2rem; font-weight: 600; color: #fff; line-height: 1; }
+    .card-unit  { font-size: .85rem; color: var(--text-dim); margin-left: 3px; }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 4px;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      margin-top: 8px;
+    }
+    .badge-on  { background: rgba(115,191,105,.15); color: var(--green); border: 1px solid var(--green); }
+    .badge-off { background: rgba(108,112,128,.15); color: var(--text-dim); border: 1px solid var(--border); }
+    .badge-err { background: rgba(242,73,92,.15);   color: var(--red);      border: 1px solid var(--red); }
+
+    /* Gauge */
+    .gauge-wrap { text-align: center; }
+    .gauge-wrap svg { width: 100%; max-width: 160px; }
+
+    /* Commands */
+    .cmd-btn {
+      width: 100%;
+      margin-top: 8px;
+      padding: 9px;
+      background: #2c3040;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      cursor: pointer;
+      transition: background .2s, border-color .2s;
+    }
+    .cmd-btn:hover   { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .cmd-btn:active  { transform: scale(.97); }
+    .cmd-btn:disabled { opacity: .5; cursor: wait; }
+
+    select {
+      width: 100%;
+      margin-top: 6px;
+      padding: 6px 8px;
+      background: #2c3040;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: .82rem;
+    }
+    .fb { font-size: .7rem; height: 14px; margin-top: 4px; }
+    .fb-ok  { color: var(--green); }
+    .fb-err { color: var(--red); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>VMC DOMEO210</h1>
+  <span id="last-update">chargement…</span>
+</header>
+
+<!-- Températures -->
+<div class="section-label">Températures</div>
+<div class="row col-4">
+  <div class="card">
+    <div class="card-title">Entrée — Timp</div>
+    <span class="card-value" id="v-timp">—</span><span class="card-unit">°C</span>
+  </div>
+  <div class="card">
+    <div class="card-title">Extraction — Text</div>
+    <span class="card-value" id="v-text">—</span><span class="card-unit">°C</span>
+  </div>
+  <div class="card">
+    <div class="card-title">Extérieur — Tout</div>
+    <span class="card-value" id="v-tout">—</span><span class="card-unit">°C</span>
+  </div>
+  <div class="card">
+    <div class="card-title">Intérieur — Tint</div>
+    <span class="card-value" id="v-tint">—</span><span class="card-unit">°C</span>
+  </div>
+</div>
+
+<!-- Débits -->
+<div class="section-label">Débits</div>
+<div class="row col-3">
+  <div class="card gauge-wrap">
+    <div class="card-title">Débit actuel</div>
+    <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10,65 A50,50 0 0,1 110,65" fill="none" stroke="#2d3038" stroke-width="10" stroke-linecap="round"/>
+      <path id="gauge-arc" d="M10,65 A50,50 0 0,1 110,65" fill="none" stroke="#5794f2" stroke-width="10"
+            stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="157"/>
+      <text id="gauge-val" x="60" y="60" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold">—</text>
+      <text x="60" y="71" text-anchor="middle" fill="#6c7080" font-size="8">m³/h</text>
+      <text x="10" y="76" text-anchor="middle" fill="#6c7080" font-size="7">0</text>
+      <text x="110" y="76" text-anchor="middle" fill="#6c7080" font-size="7">210</text>
+    </svg>
+  </div>
+  <div class="card">
+    <div class="card-title">Type de contrôle</div>
+    <div class="card-value" id="v-control" style="font-size:1rem; margin-top:10px; word-break:break-word;">—</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Déphasage débits</div>
+    <span class="card-value" id="v-dephasage">—</span>
+  </div>
+</div>
+
+<!-- États -->
+<div class="section-label">États</div>
+<div class="row col-3">
+  <div class="card">
+    <div class="card-title">Standby</div>
+    <span class="badge badge-off" id="s-standby">—</span>
+  </div>
+  <div class="card">
+    <div class="card-title">Bypass</div>
+    <span class="badge badge-off" id="s-bypass">—</span>
+  </div>
+  <div class="card">
+    <div class="card-title">Boost</div>
+    <span class="badge badge-off" id="s-boost">—</span>
+  </div>
+</div>
+
+<!-- Commandes -->
+<div class="section-label">Commandes</div>
+<div class="row col-6">
+  <div class="card">
+    <div class="card-title">Standby</div>
+    <button class="cmd-btn" onclick="cmd('/change/standby', this, 'fb-standby')">STANDBY</button>
+    <div class="fb" id="fb-standby"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Bypass</div>
+    <button class="cmd-btn" onclick="cmd('/change/bypass', this, 'fb-bypass')">BYPASS</button>
+    <div class="fb" id="fb-bypass"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Boost</div>
+    <button class="cmd-btn" onclick="cmd('/change/boost', this, 'fb-boost')">BOOST</button>
+    <div class="fb" id="fb-boost"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Débit bas (m³/h)</div>
+    <select id="sel-airflow">
+      <option value="60">60</option>
+      <option value="80">80</option>
+      <option value="100">100</option>
+      <option value="120" selected>120</option>
+      <option value="150">150</option>
+    </select>
+    <button class="cmd-btn" onclick="cmdVal('/change/airflow', 'sel-airflow', this, 'fb-airflow')">Appliquer</button>
+    <div class="fb" id="fb-airflow"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Débit boost (m³/h)</div>
+    <select id="sel-boost">
+      <option value="120">120</option>
+      <option value="140">140</option>
+      <option value="160">160</option>
+      <option value="180">180</option>
+      <option value="210">210</option>
+    </select>
+    <button class="cmd-btn" onclick="cmdVal('/change/boost_setting', 'sel-boost', this, 'fb-boost-set')">Appliquer</button>
+    <div class="fb" id="fb-boost-set"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Déséquilibre (m³/h)</div>
+    <select id="sel-unbalance">
+      <option value="-15">-15</option>
+      <option value="-10">-10</option>
+      <option value="-5">-5</option>
+      <option value="0" selected>0</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="15">15</option>
+    </select>
+    <button class="cmd-btn" onclick="cmdVal('/change/unbalance_flow', 'sel-unbalance', this, 'fb-unbalance')">Appliquer</button>
+    <div class="fb" id="fb-unbalance"></div>
+  </div>
+</div>
+
+<script>
+  async function refresh() {
+    try {
+      const r = await fetch('/metrics/latest');
+      if (!r.ok) throw new Error(r.status);
+      const d = await r.json();
+
+      // Temperatures
+      setText('v-timp',     fmtTemp(d['TEMPERATURE Timp']?.value));
+      setText('v-text',     fmtTemp(d['TEMPERATURE Text']?.value));
+      setText('v-tout',     fmtTemp(d['TEMPERATURE Tout']?.value));
+      setText('v-tint',     fmtTemp(d['TEMPERATURE Tint']?.value));
+
+      // Airflow gauge
+      const af = d['CURRENT AIRFLOW']?.value;
+      setText('gauge-val', af ?? '—');
+      updateGauge(af, 0, 210);
+
+      // Type of control & dephasage
+      setText('v-control',   d['TYPE OF CONTROL']?.value  ?? '—');
+      setText('v-dephasage', d['DEPHASAGE DES DEBITS']?.value ?? '—');
+
+      // Standby — coil register (0=off, 1=on) or boolean
+      const stReg = d['ACTIVATION MODE STANBY/ABSENCE']?.register;
+      setBadge('s-standby', stReg === 1 || stReg === true, 'ACTIVÉ', 'DÉSACTIVÉ');
+
+      // Bypass — value string
+      const byVal = d['STATE OF BYPASS']?.value;
+      setBadge('s-bypass', byVal === 'ACTIVED', 'ACTIVÉ', 'DÉSACTIVÉ');
+
+      // Boost — TYPE OF CONTROL register = 5
+      const ctReg = d['TYPE OF CONTROL']?.register;
+      setBadge('s-boost', ctReg === 5, 'ACTIVÉ', 'DÉSACTIVÉ');
+
+      document.getElementById('last-update').textContent =
+        'Mis à jour : ' + new Date().toLocaleTimeString();
+    } catch {
+      document.getElementById('last-update').textContent = 'Erreur de connexion';
+    }
+  }
+
+  function fmtTemp(v) {
+    if (v === undefined || v === null) return '—';
+    return typeof v === 'number' ? v.toFixed(1) : v;
+  }
+
+  function setText(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+
+  function setBadge(id, active, labelOn, labelOff) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = active ? labelOn : labelOff;
+    el.className = 'badge ' + (active ? 'badge-on' : 'badge-off');
+  }
+
+  function updateGauge(value, min, max) {
+    const arc = document.getElementById('gauge-arc');
+    if (!arc || value == null) return;
+    const ratio = Math.max(0, Math.min(1, (value - min) / (max - min)));
+    arc.setAttribute('stroke-dashoffset', 157 * (1 - ratio));
+  }
+
+  function feedback(fbId, ok) {
+    const el = document.getElementById(fbId);
+    if (!el) return;
+    el.textContent = ok ? '✓ OK' : '✗ Erreur';
+    el.className = 'fb ' + (ok ? 'fb-ok' : 'fb-err');
+    setTimeout(() => { el.textContent = ''; el.className = 'fb'; }, 3000);
+  }
+
+  async function cmd(url, btn, fbId) {
+    btn.disabled = true;
+    try {
+      const r = await fetch(url);
+      feedback(fbId, r.ok);
+      if (r.ok) setTimeout(refresh, 1200);
+    } catch { feedback(fbId, false); }
+    finally { btn.disabled = false; }
+  }
+
+  async function cmdVal(url, selId, btn, fbId) {
+    const val = document.getElementById(selId).value;
+    btn.disabled = true;
+    try {
+      const r = await fetch(`${url}?value=${val}`);
+      feedback(fbId, r.ok);
+      if (r.ok) setTimeout(refresh, 1200);
+    } catch { feedback(fbId, false); }
+    finally { btn.disabled = false; }
+  }
+
+  refresh();
+  setInterval(refresh, 30000);
+</script>
+</body>
+</html>

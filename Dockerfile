@@ -6,6 +6,9 @@ RUN apt-get update && apt-get install -y cron
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 
 COPY ./app /app
+COPY ./start.sh /start-with-cron.sh
 
-RUN chmod +x /app/retrieve.sh && python /app/cron.py
+RUN chmod +x /app/retrieve.sh /start-with-cron.sh && python /app/cron.py
+
+CMD ["/start-with-cron.sh"]
 

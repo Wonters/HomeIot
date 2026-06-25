@@ -1,9 +1,12 @@
 import json
+from pathlib import Path
 from fastapi import FastAPI
-from fastapi.responses import Response
+from fastapi.responses import Response, HTMLResponse
 from pymongo.collection import ObjectId
 from datetime import datetime
 from domeo import connect_mongo, connect_modbus, switch_coil, request_domeo
+
+DASHBOARD_HTML = (Path(__file__).parent / "templates" / "dashboard.html").read_text()
 
 app = FastAPI()
 
@@ -15,6 +18,37 @@ class MongoEncoder(json.JSONEncoder):
         elif isinstance(value, datetime):
             return value.strftime('%Y-%m-%dT%H:%M:%SZ')
         return super().default(value)
+
+
+@app.get("/", response_class=HTMLResponse)
+def dashboard():
+    return DASHBOARD_HTML
+
+
+@app.get("/metrics/latest")
+def get_latest_metrics():
+    with connect_mongo() as client:
+        pipeline = [
+            {"$sort": {"date": -1}},
+            {"$group": {
+                "_id": "$name",
+                "value": {"$first": "$value"},
+                "register": {"$first": "$register"},
+                "unit": {"$first": "$unit"},
+                "date": {"$first": "$date"},
+            }},
+        ]
+        result = {
+            doc["_id"]: {
+                "value": doc["value"],
+                "register": doc["register"],
+                "unit": doc.get("unit", ""),
+                "date": doc["date"],
+            }
+            for doc in client.domeo210.metrics.aggregate(pipeline)
+        }
+        return Response(media_type="application/json",
+                        content=json.dumps(result, cls=MongoEncoder))
 
 
 @app.get("/metrics")
