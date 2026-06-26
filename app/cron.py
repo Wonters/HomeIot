@@ -6,3 +6,5 @@ with CronTab(user="root") as cron:
     cron.remove_all()
     job = cron.new(command="/app/retrieve.sh")
     job.minute.every(PING)
+    watchdog = cron.new(command="/app/watchdog.sh")
+    watchdog.setall(f'{PING//2}-55/{PING} * * * *')

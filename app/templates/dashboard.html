@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VMC DOMEO210</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
   <style>
     :root {
       --bg: #111217;
@@ -31,7 +33,9 @@
       margin-bottom: 20px;
     }
     header h1 { font-size: 1.3rem; letter-spacing: .05em; color: #fff; }
-    #last-update { font-size: .75rem; color: var(--text-dim); }
+    #header-right { text-align: right; }
+    #cron-status { font-size: .78rem; color: var(--text-dim); margin-bottom: 2px; }
+    #last-update  { font-size: .75rem; color: var(--text-dim); }
 
     .section-label {
       font-size: .65rem;
@@ -71,19 +75,6 @@
     .card-value { font-size: 2rem; font-weight: 600; color: #fff; line-height: 1; }
     .card-unit  { font-size: .85rem; color: var(--text-dim); margin-left: 3px; }
 
-    .badge {
-      display: inline-block;
-      padding: 5px 14px;
-      border-radius: 4px;
-      font-size: .8rem;
-      font-weight: 600;
-      letter-spacing: .05em;
-      margin-top: 8px;
-    }
-    .badge-on  { background: rgba(115,191,105,.15); color: var(--green); border: 1px solid var(--green); }
-    .badge-off { background: rgba(108,112,128,.15); color: var(--text-dim); border: 1px solid var(--border); }
-    .badge-err { background: rgba(242,73,92,.15);   color: var(--red);      border: 1px solid var(--red); }
-
     /* Gauge */
     .gauge-wrap { text-align: center; }
     .gauge-wrap svg { width: 100%; max-width: 160px; }
@@ -101,11 +92,19 @@
       font-weight: 600;
       letter-spacing: .05em;
       cursor: pointer;
-      transition: background .2s, border-color .2s;
+      transition: background .2s, border-color .2s, color .2s;
     }
     .cmd-btn:hover   { background: var(--blue); border-color: var(--blue); color: #fff; }
     .cmd-btn:active  { transform: scale(.97); }
     .cmd-btn:disabled { opacity: .5; cursor: wait; }
+    .cmd-btn-active  {
+      background: rgba(115,191,105,.18) !important;
+      border-color: var(--green) !important;
+      color: var(--green) !important;
+    }
+    .cmd-btn-active:hover {
+      background: rgba(115,191,105,.35) !important;
+    }
 
     select {
       width: 100%;
@@ -117,16 +116,43 @@
       border-radius: 4px;
       font-size: .82rem;
     }
+    .cur-val {
+      font-size: .62rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
     .fb { font-size: .7rem; height: 14px; margin-top: 4px; }
     .fb-ok  { color: var(--green); }
     .fb-err { color: var(--red); }
+
+    /* Chart section */
+    .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 20px; }
+    .period-btns { display: flex; gap: 8px; margin-bottom: 14px; }
+    .period-btn {
+      padding: 5px 14px;
+      background: #2c3040;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .period-btn:hover  { border-color: var(--blue); color: var(--blue); }
+    .period-btn.active { background: rgba(87,148,242,.15); border-color: var(--blue); color: var(--blue); }
+    #chart-empty { display:none; text-align:center; color:var(--text-dim); font-size:.85rem; padding:40px 0; }
   </style>
 </head>
 <body>
 
 <header>
   <h1>VMC DOMEO210</h1>
-  <span id="last-update">chargement…</span>
+  <div id="header-right">
+    <div id="cron-status">…</div>
+    <div id="last-update">chargement…</div>
+  </div>
 </header>
 
 <!-- Températures -->
@@ -150,6 +176,18 @@
   </div>
 </div>
 
+<!-- Historique températures -->
+<div class="section-label">Historique des températures</div>
+<div class="chart-card">
+  <div class="period-btns">
+    <button class="period-btn active" onclick="setPeriod('day',this)">Jour</button>
+    <button class="period-btn" onclick="setPeriod('month',this)">Mois</button>
+    <button class="period-btn" onclick="setPeriod('year',this)">Année</button>
+  </div>
+  <div id="chart-empty">Aucune donnée pour cette période</div>
+  <canvas id="temp-chart" height="80"></canvas>
+</div>
+
 <!-- Débits -->
 <div class="section-label">Débits</div>
 <div class="row col-3">
@@ -171,24 +209,7 @@
   </div>
   <div class="card">
     <div class="card-title">Déphasage débits</div>
-    <span class="card-value" id="v-dephasage">—</span>
-  </div>
-</div>
-
-<!-- États -->
-<div class="section-label">États</div>
-<div class="row col-3">
-  <div class="card">
-    <div class="card-title">Standby</div>
-    <span class="badge badge-off" id="s-standby">—</span>
-  </div>
-  <div class="card">
-    <div class="card-title">Bypass</div>
-    <span class="badge badge-off" id="s-bypass">—</span>
-  </div>
-  <div class="card">
-    <div class="card-title">Boost</div>
-    <span class="badge badge-off" id="s-boost">—</span>
+    <span class="card-value" id="v-dephasage">—</span><span class="card-unit">%</span>
   </div>
 </div>
 
@@ -197,17 +218,17 @@
 <div class="row col-6">
   <div class="card">
     <div class="card-title">Standby</div>
-    <button class="cmd-btn" onclick="cmd('/change/standby', this, 'fb-standby')">STANDBY</button>
+    <button class="cmd-btn" id="btn-standby" onclick="cmd('/change/standby', this, 'fb-standby')">STANDBY</button>
     <div class="fb" id="fb-standby"></div>
   </div>
   <div class="card">
     <div class="card-title">Bypass</div>
-    <button class="cmd-btn" onclick="cmd('/change/bypass', this, 'fb-bypass')">BYPASS</button>
+    <button class="cmd-btn" id="btn-bypass" onclick="cmd('/change/bypass', this, 'fb-bypass')">BYPASS</button>
     <div class="fb" id="fb-bypass"></div>
   </div>
   <div class="card">
     <div class="card-title">Boost</div>
-    <button class="cmd-btn" onclick="cmd('/change/boost', this, 'fb-boost')">BOOST</button>
+    <button class="cmd-btn" id="btn-boost" onclick="cmd('/change/boost', this, 'fb-boost')">BOOST</button>
     <div class="fb" id="fb-boost"></div>
   </div>
   <div class="card">
@@ -219,6 +240,7 @@
       <option value="120" selected>120</option>
       <option value="150">150</option>
     </select>
+    <div class="cur-val">Actuel : <span id="cur-airflow">—</span> m³/h</div>
     <button class="cmd-btn" onclick="cmdVal('/change/airflow', 'sel-airflow', this, 'fb-airflow')">Appliquer</button>
     <div class="fb" id="fb-airflow"></div>
   </div>
@@ -231,6 +253,7 @@
       <option value="180">180</option>
       <option value="210">210</option>
     </select>
+    <div class="cur-val">Actuel : <span id="cur-boost">—</span> m³/h</div>
     <button class="cmd-btn" onclick="cmdVal('/change/boost_setting', 'sel-boost', this, 'fb-boost-set')">Appliquer</button>
     <div class="fb" id="fb-boost-set"></div>
   </div>
@@ -245,44 +268,134 @@
       <option value="10">10</option>
       <option value="15">15</option>
     </select>
+    <div class="cur-val">Actuel : <span id="cur-unbalance">—</span> m³/h</div>
     <button class="cmd-btn" onclick="cmdVal('/change/unbalance_flow', 'sel-unbalance', this, 'fb-unbalance')">Appliquer</button>
     <div class="fb" id="fb-unbalance"></div>
   </div>
 </div>
 
 <script>
+  /* ── Chart ── */
+  const TEMP_SERIES = [
+    { key: 'TEMPERATURE Timp', label: 'Timp (entrée)',      color: '#5794f2' },
+    { key: 'TEMPERATURE Text', label: 'Text (extraction)',  color: '#ff9830' },
+    { key: 'TEMPERATURE Tout', label: 'Tout (extérieur)',   color: '#73bf69' },
+    { key: 'TEMPERATURE Tint', label: 'Tint (intérieur)',   color: '#f2495c' },
+  ];
+
+  const tempChart = new Chart(document.getElementById('temp-chart').getContext('2d'), {
+    type: 'line',
+    data: {
+      datasets: TEMP_SERIES.map(s => ({
+        label: s.label,
+        data: [],
+        borderColor: s.color,
+        backgroundColor: s.color + '22',
+        borderWidth: 1.5,
+        pointRadius: 0,
+        tension: 0.3,
+        fill: false,
+      }))
+    },
+    options: {
+      animation: false,
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { color: '#d0d2d8', font: { size: 11 } } },
+        tooltip: { backgroundColor: '#181b1f', borderColor: '#2d3038', borderWidth: 1 }
+      },
+      scales: {
+        x: {
+          type: 'time',
+          time: { tooltipFormat: 'dd/MM HH:mm', displayFormats: { hour: 'HH:mm', day: 'dd/MM', month: 'MM/yyyy' } },
+          ticks: { color: '#6c7080', maxTicksLimit: 8 },
+          grid:  { color: '#2d3038' },
+        },
+        y: {
+          ticks: { color: '#6c7080', callback: v => v + ' °C' },
+          grid:  { color: '#2d3038' },
+        }
+      }
+    }
+  });
+
+  async function loadTemperatures(period) {
+    try {
+      const r = await fetch('/metrics/temperatures?period=' + period);
+      const d = await r.json();
+      let hasData = false;
+      TEMP_SERIES.forEach((s, i) => {
+        const pts = (d[s.key] || []).map(p => ({ x: p.t, y: p.v }));
+        tempChart.data.datasets[i].data = pts;
+        if (pts.length) hasData = true;
+      });
+      tempChart.update();
+      document.getElementById('chart-empty').style.display = hasData ? 'none' : 'block';
+      document.getElementById('temp-chart').style.display  = hasData ? 'block' : 'none';
+    } catch (e) {
+      console.error('loadTemperatures', e);
+    }
+  }
+
+  function setPeriod(period, btn) {
+    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    loadTemperatures(period);
+  }
+
+  /* ── Status cron ── */
+  async function loadStatus() {
+    try {
+      const r = await fetch('/status');
+      const d = await r.json();
+      const dot   = d.cron_running ? '<span style="color:#73bf69">●</span>' : '<span style="color:#f2495c">●</span>';
+      const label = d.cron_running ? 'actif' : 'inactif';
+      document.getElementById('cron-status').innerHTML =
+        dot + ' Cron ' + label + ' · toutes les ' + d.cron_interval_min + ' min';
+    } catch {
+      document.getElementById('cron-status').textContent = 'Statut cron indisponible';
+    }
+  }
+
+  /* ── Metrics refresh ── */
   async function refresh() {
     try {
       const r = await fetch('/metrics/latest');
       if (!r.ok) throw new Error(r.status);
       const d = await r.json();
 
-      // Temperatures
-      setText('v-timp',     fmtTemp(d['TEMPERATURE Timp']?.value));
-      setText('v-text',     fmtTemp(d['TEMPERATURE Text']?.value));
-      setText('v-tout',     fmtTemp(d['TEMPERATURE Tout']?.value));
-      setText('v-tint',     fmtTemp(d['TEMPERATURE Tint']?.value));
+      setText('v-timp', fmtTemp(d['TEMPERATURE Timp']?.value));
+      setText('v-text', fmtTemp(d['TEMPERATURE Text']?.value));
+      setText('v-tout', fmtTemp(d['TEMPERATURE Tout']?.value));
+      setText('v-tint', fmtTemp(d['TEMPERATURE Tint']?.value));
 
-      // Airflow gauge
       const af = d['CURRENT AIRFLOW']?.value;
       setText('gauge-val', af ?? '—');
       updateGauge(af, 0, 210);
 
-      // Type of control & dephasage
       setText('v-control',   d['TYPE OF CONTROL']?.value  ?? '—');
       setText('v-dephasage', d['DEPHASAGE DES DEBITS']?.value ?? '—');
 
-      // Standby — coil register (0=off, 1=on) or boolean
       const stReg = d['ACTIVATION MODE STANBY/ABSENCE']?.register;
-      setBadge('s-standby', stReg === 1 || stReg === true, 'ACTIVÉ', 'DÉSACTIVÉ');
+      setCmdBtn('btn-standby', stReg === 1 || stReg === true);
 
-      // Bypass — value string
       const byVal = d['STATE OF BYPASS']?.value;
-      setBadge('s-bypass', byVal === 'ACTIVED', 'ACTIVÉ', 'DÉSACTIVÉ');
+      setCmdBtn('btn-bypass', byVal === 'ACTIVED');
 
-      // Boost — TYPE OF CONTROL register = 5
       const ctReg = d['TYPE OF CONTROL']?.register;
-      setBadge('s-boost', ctReg === 5, 'ACTIVÉ', 'DÉSACTIVÉ');
+      setCmdBtn('btn-boost', ctReg === 5);
+
+      // Current settings
+      const curAf  = d['LOW AIRFLOW SETTING']?.value;
+      const curBst = d['TEMPORISED 1/2H BOOST AIRFLOW SETTING']?.value;
+      const curUnb = d['UNBALANCE AIRFLOW SELECTION']?.value;
+      setText('cur-airflow',   curAf  ?? '—');
+      setText('cur-boost',     curBst ?? '—');
+      setText('cur-unbalance', curUnb ?? '—');
+      selectClosest('sel-airflow',   curAf);
+      selectClosest('sel-boost',     curBst);
+      selectClosest('sel-unbalance', curUnb);
 
       document.getElementById('last-update').textContent =
         'Mis à jour : ' + new Date().toLocaleTimeString();
@@ -291,6 +404,7 @@
     }
   }
 
+  /* ── Helpers ── */
   function fmtTemp(v) {
     if (v === undefined || v === null) return '—';
     return typeof v === 'number' ? v.toFixed(1) : v;
@@ -301,11 +415,21 @@
     if (el) el.textContent = val;
   }
 
-  function setBadge(id, active, labelOn, labelOff) {
+  function setCmdBtn(id, active) {
     const el = document.getElementById(id);
     if (!el) return;
-    el.textContent = active ? labelOn : labelOff;
-    el.className = 'badge ' + (active ? 'badge-on' : 'badge-off');
+    if (active) el.classList.add('cmd-btn-active');
+    else        el.classList.remove('cmd-btn-active');
+  }
+
+  function selectClosest(selId, val) {
+    if (val === undefined || val === null) return;
+    const sel = document.getElementById(selId);
+    if (!sel) return;
+    const target = String(Math.round(val));
+    for (const opt of sel.options) {
+      if (opt.value === target) { sel.value = target; return; }
+    }
   }
 
   function updateGauge(value, min, max) {
@@ -344,8 +468,12 @@
     finally { btn.disabled = false; }
   }
 
+  /* ── Init ── */
+  loadStatus();
   refresh();
+  loadTemperatures('day');
   setInterval(refresh, 30000);
+  setInterval(loadStatus, 60000);
 </script>
 </body>
 </html>

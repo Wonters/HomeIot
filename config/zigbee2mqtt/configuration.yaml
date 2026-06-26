@@ -1,0 +1,32 @@
+data_path: /app/data
+socat:
+  enabled: false
+  master: pty,raw,echo=0,link=/tmp/ttyZ2M,mode=777
+  slave: tcp-listen:8485,keepalive,nodelay,reuseaddr,keepidle=1,keepintvl=1,keepcnt=5
+  options: '-d -d'
+  log: false
+mqtt:
+  server: mqtt://core-mosquitto:1883
+  user: mqtt-user
+  password: mqtt
+serial:
+  port: tcp://192.168.3.7:8485
+  adapter: ezsp
+zigbee_herdsman_debug: true
+frontend:
+  enabled: true
+advanced:
+  log_level: debug
+  external_converters:
+    - esp32h2.js
+    - linky.js
+    - temperature.js
+disable_tuya_default_response: false
+version: 5
+ota:
+  default_maximum_data_size: 61
+devices:
+  '0x744dbdfffe607d24':
+    friendly_name: relay_test
+  '0x744dbdfffe600e66':
+    friendly_name: Linky TIC

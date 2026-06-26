@@ -3,7 +3,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.responses import Response, HTMLResponse
 from pymongo.collection import ObjectId
-from datetime import datetime
+from datetime import datetime, timedelta
 from domeo import connect_mongo, connect_modbus, switch_coil, request_domeo
 
 DASHBOARD_HTML = (Path(__file__).parent / "templates" / "dashboard.html").read_text()
@@ -115,6 +115,50 @@ def change_unbalance_flow(value: int = 0):
         value = value + (2 ** 16)
     with connect_modbus() as client:
         print(client.write_register(address=8, value=value))
+
+
+@app.get("/metrics/temperatures")
+def get_temperature_history(period: str = 'day'):
+    with connect_mongo() as client:
+        now = datetime.utcnow()
+        if period == 'year':
+            since = now - timedelta(days=365)
+        elif period == 'month':
+            since = now - timedelta(days=30)
+        else:
+            since = now - timedelta(days=1)
+        names = ['TEMPERATURE Timp', 'TEMPERATURE Text', 'TEMPERATURE Tout', 'TEMPERATURE Tint']
+        result = {}
+        for name in names:
+            docs = list(client.domeo210.metrics.find(
+                {'name': name, 'date': {'$gte': since}},
+                {'date': 1, 'value': 1, '_id': 0}
+            ).sort('date', 1))
+            if len(docs) > 300:
+                step = len(docs) // 300
+                docs = docs[::step]
+            result[name] = [{'t': d['date'], 'v': d['value']} for d in docs]
+        return Response(media_type="application/json",
+                        content=json.dumps(result, cls=MongoEncoder))
+
+
+@app.get("/status")
+def get_status():
+    import subprocess
+    with connect_mongo() as client:
+        last = client.domeo210.metrics.find_one(sort=[('date', -1)])
+        last_date = last['date'] if last else None
+    try:
+        result = subprocess.run(['service', 'cron', 'status'], capture_output=True, text=True)
+        cron_running = 'running' in result.stdout.lower() or 'running' in result.stderr.lower()
+    except Exception:
+        cron_running = False
+    return Response(media_type="application/json",
+                    content=json.dumps({
+                        'cron_running': cron_running,
+                        'cron_interval_min': 10,
+                        'last_update': last_date,
+                    }, cls=MongoEncoder))
 
 
 @app.get("/metrics/drop")

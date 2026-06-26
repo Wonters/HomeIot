@@ -46,11 +46,10 @@ def decode(name, available_values, modbus_response):
             value = "not found in datasheet"
         unit = ""
     else:
-        if name == "UNBALANCE AIRFLOW SELECTION":
+        if name in ("UNBALANCE AIRFLOW SELECTION", "DEPHASAGE DES DEBITS"):
             value = (
-                modbus_response - (2**16) if modbus_response > 15 else modbus_response
+                modbus_response - (2**16) if modbus_response > 32767 else modbus_response
             )
-            print(value)
         elif name in (
             "TEMPERATURE Tin PRE-HEATING BATTERY",
             "TEMPERATURE Tout PRE-HEATING BATTERY",

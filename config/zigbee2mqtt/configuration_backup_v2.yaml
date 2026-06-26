@@ -1,0 +1,24 @@
+data_path: /app/data
+socat:
+  enabled: false
+  master: pty,raw,echo=0,link=/tmp/ttyZ2M,mode=777
+  slave: tcp-listen:8485,keepalive,nodelay,reuseaddr,keepidle=1,keepintvl=1,keepcnt=5
+  options: "-d -d"
+  log: false
+mqtt:
+  server: mqtt://core-mosquitto:1883
+  user: mqtt-user
+  password: mqtt
+serial:
+  port: tcp://192.168.3.7:8485
+  adapter: ezsp
+permit_join: true
+zigbee_herdsman_debug: true
+frontend: true
+advanced:
+  log_level: debug
+  external_converters:
+    - esp32h2.js
+    - linky.js
+    - temperature.js
+disable_tuya_default_response: false
