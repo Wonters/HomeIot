@@ -16145,3 +16145,7 @@ TypeError: can't compare offset-naive and offset-aware datetimes
 2026-06-28T20:18:10Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
 2026-06-28T20:18:10Z INFO retrieve completed
 2026-06-28T20:18:25Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:18:59Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:18:59Z INFO watchdog completed
+2026-06-28T20:19:11Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:19:11Z INFO retrieve completed
