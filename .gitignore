@@ -1,3 +1,11 @@
 .env
 mosquitto/data
 mosquitto/log
+mongo/data
+config/zigbee2mqtt/log
+config/zigbee2mqtt/data
+config/zigbee2mqtt/migration*
+config/zigbee2mqtt/database.db.backup*
+__pycache__/
+.venv/
+mosquitto/config/passwd

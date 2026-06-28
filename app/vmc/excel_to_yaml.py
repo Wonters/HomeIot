@@ -8,7 +8,7 @@ from openpyxl.utils.cell import (
 from openpyxl.cell import MergedCell
 import yaml
 
-config_filepath = "config/domeo210_modbus.yml"
+config_filepath = "vmc/config/domeo210_modbus.yml"
 data = yaml.load(open(config_filepath, "r"), yaml.SafeLoader)
 wb = load_workbook("Downloads/DOMEO-PARAMETRES-MODBUS.xlsx")
 

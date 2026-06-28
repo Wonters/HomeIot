@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeIot</title>
+  <style>
+    :root {
+      --bg: #111217;
+      --card: #181b1f;
+      --border: #2d3038;
+      --text: #d0d2d8;
+      --text-dim: #6c7080;
+      --blue: #5794f2;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    header {
+      max-width: 720px;
+      margin: 0 auto 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    header h1 {
+      font-size: 1.6rem;
+      letter-spacing: .06em;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    header p {
+      font-size: .9rem;
+      color: var(--text-dim);
+    }
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+    }
+    .apps {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+    .app-card {
+      display: block;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color .2s, transform .15s, box-shadow .2s;
+    }
+    .app-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+    }
+    .app-icon {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+      line-height: 1;
+    }
+    .app-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .app-desc {
+      font-size: .8rem;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>HomeIot</h1>
+  <p>Tableau de bord central des applications domotiques.</p>
+</header>
+
+<main>
+  <div class="section-label">Vue d'ensemble</div>
+  <div class="apps">
+    <a class="app-card" href="/dashboard/">
+      <div class="app-icon">📈</div>
+      <div class="app-name">Température extérieur</div>
+      <div class="app-desc">X-Sense SAAS et VMC Tout — comparaison des mesures extérieures.</div>
+    </a>
+  </div>
+
+  <div class="section-label" style="margin-top: 28px">Applications</div>
+  <div class="apps">
+    <a class="app-card" href="/vmc/">
+      <div class="app-icon">🌀</div>
+      <div class="app-name">VMC</div>
+      <div class="app-desc">Ventilation DOMEO210 — températures, débits et commandes.</div>
+    </a>
+  </div>
+
+  <div class="section-label" style="margin-top: 28px">Capteurs</div>
+  <div class="apps">
+    <a class="app-card" href="/capteurs/#zigbee">
+      <div class="app-icon">📡</div>
+      <div class="app-name">Capteurs Zigbee</div>
+      <div class="app-desc">Capteurs et actionneurs Zigbee — via zigbee2mqtt.</div>
+    </a>
+    <a class="app-card" href="/capteurs/#lora">
+      <div class="app-icon">🛡️</div>
+      <div class="app-name">X-Sense (LoRa)</div>
+      <div class="app-desc">Détecteurs fumée et thermo-hygromètres — base SBS50 / cloud.</div>
+    </a>
+  </div>
+
+  <div class="section-label" style="margin-top: 28px">Infrastructure</div>
+  <div class="apps">
+    <a class="app-card external-link" href="http://localhost:8001/" target="_blank" rel="noopener noreferrer" data-port="8001">
+      <div class="app-icon">🐝</div>
+      <div class="app-name">Zigbee2MQTT</div>
+      <div class="app-desc">Interface web — appairage, carte réseau et journaux.</div>
+    </a>
+    <a class="app-card external-link" href="http://localhost:3000/" target="_blank" rel="noopener noreferrer" data-port="3000">
+      <div class="app-icon">📊</div>
+      <div class="app-name">Grafana</div>
+      <div class="app-desc">Tableaux de bord — visualisation et commandes VMC.</div>
+    </a>
+  </div>
+  <script>
+    document.querySelectorAll('.external-link[data-port]').forEach(function (el) {
+      el.href = location.protocol + '//' + location.hostname + ':' + el.dataset.port + '/';
+    });
+  </script>
+</main>
+
+</body>
+</html>

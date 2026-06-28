@@ -1,0 +1,16 @@
+[project]
+name = "homeiot"
+version = "0.1.0"
+description = "HomeIot domotic hub"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "pymodbus>=3.8.0",
+    "pymongo>=4.11.0",
+    "pyyaml>=6.0.2",
+    "tqdm>=4.67.0",
+    "paho-mqtt>=2.1.0",
+    "python-xsense>=0.0.17",
+    "aiohttp>=3.14.1",
+]

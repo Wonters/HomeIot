@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Température extérieur</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2/dist/chartjs-plugin-zoom.min.js"></script>
+  <style>
+    :root {
+      --bg: #111217;
+      --card: #181b1f;
+      --border: #2d3038;
+      --text: #d0d2d8;
+      --text-dim: #6c7080;
+      --green: #73bf69;
+      --blue: #5794f2;
+      --orange: #ff9830;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+      padding: 0;
+    }
+    .page {
+      padding: 16px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    header h1 { font-size: 1.3rem; letter-spacing: .05em; color: #fff; }
+    #header-right { text-align: right; font-size: .78rem; color: var(--text-dim); }
+    .section-label {
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cards {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      margin-bottom: 24px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+    .card-title {
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    .card-value { font-size: 1.8rem; font-weight: 600; color: #fff; line-height: 1; }
+    .card-unit { font-size: .85rem; color: var(--text-dim); margin-left: 3px; }
+    .card-date { font-size: .68rem; color: var(--text-dim); margin-top: 6px; }
+    .card-age { font-size: .68rem; margin-top: 4px; }
+    .card-age.stale { color: #ff9830; }
+    .card.vmc { border-left: 3px solid var(--green); }
+    .card.xsense { border-left: 3px solid var(--orange); }
+    .diag-note {
+      background: rgba(255, 152, 48, .08);
+      border: 1px solid rgba(255, 152, 48, .25);
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: .78rem;
+      color: var(--text-dim);
+      line-height: 1.45;
+      margin-bottom: 20px;
+    }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .period-btns { display: flex; gap: 8px; margin-bottom: 14px; }
+    .period-btn {
+      padding: 5px 14px;
+      background: #2c3040;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .period-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .period-btn.active { background: rgba(87,148,242,.15); border-color: var(--blue); color: var(--blue); }
+    #chart-empty {
+      display: none;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: .85rem;
+      padding: 40px 0;
+    }
+    .chart-hint {
+      font-size: .7rem;
+      color: var(--text-dim);
+      margin-top: -8px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+<header>
+  <h1>Température extérieur</h1>
+  <div id="header-right">VMC Tout · X-Sense SAAS</div>
+</header>
+
+<div class="section-label">Valeurs actuelles</div>
+<div class="cards" id="latest-cards"></div>
+<div class="diag-note" id="diag-note" hidden></div>
+
+<div class="section-label">Historique</div>
+<div class="chart-card">
+  <div class="period-btns">
+    <button class="period-btn active" onclick="setPeriod('day', this)">Jour</button>
+    <button class="period-btn" onclick="setPeriod('month', this)">Mois</button>
+    <button class="period-btn" onclick="setPeriod('year', this)">Année</button>
+  </div>
+  <div id="chart-empty">Aucune donnée pour cette période</div>
+  <p class="chart-hint">Températures extérieures (°C) — glisser pour zoomer · double-clic pour réinitialiser</p>
+  <canvas id="history-chart" height="120"></canvas>
+</div>
+
+</div>
+
+<script>
+  let currentPeriod = 'day';
+
+  const historyChart = new Chart(document.getElementById('history-chart').getContext('2d'), {
+    type: 'line',
+    data: { datasets: [] },
+    options: {
+      animation: false,
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { color: '#d0d2d8', font: { size: 11 } } },
+        tooltip: {
+          backgroundColor: '#181b1f',
+          borderColor: '#2d3038',
+          borderWidth: 1,
+          callbacks: {
+            label(ctx) {
+              const v = ctx.parsed.y;
+              return ctx.dataset.label + ' : ' + (typeof v === 'number' ? v.toFixed(1) : v) + ' °C';
+            },
+          },
+        },
+        zoom: {
+          limits: { x: { min: 'original', max: 'original' } },
+          pan: { enabled: false },
+          zoom: {
+            wheel: { enabled: false },
+            pinch: { enabled: false },
+            drag: {
+              enabled: true,
+              backgroundColor: 'rgba(87,148,242,0.12)',
+              borderColor: 'rgba(87,148,242,0.55)',
+              borderWidth: 1,
+            },
+            mode: 'x',
+          },
+        },
+      },
+      scales: {
+        x: {
+          type: 'time',
+          time: {
+            tooltipFormat: 'dd/MM HH:mm',
+            displayFormats: { hour: 'HH:mm', day: 'dd/MM', month: 'MM/yyyy' },
+          },
+          ticks: { color: '#6c7080', maxTicksLimit: 8 },
+          grid: { color: '#2d3038' },
+        },
+        y: {
+          ticks: { color: '#6c7080', callback: v => v + ' °C' },
+          grid: { color: '#2d3038' },
+        },
+      },
+    },
+  });
+
+  document.getElementById('history-chart').addEventListener('dblclick', () => {
+    historyChart.resetZoom();
+  });
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleString();
+  }
+
+  function fmtTemp(v) {
+    return typeof v === 'number' ? v.toFixed(1) : '—';
+  }
+
+  function ageMinutes(iso) {
+    if (!iso) return null;
+    return Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  }
+
+  function ageLabel(iso) {
+    const mins = ageMinutes(iso);
+    if (mins === null) return '—';
+    if (mins < 2) return 'à l\'instant';
+    if (mins < 60) return `il y a ${mins} min`;
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return m ? `il y a ${h} h ${m} min` : `il y a ${h} h`;
+  }
+
+  function renderDiagNote(data) {
+    const note = document.getElementById('diag-note');
+    const vmc = data.vmc_tout;
+    const xs = data.xsense_saas;
+    const parts = [];
+
+    const xsAge = ageMinutes(xs?.date);
+    if (xsAge !== null && xsAge > 30) {
+      const cloudAge = ageMinutes(xs.cloud_sync_at);
+      const cloudInfo = cloudAge !== null && cloudAge < 30
+        ? ` · cloud sync ${ageLabel(xs.cloud_sync_at)}`
+        : '';
+      parts.push(`X-Sense : dernière mesure ${ageLabel(xs.date)}${xs.battery != null ? ` · batterie ${xs.battery}%` : ''}${cloudInfo}.`);
+    }
+    if (typeof vmc?.value === 'number' && typeof xs?.value === 'number') {
+      const delta = xs.value - vmc.value;
+      parts.push(`Écart actuel : ${delta > 0 ? '+' : ''}${delta.toFixed(1)} °C (X-Sense vs VMC).`);
+    }
+    if (parts.length) {
+      parts.push('La sonde VMC est sur l\'unité DOMEO (prise d\'air), pas sur la terrasse — un écart diurne est normal si l\'exposition au soleil diffère.');
+      note.textContent = parts.join(' ');
+      note.hidden = false;
+    } else {
+      note.hidden = true;
+    }
+  }
+
+  function renderLatestCards(data) {
+    const xsense = data.xsense_saas;
+    const vmcAge = ageMinutes(data.vmc_tout?.date);
+    const xsAge = ageMinutes(xsense?.date);
+    document.getElementById('latest-cards').innerHTML = `
+      <div class="card vmc">
+        <div class="card-title">VMC Tout</div>
+        <span class="card-value">${fmtTemp(data.vmc_tout?.value)}</span><span class="card-unit">°C</span>
+        <div class="card-date">${fmtDate(data.vmc_tout?.date)}</div>
+        <div class="card-age${vmcAge > 5 ? ' stale' : ''}">MAJ ${ageLabel(data.vmc_tout?.date)}</div>
+      </div>
+      <div class="card xsense">
+        <div class="card-title">${xsense?.label || 'X-Sense SAAS'}</div>
+        <span class="card-value">${fmtTemp(xsense?.value)}</span><span class="card-unit">°C</span>
+        <div class="card-date">${fmtDate(xsense?.date)}</div>
+        <div class="card-age${xsAge > 30 ? ' stale' : ''}">MAJ ${ageLabel(xsense?.date)}</div>
+      </div>`;
+    renderDiagNote(data);
+  }
+
+  async function loadLatest() {
+    try {
+      const r = await fetch('/dashboard/latest');
+      renderLatestCards(await r.json());
+    } catch (e) {
+      console.error('loadLatest', e);
+    }
+  }
+
+  async function loadChartData(period) {
+    try {
+      const r = await fetch('/dashboard/temperatures?period=' + period);
+      const data = await r.json();
+
+      const datasets = [];
+      const seriesList = [
+        { key: 'vmc_tout', color: data.colors?.vmc_tout || '#73bf69', width: 2 },
+        { key: 'xsense_saas', color: data.colors?.xsense_saas || '#ff9830', width: 2 },
+      ];
+      seriesList.forEach(({ key, color, width }) => {
+        const series = data[key];
+        if (!series?.points?.length) return;
+        datasets.push({
+          label: series.label,
+          data: series.points.map(p => ({ x: p.t, y: p.v })),
+          borderColor: color,
+          backgroundColor: color + '22',
+          borderWidth: width,
+          pointRadius: 0,
+          tension: 0.3,
+          fill: false,
+        });
+      });
+
+      historyChart.data.datasets = datasets;
+      historyChart.resetZoom();
+      historyChart.update();
+
+      const hasData = datasets.length > 0;
+      document.getElementById('chart-empty').style.display = hasData ? 'none' : 'block';
+      document.getElementById('history-chart').style.display = hasData ? 'block' : 'none';
+    } catch (e) {
+      console.error('loadChartData', e);
+    }
+  }
+
+  function setPeriod(period, btn) {
+    currentPeriod = period;
+    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    loadChartData(period);
+  }
+
+  loadLatest();
+  loadChartData('day');
+  setInterval(() => {
+    loadLatest();
+    loadChartData(currentPeriod);
+  }, 30000);
+</script>
+
+</body>
+</html>

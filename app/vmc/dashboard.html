@@ -6,6 +6,7 @@
   <title>VMC DOMEO210</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2/dist/chartjs-plugin-zoom.min.js"></script>
   <style>
     :root {
       --bg: #111217;
@@ -22,6 +23,9 @@
       background: var(--bg);
       color: var(--text);
       font-family: system-ui, sans-serif;
+      padding: 0;
+    }
+    .page {
       padding: 16px;
     }
     header {
@@ -34,7 +38,7 @@
     }
     header h1 { font-size: 1.3rem; letter-spacing: .05em; color: #fff; }
     #header-right { text-align: right; }
-    #cron-status { font-size: .78rem; color: var(--text-dim); margin-bottom: 2px; }
+    #supervisor-status { font-size: .78rem; color: var(--text-dim); margin-bottom: 2px; }
     #last-update  { font-size: .75rem; color: var(--text-dim); }
 
     .section-label {
@@ -49,14 +53,15 @@
     .row { display: grid; gap: 12px; margin-bottom: 20px; }
     .col-4 { grid-template-columns: repeat(4, 1fr); }
     .col-3 { grid-template-columns: repeat(3, 1fr); }
+    .col-2 { grid-template-columns: repeat(2, 1fr); }
     .col-6 { grid-template-columns: repeat(6, 1fr); }
 
     @media (max-width: 900px) {
-      .col-4, .col-3 { grid-template-columns: repeat(2, 1fr); }
+      .col-4, .col-3, .col-2 { grid-template-columns: repeat(2, 1fr); }
       .col-6 { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 500px) {
-      .col-4, .col-3, .col-6 { grid-template-columns: repeat(2, 1fr); }
+      .col-4, .col-3, .col-2, .col-6 { grid-template-columns: repeat(2, 1fr); }
     }
 
     .card {
@@ -73,11 +78,40 @@
       margin-bottom: 8px;
     }
     .card-value { font-size: 2rem; font-weight: 600; color: #fff; line-height: 1; }
+    .card-value-sm { font-size: 1rem; font-weight: 600; color: #fff; line-height: 1.35; word-break: break-word; }
     .card-unit  { font-size: .85rem; color: var(--text-dim); margin-left: 3px; }
 
     /* Gauge */
     .gauge-wrap { text-align: center; }
     .gauge-wrap svg { width: 100%; max-width: 160px; }
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .card-title-row .card-title { margin-bottom: 0; }
+    .bypass-badge {
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .bypass-badge.on {
+      color: var(--green);
+      border-color: var(--green);
+      background: rgba(115, 191, 105, .12);
+    }
+    .bypass-badge.off {
+      color: var(--text-dim);
+      border-color: var(--border);
+      background: rgba(108, 112, 128, .08);
+    }
 
     /* Commands */
     .cmd-btn {
@@ -116,6 +150,22 @@
       border-radius: 4px;
       font-size: .82rem;
     }
+    .config-input {
+      width: 100%;
+      margin-top: 6px;
+      padding: 6px 8px;
+      background: #2c3040;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: .82rem;
+    }
+    .config-hint {
+      font-size: .68rem;
+      color: var(--text-dim);
+      margin-top: 8px;
+      line-height: 1.4;
+    }
     .cur-val {
       font-size: .62rem;
       color: var(--text-dim);
@@ -143,14 +193,18 @@
     .period-btn:hover  { border-color: var(--blue); color: var(--blue); }
     .period-btn.active { background: rgba(87,148,242,.15); border-color: var(--blue); color: var(--blue); }
     #chart-empty { display:none; text-align:center; color:var(--text-dim); font-size:.85rem; padding:40px 0; }
+    .chart-hint { font-size: .7rem; color: var(--text-dim); margin-top: -8px; margin-bottom: 10px; }
+    #history-chart { cursor: crosshair; }
   </style>
 </head>
 <body>
 
+<div class="page">
+
 <header>
   <h1>VMC DOMEO210</h1>
   <div id="header-right">
-    <div id="cron-status">…</div>
+    <div id="supervisor-status">…</div>
     <div id="last-update">chargement…</div>
   </div>
 </header>
@@ -176,8 +230,29 @@
   </div>
 </div>
 
-<!-- Historique températures -->
-<div class="section-label">Historique des températures</div>
+<!-- Équipement -->
+<div class="section-label">Équipement</div>
+<div class="row col-4">
+  <div class="card">
+    <div class="card-title">Type VMC</div>
+    <div class="card-value-sm" id="v-vmc-type">—</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Firmware carte</div>
+    <div class="card-value-sm" id="v-fw-main">—</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Firmware télécommande</div>
+    <div class="card-value-sm" id="v-fw-remote">—</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Firmware programmation</div>
+    <div class="card-value-sm" id="v-fw-prog">—</div>
+  </div>
+</div>
+
+<!-- Historique -->
+<div class="section-label">Historique températures &amp; modes</div>
 <div class="chart-card">
   <div class="period-btns">
     <button class="period-btn active" onclick="setPeriod('day',this)">Jour</button>
@@ -185,14 +260,18 @@
     <button class="period-btn" onclick="setPeriod('year',this)">Année</button>
   </div>
   <div id="chart-empty">Aucune donnée pour cette période</div>
-  <canvas id="temp-chart" height="80"></canvas>
+  <p class="chart-hint">Températures (°C) · États réels Standby / Bypass / Boost — glisser pour zoomer · double-clic pour réinitialiser</p>
+  <canvas id="history-chart" height="100"></canvas>
 </div>
 
 <!-- Débits -->
 <div class="section-label">Débits</div>
 <div class="row col-3">
   <div class="card gauge-wrap">
-    <div class="card-title">Débit actuel</div>
+    <div class="card-title-row">
+      <div class="card-title">Débit actuel</div>
+      <span id="bypass-state-badge" class="bypass-badge off">Bypass OFF</span>
+    </div>
     <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg">
       <path d="M10,65 A50,50 0 0,1 110,65" fill="none" stroke="#2d3038" stroke-width="10" stroke-linecap="round"/>
       <path id="gauge-arc" d="M10,65 A50,50 0 0,1 110,65" fill="none" stroke="#5794f2" stroke-width="10"
@@ -213,22 +292,60 @@
   </div>
 </div>
 
+<!-- Moteurs -->
+<div class="section-label">Moteurs</div>
+<div class="row col-2">
+  <div class="card">
+    <div class="card-title">Vitesse extraction</div>
+    <span class="card-value" id="v-motor-extract">—</span><span class="card-unit">RPM</span>
+  </div>
+  <div class="card">
+    <div class="card-title">Vitesse insufflation</div>
+    <span class="card-value" id="v-motor-input">—</span><span class="card-unit">RPM</span>
+  </div>
+</div>
+
+<!-- Bypass auto DOMEO -->
+<div class="section-label">Bypass auto (DOMEO)</div>
+<div class="row col-3">
+  <div class="card">
+    <div class="card-title">Bypass auto control</div>
+    <p class="config-hint">Logique native DOMEO — seuils Tint / Text MINI</p>
+    <button class="cmd-btn" id="btn-bypass-auto" onclick="cmd('/vmc/change/bypass_auto', this, 'fb-bypass-auto')">BYPASS AUTO</button>
+    <div class="fb" id="fb-bypass-auto"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Text MINI (°C)</div>
+    <input class="config-input" id="cfg-text-mini" type="number" min="11" max="20" step="1" value="12">
+    <p class="config-hint">Température extraction min. (11–20 °C)</p>
+    <button class="cmd-btn" onclick="saveBypassAutoMini('text', this)">Appliquer</button>
+    <div class="fb" id="fb-text-mini"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Tint MINI (°C)</div>
+    <input class="config-input" id="cfg-tint-mini" type="number" min="21" max="30" step="1" value="24">
+    <p class="config-hint">Température intérieure min. (21–30 °C)</p>
+    <button class="cmd-btn" onclick="saveBypassAutoMini('tint', this)">Appliquer</button>
+    <div class="fb" id="fb-tint-mini"></div>
+  </div>
+</div>
+
 <!-- Commandes -->
 <div class="section-label">Commandes</div>
 <div class="row col-6">
   <div class="card">
     <div class="card-title">Standby</div>
-    <button class="cmd-btn" id="btn-standby" onclick="cmd('/change/standby', this, 'fb-standby')">STANDBY</button>
+    <button class="cmd-btn" id="btn-standby" onclick="cmd('/vmc/change/standby', this, 'fb-standby')">STANDBY</button>
     <div class="fb" id="fb-standby"></div>
   </div>
   <div class="card">
     <div class="card-title">Bypass</div>
-    <button class="cmd-btn" id="btn-bypass" onclick="cmd('/change/bypass', this, 'fb-bypass')">BYPASS</button>
+    <button class="cmd-btn" id="btn-bypass" onclick="cmd('/vmc/change/bypass', this, 'fb-bypass')">BYPASS</button>
     <div class="fb" id="fb-bypass"></div>
   </div>
   <div class="card">
     <div class="card-title">Boost</div>
-    <button class="cmd-btn" id="btn-boost" onclick="cmd('/change/boost', this, 'fb-boost')">BOOST</button>
+    <button class="cmd-btn" id="btn-boost" onclick="cmd('/vmc/change/boost', this, 'fb-boost')">BOOST</button>
     <div class="fb" id="fb-boost"></div>
   </div>
   <div class="card">
@@ -241,7 +358,7 @@
       <option value="150">150</option>
     </select>
     <div class="cur-val">Actuel : <span id="cur-airflow">—</span> m³/h</div>
-    <button class="cmd-btn" onclick="cmdVal('/change/airflow', 'sel-airflow', this, 'fb-airflow')">Appliquer</button>
+    <button class="cmd-btn" onclick="cmdVal('/vmc/change/airflow', 'sel-airflow', this, 'fb-airflow')">Appliquer</button>
     <div class="fb" id="fb-airflow"></div>
   </div>
   <div class="card">
@@ -254,7 +371,7 @@
       <option value="210">210</option>
     </select>
     <div class="cur-val">Actuel : <span id="cur-boost">—</span> m³/h</div>
-    <button class="cmd-btn" onclick="cmdVal('/change/boost_setting', 'sel-boost', this, 'fb-boost-set')">Appliquer</button>
+    <button class="cmd-btn" onclick="cmdVal('/vmc/change/boost_setting', 'sel-boost', this, 'fb-boost-set')">Appliquer</button>
     <div class="fb" id="fb-boost-set"></div>
   </div>
   <div class="card">
@@ -269,8 +386,9 @@
       <option value="15">15</option>
     </select>
     <div class="cur-val">Actuel : <span id="cur-unbalance">—</span> m³/h</div>
-    <button class="cmd-btn" onclick="cmdVal('/change/unbalance_flow', 'sel-unbalance', this, 'fb-unbalance')">Appliquer</button>
+    <button class="cmd-btn" onclick="cmdVal('/vmc/change/unbalance_flow', 'sel-unbalance', this, 'fb-unbalance')">Appliquer</button>
     <div class="fb" id="fb-unbalance"></div>
+  </div>
   </div>
 </div>
 
@@ -283,27 +401,85 @@
     { key: 'TEMPERATURE Tint', label: 'Tint (intérieur)',   color: '#f2495c' },
   ];
 
-  const tempChart = new Chart(document.getElementById('temp-chart').getContext('2d'), {
+  const MODE_SERIES = [
+    { key: 'standby', label: 'Standby', color: '#b877d9' },
+    { key: 'bypass',  label: 'Bypass',  color: '#fade2a' },
+    { key: 'boost',   label: 'Boost',   color: '#56d64b' },
+  ];
+
+  let currentPeriod = 'day';
+
+  const historyChart = new Chart(document.getElementById('history-chart').getContext('2d'), {
     type: 'line',
     data: {
-      datasets: TEMP_SERIES.map(s => ({
-        label: s.label,
-        data: [],
-        borderColor: s.color,
-        backgroundColor: s.color + '22',
-        borderWidth: 1.5,
-        pointRadius: 0,
-        tension: 0.3,
-        fill: false,
-      }))
+      datasets: [
+        ...TEMP_SERIES.map(s => ({
+          label: s.label,
+          data: [],
+          borderColor: s.color,
+          backgroundColor: s.color + '22',
+          borderWidth: 1.5,
+          pointRadius: 0,
+          tension: 0.3,
+          fill: false,
+          yAxisID: 'y',
+          isMode: false,
+        })),
+        ...MODE_SERIES.map(s => ({
+          label: s.label,
+          data: [],
+          borderColor: s.color,
+          backgroundColor: s.color + '33',
+          borderWidth: 2,
+          borderDash: [6, 3],
+          pointRadius: 0,
+          stepped: true,
+          fill: false,
+          yAxisID: 'yModes',
+          isMode: true,
+        })),
+      ],
     },
     options: {
       animation: false,
       responsive: true,
-      interaction: { mode: 'index', intersect: false },
+      interaction: { mode: 'nearest', axis: 'x', intersect: false },
       plugins: {
         legend: { labels: { color: '#d0d2d8', font: { size: 11 } } },
-        tooltip: { backgroundColor: '#181b1f', borderColor: '#2d3038', borderWidth: 1 }
+        tooltip: {
+          backgroundColor: '#181b1f',
+          borderColor: '#2d3038',
+          borderWidth: 1,
+          callbacks: {
+            label(ctx) {
+              if (ctx.dataset.isMode) {
+                if (ctx.raw && typeof ctx.raw.active === 'boolean') {
+                  return ctx.dataset.label + ' : ' + (ctx.raw.active ? 'ON' : 'OFF');
+                }
+                const scale = ctx.chart.scales.yModes;
+                const mid = (scale.min + scale.max) / 2;
+                return ctx.dataset.label + ' : ' + (ctx.parsed.y >= mid ? 'ON' : 'OFF');
+              }
+              const v = ctx.parsed.y;
+              return ctx.dataset.label + ' : ' + (typeof v === 'number' ? v.toFixed(1) : v) + ' °C';
+            },
+          },
+        },
+        zoom: {
+          limits: { x: { min: 'original', max: 'original' } },
+          pan: { enabled: false },
+          zoom: {
+            wheel: { enabled: false },
+            pinch: { enabled: false },
+            drag: {
+              enabled: true,
+              backgroundColor: 'rgba(87,148,242,0.12)',
+              borderColor: 'rgba(87,148,242,0.55)',
+              borderWidth: 1,
+            },
+            mode: 'x',
+          },
+        },
       },
       scales: {
         x: {
@@ -313,55 +489,121 @@
           grid:  { color: '#2d3038' },
         },
         y: {
+          position: 'left',
           ticks: { color: '#6c7080', callback: v => v + ' °C' },
           grid:  { color: '#2d3038' },
-        }
-      }
-    }
+        },
+        yModes: {
+          position: 'right',
+          afterBuildTicks(scale) {
+            scale.ticks = [
+              { value: scale.min, label: 'OFF' },
+              { value: scale.max, label: 'ON' },
+            ];
+          },
+          ticks: { color: '#6c7080' },
+          grid: { drawOnChartArea: false },
+        },
+      },
+    },
   });
 
-  async function loadTemperatures(period) {
+  document.getElementById('history-chart').addEventListener('dblclick', () => {
+    historyChart.resetZoom();
+  });
+
+  function downsample(points, maxPoints = 300) {
+    if (points.length <= maxPoints) return points;
+    const step = Math.ceil(points.length / maxPoints);
+    return points.filter((_, i) => i % step === 0);
+  }
+
+  function computeTempBounds(temps) {
+    let min = Infinity, max = -Infinity;
+    TEMP_SERIES.forEach(s => {
+      for (const p of (temps[s.key] || [])) {
+        if (p.v != null && !Number.isNaN(p.v)) {
+          min = Math.min(min, p.v);
+          max = Math.max(max, p.v);
+        }
+      }
+    });
+    if (!isFinite(min)) return { min: 0, max: 30 };
+    const pad = Math.max((max - min) * 0.05, 0.5);
+    return { min: Math.floor((min - pad) * 2) / 2, max: Math.ceil((max + pad) * 2) / 2 };
+  }
+
+  function applyChartBounds(bounds) {
+    historyChart.options.scales.y.min = bounds.min;
+    historyChart.options.scales.y.max = bounds.max;
+    historyChart.options.scales.yModes.min = bounds.min;
+    historyChart.options.scales.yModes.max = bounds.max;
+  }
+
+  async function loadChartData(period) {
     try {
-      const r = await fetch('/metrics/temperatures?period=' + period);
-      const d = await r.json();
+      const [tempRes, modesRes] = await Promise.all([
+        fetch('/vmc/metrics/temperatures?period=' + period),
+        fetch('/vmc/status/history?period=' + period),
+      ]);
+      const temps = await tempRes.json();
+      const modes = await modesRes.json();
+
+      const bounds = computeTempBounds(temps);
+      applyChartBounds(bounds);
+
       let hasData = false;
       TEMP_SERIES.forEach((s, i) => {
-        const pts = (d[s.key] || []).map(p => ({ x: p.t, y: p.v }));
-        tempChart.data.datasets[i].data = pts;
+        const pts = (temps[s.key] || []).map(p => ({ x: p.t, y: p.v }));
+        historyChart.data.datasets[i].data = pts;
         if (pts.length) hasData = true;
       });
-      tempChart.update();
+
+      const modeOffset = TEMP_SERIES.length;
+      MODE_SERIES.forEach((s, i) => {
+        const pts = modes.map(d => ({
+          x: d.date,
+          y: d[s.key]?.active ? bounds.max : bounds.min,
+          active: !!d[s.key]?.active,
+        }));
+        historyChart.data.datasets[modeOffset + i].data = pts;
+        if (pts.length) hasData = true;
+      });
+
+      historyChart.resetZoom();
+      historyChart.update();
       document.getElementById('chart-empty').style.display = hasData ? 'none' : 'block';
-      document.getElementById('temp-chart').style.display  = hasData ? 'block' : 'none';
+      document.getElementById('history-chart').style.display = hasData ? 'block' : 'none';
     } catch (e) {
-      console.error('loadTemperatures', e);
+      console.error('loadChartData', e);
     }
   }
 
   function setPeriod(period, btn) {
+    currentPeriod = period;
     document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    loadTemperatures(period);
+    loadChartData(period);
   }
 
-  /* ── Status cron ── */
+  /* ── Status supervisor ── */
   async function loadStatus() {
     try {
-      const r = await fetch('/status');
+      const r = await fetch('/vmc/status');
       const d = await r.json();
-      const dot   = d.cron_running ? '<span style="color:#73bf69">●</span>' : '<span style="color:#f2495c">●</span>';
-      const label = d.cron_running ? 'actif' : 'inactif';
-      document.getElementById('cron-status').innerHTML =
-        dot + ' Cron ' + label + ' · toutes les ' + d.cron_interval_min + ' min';
+      const dot   = d.supervisor_running ? '<span style="color:#73bf69">●</span>' : '<span style="color:#f2495c">●</span>';
+      const label = d.supervisor_running ? 'actif' : 'inactif';
+      document.getElementById('supervisor-status').innerHTML =
+        dot + ' Supervisor ' + label + ' · toutes les ' + d.poll_interval_min + ' min';
     } catch {
-      document.getElementById('cron-status').textContent = 'Statut cron indisponible';
+      document.getElementById('supervisor-status').textContent = 'Statut supervisor indisponible';
     }
   }
 
   /* ── Metrics refresh ── */
   async function refresh() {
     try {
-      const r = await fetch('/metrics/latest');
+      const r = await fetch('/vmc/metrics/latest');
       if (!r.ok) throw new Error(r.status);
       const d = await r.json();
 
@@ -374,14 +616,35 @@
       setText('gauge-val', af ?? '—');
       updateGauge(af, 0, 210);
 
+      const bypassOn = d['STATE OF BYPASS']?.value === 'ACTIVED';
+      const bypassBadge = document.getElementById('bypass-state-badge');
+      bypassBadge.textContent = bypassOn ? 'Bypass ON' : 'Bypass OFF';
+      bypassBadge.className = 'bypass-badge ' + (bypassOn ? 'on' : 'off');
+
       setText('v-control',   d['TYPE OF CONTROL']?.value  ?? '—');
-      setText('v-dephasage', d['DEPHASAGE DES DEBITS']?.value ?? '—');
+      setText('v-dephasage', d['UNBALANCE AIRFLOW SELECTION']?.value ?? '—');
+
+      setText('v-vmc-type', fmtLabel(d['TYPE OF HEAT RECOVERY']));
+      setText('v-fw-main', fmtVersion(d['SOFTWARE VERSION MAIN ELECTRONIC']?.value));
+      setText('v-fw-remote', fmtVersion(d['SOFTWARE VERSION REMOTE CONTROL']?.value));
+      setText('v-fw-prog', fmtVersion(d['SOFTWARE VERSION PROGRAMMATION UNIT']?.value));
+
+      setText('v-motor-extract', fmtRpm(d['EXTRACT MOTOR SPEED']?.value));
+      setText('v-motor-input', fmtRpm(d['INPUT MOTOR SPEED']?.value));
 
       const stReg = d['ACTIVATION MODE STANBY/ABSENCE']?.register;
       setCmdBtn('btn-standby', stReg === 1 || stReg === true);
 
-      const byVal = d['STATE OF BYPASS']?.value;
+      const byVal = d['MANUAL BYPASS']?.value;
       setCmdBtn('btn-bypass', byVal === 'ACTIVED');
+
+      const autoVal = d['BYPASS AUTO CONTROL']?.value;
+      setCmdBtn('btn-bypass-auto', autoVal === 'ACTIVED');
+
+      const textMini = d['BYPASS AUTO: Text MINI']?.value;
+      const tintMini = d['BYPASS AUTO: Tint MINI']?.value;
+      if (textMini != null) document.getElementById('cfg-text-mini').value = textMini;
+      if (tintMini != null) document.getElementById('cfg-tint-mini').value = tintMini;
 
       const ctReg = d['TYPE OF CONTROL']?.register;
       setCmdBtn('btn-boost', ctReg === 5);
@@ -408,6 +671,29 @@
   function fmtTemp(v) {
     if (v === undefined || v === null) return '—';
     return typeof v === 'number' ? v.toFixed(1) : v;
+  }
+
+  function fmtRpm(v) {
+    if (v === undefined || v === null) return '—';
+    return typeof v === 'number' ? Math.round(v).toString() : v;
+  }
+
+  function fmtVersion(v) {
+    if (v === undefined || v === null) return '—';
+    if (typeof v !== 'number') return v;
+    const major = Math.floor(v / 100);
+    const minor = v % 100;
+    return `${major}.${String(minor).padStart(2, '0')}`;
+  }
+
+  function fmtLabel(metric) {
+    if (!metric) return '—';
+    const value = metric.value;
+    if (value && value !== 'not found in datasheet') return value;
+    if (metric.register !== undefined && metric.register !== null) {
+      return `Code ${metric.register}`;
+    }
+    return '—';
   }
 
   function setText(id, val) {
@@ -468,11 +754,37 @@
     finally { btn.disabled = false; }
   }
 
+  async function saveBypassAutoMini(kind, btn) {
+    const isText = kind === 'text';
+    const el = document.getElementById(isText ? 'cfg-text-mini' : 'cfg-tint-mini');
+    const fbId = isText ? 'fb-text-mini' : 'fb-tint-mini';
+    const value = parseInt(el.value, 10);
+    const [min, max] = isText ? [11, 20] : [21, 30];
+    if (Number.isNaN(value) || value < min || value > max) {
+      feedback(fbId, false);
+      return;
+    }
+    btn.disabled = true;
+    try {
+      const endpoint = isText
+        ? '/vmc/config/bypass_auto_text_mini'
+        : '/vmc/config/bypass_auto_tint_mini';
+      const r = await fetch(`${endpoint}?value=${value}`);
+      feedback(fbId, r.ok);
+      if (r.ok) setTimeout(refresh, 1200);
+    } catch {
+      feedback(fbId, false);
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
   /* ── Init ── */
   loadStatus();
   refresh();
-  loadTemperatures('day');
+  loadChartData('day');
   setInterval(refresh, 30000);
+  setInterval(() => loadChartData(currentPeriod), 30000);
   setInterval(loadStatus, 60000);
 </script>
 </body>

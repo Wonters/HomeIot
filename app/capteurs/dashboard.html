@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capteurs</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2/dist/chartjs-plugin-zoom.min.js"></script>
+  <style>
+    :root {
+      --bg: #111217;
+      --card: #181b1f;
+      --border: #2d3038;
+      --text: #d0d2d8;
+      --text-dim: #6c7080;
+      --green: #73bf69;
+      --blue: #5794f2;
+      --red: #f2495c;
+      --orange: #ff9830;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+      padding: 0;
+    }
+    .page { padding: 16px; max-width: 1100px; margin: 0 auto; }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    header h1 { font-size: 1.3rem; letter-spacing: .05em; color: #fff; }
+    #header-right { text-align: right; font-size: .78rem; color: var(--text-dim); }
+    .xsense-reset-btn {
+      margin-top: 8px;
+      padding: 5px 10px;
+      background: #2c3040;
+      color: var(--orange);
+      border: 1px solid rgba(255, 152, 48, .35);
+      border-radius: 4px;
+      font-size: .72rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .xsense-reset-btn:hover:not(:disabled) {
+      background: rgba(255, 152, 48, .12);
+    }
+    .xsense-reset-btn:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+    #xsense-reset-status { margin-top: 4px; min-height: 1em; }
+    .section-label {
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .devices-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      margin-bottom: 24px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+    .device-name {
+      font-size: .95rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .device-meta {
+      font-size: .7rem;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(45, 48, 56, .5);
+      font-size: .82rem;
+    }
+    .metric-row:last-child { border-bottom: none; }
+    .metric-label { color: var(--text-dim); text-transform: capitalize; }
+    .metric-value { color: #fff; font-weight: 500; }
+    .metric-value.on  { color: var(--green); }
+    .metric-value.off { color: var(--text-dim); }
+    .cmd-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .cmd-btn {
+      flex: 1;
+      padding: 8px;
+      background: #2c3040;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .cmd-btn:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .cmd-btn:disabled { opacity: .5; cursor: wait; }
+    .cmd-btn-active {
+      background: rgba(115,191,105,.18) !important;
+      border-color: var(--green) !important;
+      color: var(--green) !important;
+    }
+    .empty-state {
+      text-align: center;
+      color: var(--text-dim);
+      padding: 40px 20px;
+      font-size: .9rem;
+    }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .chart-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+      align-items: center;
+    }
+    select {
+      padding: 6px 10px;
+      background: #2c3040;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: .82rem;
+    }
+    .period-btns { display: flex; gap: 8px; }
+    .period-btn {
+      padding: 5px 14px;
+      background: #2c3040;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .period-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .period-btn.active {
+      background: rgba(87,148,242,.15);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+    .chart-empty { text-align: center; color: var(--text-dim); padding: 30px 0; }
+    .chart-wrap { position: relative; height: 280px; }
+    .chart-wrap.hidden { display: none; }
+    .fb { font-size: .7rem; height: 14px; margin-top: 6px; }
+    .fb-ok  { color: var(--green); }
+    .fb-err { color: var(--red); }
+    .protocol-badge {
+      display: inline-block;
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 3px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .protocol-badge.zigbee {
+      background: rgba(87,148,242,.15);
+      color: var(--blue);
+      border: 1px solid rgba(87,148,242,.35);
+    }
+    .protocol-badge.lora {
+      background: rgba(255,152,48,.12);
+      color: var(--orange);
+      border: 1px solid rgba(255,152,48,.35);
+    }
+    .protocol-section { margin-bottom: 28px; }
+    .protocol-section:target .section-label { color: var(--blue); }
+    #section-lora:target .section-label { color: var(--orange); }
+    .location-group { margin-bottom: 18px; }
+    .location-label {
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 10px;
+      padding-left: 2px;
+    }
+    .lora-table-wrap {
+      overflow-x: auto;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--card);
+    }
+    .lora-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .8rem;
+    }
+    .lora-table th {
+      text-align: left;
+      padding: 10px 12px;
+      color: var(--text-dim);
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .lora-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(45, 48, 56, .5);
+      white-space: nowrap;
+    }
+    .lora-table tbody tr {
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .lora-table tbody tr:hover { background: rgba(255, 152, 48, .06); }
+    .lora-table tbody tr.selected {
+      background: rgba(255, 152, 48, .12);
+      box-shadow: inset 3px 0 0 var(--orange);
+    }
+    .lora-table tbody tr:last-child td { border-bottom: none; }
+    .lora-name { color: #fff; font-weight: 600; }
+    .lora-loc { color: var(--orange); }
+    .lora-val { font-variant-numeric: tabular-nums; }
+    .lora-detail-panel { display: none; margin-top: 8px; }
+    .lora-detail-panel.visible { display: block; }
+    .detail-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .detail-title { font-size: 1rem; font-weight: 600; color: #fff; }
+    .detail-meta { font-size: .72rem; color: var(--text-dim); }
+    .detail-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .detail-metric {
+      background: #111217;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 10px 12px;
+    }
+    .detail-metric-label {
+      font-size: .65rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 4px;
+    }
+    .detail-metric-value { font-size: 1.1rem; font-weight: 600; color: #fff; }
+    .field-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .field-tab {
+      padding: 5px 12px;
+      background: #2c3040;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .field-tab:hover { border-color: var(--orange); color: var(--orange); }
+    .field-tab.active {
+      background: rgba(255, 152, 48, .15);
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    .status-dot.on { background: var(--green); }
+    .status-dot.off { background: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+<header>
+  <h1>Capteurs</h1>
+  <div id="header-right">
+    <div id="mqtt-status">…</div>
+    <div id="xsense-status"></div>
+    <button id="xsense-reset-btn" class="xsense-reset-btn" hidden onclick="resetXsenseHistory()">
+      Réinitialiser historique X-Sense (1 an)
+    </button>
+    <div id="xsense-reset-status"></div>
+    <div id="last-update">chargement…</div>
+  </div>
+</header>
+
+<div class="protocol-section" id="section-zigbee">
+  <div class="section-label">Zigbee (zigbee2mqtt)</div>
+  <div id="devices-zigbee" class="devices-grid">
+    <div class="empty-state">Chargement…</div>
+  </div>
+  <div class="section-label" style="margin-top:20px">Historique Zigbee</div>
+  <div class="chart-card">
+    <div class="chart-controls">
+      <select id="sel-device-zigbee" onchange="onDeviceChange('zigbee')">
+        <option value="">— Appareil —</option>
+      </select>
+      <select id="sel-field-zigbee" onchange="onFieldChange('zigbee')">
+        <option value="">— Mesure —</option>
+      </select>
+      <div class="period-btns">
+        <button class="period-btn active" data-protocol="zigbee" onclick="setPeriod('zigbee', 'day', this)">Jour</button>
+        <button class="period-btn" data-protocol="zigbee" onclick="setPeriod('zigbee', 'month', this)">Mois</button>
+        <button class="period-btn" data-protocol="zigbee" onclick="setPeriod('zigbee', 'year', this)">Année</button>
+      </div>
+    </div>
+    <div id="chart-empty-zigbee" class="chart-empty">Sélectionnez un appareil et une mesure</div>
+    <div id="chart-wrap-zigbee" class="chart-wrap hidden">
+      <canvas id="history-chart-zigbee"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="protocol-section" id="section-lora">
+  <div class="section-label">X-Sense (LoRa)</div>
+  <div id="devices-lora">
+    <div class="empty-state">Chargement…</div>
+  </div>
+
+  <div id="lora-detail-panel" class="lora-detail-panel">
+    <div class="section-label" style="margin-top:8px">Détail</div>
+    <div class="chart-card" id="lora-detail-card">
+      <div class="detail-header">
+        <div>
+          <div class="detail-title" id="lora-detail-title">—</div>
+          <div class="detail-meta" id="lora-detail-meta">—</div>
+        </div>
+      </div>
+      <div class="detail-metrics" id="lora-detail-metrics"></div>
+    </div>
+
+    <div class="section-label">Historique</div>
+    <div class="chart-card">
+      <div class="field-tabs" id="lora-field-tabs"></div>
+      <div class="chart-controls">
+        <div class="period-btns">
+          <button class="period-btn active" data-protocol="lora" onclick="setPeriod('lora', 'day', this)">Jour</button>
+          <button class="period-btn" data-protocol="lora" onclick="setPeriod('lora', 'month', this)">Mois</button>
+          <button class="period-btn" data-protocol="lora" onclick="setPeriod('lora', 'year', this)">Année</button>
+        </div>
+      </div>
+      <div id="chart-empty-lora" class="chart-empty">Sélectionnez une mesure</div>
+      <div id="chart-wrap-lora" class="chart-wrap hidden">
+        <canvas id="history-chart-lora"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+  const FIELD_LABELS = {
+    temperature: 'Température',
+    humidity: 'Humidité',
+    battery: 'Batterie',
+    linkquality: 'Qualité lien',
+    state: 'État',
+    state_relay: 'Relais',
+    intensity: 'Intensité',
+    analog_output_10: 'Sortie analogique',
+    pressure: 'Pression',
+    voltage: 'Tension',
+    illuminance: 'Luminosité',
+    co2: 'CO₂',
+    online: 'Connexion',
+    lifeend: 'Fin de vie',
+    smokealarm: 'Fumée',
+    smokefault: 'Défaut capteur',
+  };
+
+  const META_FIELDS = new Set(['update', 'source', 'friendly_name', 'model', 'manufacturer', 'station_sn', 'device_sn', 'location', 'sample_time']);
+
+  const FIELD_UNITS = {
+    temperature: '°C',
+    humidity: '%',
+    battery: '%',
+    pressure: 'hPa',
+    voltage: 'V',
+    illuminance: 'lx',
+    co2: 'ppm',
+  };
+
+  const NUMERIC_FIELDS = new Set([
+    'temperature', 'humidity', 'battery', 'linkquality', 'pressure',
+    'voltage', 'current', 'power', 'energy', 'intensity',
+    'analog_output_10', 'illuminance', 'co2',
+  ]);
+
+  const CONTROLLABLE = new Set(['state', 'state_relay']);
+  const PROTOCOLS = ['zigbee', 'lora'];
+  let devicesData = [];
+  const chartPeriods = { zigbee: 'day', lora: 'day' };
+  const chartSelections = {
+    zigbee: { device: '', field: '' },
+    lora: { device: '', field: '' },
+  };
+  let selectedLoraDevice = '';
+
+  function chartOptions() {
+    return {
+      animation: false,
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { backgroundColor: '#181b1f', borderColor: '#2d3038', borderWidth: 1 },
+      },
+      scales: {
+        x: {
+          type: 'time',
+          time: { tooltipFormat: 'dd/MM HH:mm', displayFormats: { hour: 'HH:mm', day: 'dd/MM', month: 'MM/yyyy' } },
+          ticks: { color: '#6c7080', maxTicksLimit: 8 },
+          grid: { color: '#2d3038' },
+        },
+        y: {
+          ticks: { color: '#6c7080' },
+          grid: { color: '#2d3038' },
+        },
+      },
+    };
+  }
+
+  const historyCharts = {};
+
+  function initHistoryCharts() {
+    if (typeof Chart === 'undefined') {
+      console.warn('Chart.js indisponible');
+      return;
+    }
+    PROTOCOLS.forEach(protocol => {
+      const canvas = document.getElementById('history-chart-' + protocol);
+      if (!canvas || historyCharts[protocol]) return;
+      historyCharts[protocol] = new Chart(canvas.getContext('2d'), {
+        type: 'line',
+        data: { datasets: [{
+          label: '',
+          data: [],
+          borderColor: protocol === 'lora' ? '#ff9830' : '#5794f2',
+          backgroundColor: protocol === 'lora' ? '#ff983022' : '#5794f222',
+          borderWidth: 1.5,
+          pointRadius: 2,
+          tension: 0.3,
+          fill: true,
+        }]},
+        options: chartOptions(),
+      });
+    });
+  }
+
+  function fieldLabel(field) {
+    return FIELD_LABELS[field] || field.replace(/_/g, ' ');
+  }
+
+  function formatValue(field, value) {
+    if (value === null || value === undefined) return '—';
+    if (field === 'state' || field === 'state_relay') {
+      const on = String(value).toUpperCase() === 'ON';
+      return on ? 'ON' : 'OFF';
+    }
+    if (typeof value === 'number') {
+      const unit = FIELD_UNITS[field] || '';
+      const decimals = Number.isInteger(value) ? 0 : 1;
+      return value.toFixed(decimals) + (unit ? ' ' + unit : '');
+    }
+    return String(value);
+  }
+
+  function isOn(field, value) {
+    return (field === 'state' || field === 'state_relay') && String(value).toUpperCase() === 'ON';
+  }
+
+  function deviceProtocol(d) {
+    return d.protocol === 'lora' ? 'lora' : 'zigbee';
+  }
+
+  function devicesForProtocol(protocol) {
+    return devicesData.filter(d => deviceProtocol(d) === protocol);
+  }
+
+  function getActiveHash() {
+    const hash = location.hash.replace('#', '');
+    return hash === 'zigbee' || hash === 'lora' ? hash : null;
+  }
+
+  function applyHashFilter() {
+    const hash = getActiveHash();
+    document.getElementById('section-zigbee').style.display = !hash || hash === 'zigbee' ? '' : 'none';
+    document.getElementById('section-lora').style.display = !hash || hash === 'lora' ? '' : 'none';
+  }
+
+  function renderDeviceCard(d) {
+    const state = d.state || {};
+    const fields = Object.keys(state).filter(f => !META_FIELDS.has(f));
+    const protocol = deviceProtocol(d);
+    const badge = protocol === 'lora'
+      ? '<span class="protocol-badge lora">LoRa</span>'
+      : '<span class="protocol-badge zigbee">Zigbee</span>';
+
+    const metricsHtml = fields.map(f => {
+      const val = state[f];
+      const cls = (f === 'state' || f === 'state_relay')
+        ? (isOn(f, val) ? 'metric-value on' : 'metric-value off')
+        : 'metric-value';
+      return `<div class="metric-row">
+        <span class="metric-label">${fieldLabel(f)}</span>
+        <span class="${cls}">${formatValue(f, val)}</span>
+      </div>`;
+    }).join('');
+
+    const controls = fields
+      .filter(f => CONTROLLABLE.has(f))
+      .map(f => {
+        const active = isOn(f, state[f]);
+        return `<div>
+          <div class="cmd-row">
+            <button class="cmd-btn${active ? ' cmd-btn-active' : ''}"
+              onclick="setState('${d.name}', '${f}', 'ON', this)">ON</button>
+            <button class="cmd-btn${!active ? ' cmd-btn-active' : ''}"
+              onclick="setState('${d.name}', '${f}', 'OFF', this)">OFF</button>
+            <button class="cmd-btn"
+              onclick="setState('${d.name}', '${f}', 'TOGGLE', this)">Toggle</button>
+          </div>
+          <div class="fb" id="fb-${d.name}-${f}"></div>
+        </div>`;
+      }).join('');
+
+    const lastSeen = d.last_seen
+      ? new Date(d.last_seen).toLocaleString()
+      : '—';
+
+    const locationLine = d.location
+      ? `<div class="device-meta"><span style="color:var(--orange)">📍 ${d.location}</span></div>`
+      : '';
+
+    return `<div class="card">
+      <div class="device-name">${d.display_name || d.name}${badge}</div>
+      ${locationLine}
+      <div class="device-meta">${d.name} · MAJ : ${lastSeen}</div>
+      ${metricsHtml || '<div class="metric-row"><span class="metric-label">Aucune donnée</span></div>'}
+      ${controls}
+    </div>`;
+  }
+
+  function tableCellValue(field, value) {
+    if (value === null || value === undefined) return '—';
+    if (field === 'online') {
+      const on = value === true || String(value).toLowerCase() === 'online';
+      return `<span class="status-dot ${on ? 'on' : 'off'}"></span>${on ? 'En ligne' : 'Hors ligne'}`;
+    }
+    return formatValue(field, value);
+  }
+
+  function loraNumericFields(device) {
+    return Object.keys(device.state || {}).filter(f => NUMERIC_FIELDS.has(f));
+  }
+
+  function loraDisplayFields(device) {
+    const state = device.state || {};
+    const priority = ['temperature', 'humidity', 'battery', 'smokealarm', 'online'];
+    const fields = Object.keys(state).filter(f => !META_FIELDS.has(f));
+    return [
+      ...priority.filter(f => fields.includes(f)),
+      ...fields.filter(f => !priority.includes(f)),
+    ];
+  }
+
+  function renderLoraTable(devices) {
+    if (!devices.length) {
+      return '<div class="empty-state">Aucun appareil X-Sense — MQTT local ou cloud</div>';
+    }
+    const sorted = [...devices].sort((a, b) => {
+      const la = (a.location || 'zzz').toLowerCase();
+      const lb = (b.location || 'zzz').toLowerCase();
+      if (la !== lb) return la.localeCompare(lb, 'fr');
+      return (a.display_name || a.name).localeCompare(b.display_name || b.name, 'fr');
+    });
+    const rows = sorted.map(d => {
+      const state = d.state || {};
+      const selected = d.name === selectedLoraDevice ? ' selected' : '';
+      const lastSeen = d.last_seen ? new Date(d.last_seen).toLocaleString() : '—';
+      return `<tr class="lora-row${selected}" data-device="${d.name}" onclick="selectLoraDevice('${d.name}')">
+        <td><span class="lora-name">${d.display_name || d.name}</span></td>
+        <td class="lora-loc">${d.location || '—'}</td>
+        <td>${d.model || '—'}</td>
+        <td class="lora-val">${tableCellValue('temperature', state.temperature)}</td>
+        <td class="lora-val">${tableCellValue('humidity', state.humidity)}</td>
+        <td class="lora-val">${tableCellValue('battery', state.battery)}</td>
+        <td>${tableCellValue('online', state.online ?? state.smokealarm)}</td>
+        <td style="color:var(--text-dim);font-size:.72rem">${lastSeen}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="lora-table-wrap">
+      <table class="lora-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Pièce</th>
+            <th>Modèle</th>
+            <th>Temp.</th>
+            <th>Hum.</th>
+            <th>Bat.</th>
+            <th>État</th>
+            <th>MAJ</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+  }
+
+  function renderLoraDetail(device) {
+    const panel = document.getElementById('lora-detail-panel');
+    if (!device) {
+      panel.classList.remove('visible');
+      return;
+    }
+    panel.classList.add('visible');
+
+    const lastSeen = device.last_seen ? new Date(device.last_seen).toLocaleString() : '—';
+    document.getElementById('lora-detail-title').textContent = device.display_name || device.name;
+    document.getElementById('lora-detail-meta').textContent =
+      [device.model, device.location, device.name, 'MAJ : ' + lastSeen].filter(Boolean).join(' · ');
+
+    const fields = loraDisplayFields(device);
+    document.getElementById('lora-detail-metrics').innerHTML = fields.map(f => `
+      <div class="detail-metric">
+        <div class="detail-metric-label">${fieldLabel(f)}</div>
+        <div class="detail-metric-value">${tableCellValue(f, device.state[f])}</div>
+      </div>
+    `).join('');
+
+    const numericFields = loraNumericFields(device);
+    const tabs = document.getElementById('lora-field-tabs');
+    if (!numericFields.length) {
+      tabs.innerHTML = '<span style="color:var(--text-dim);font-size:.8rem">Aucune mesure historique</span>';
+      chartSelections.lora.field = '';
+      loadHistory('lora');
+      return;
+    }
+
+    if (!numericFields.includes(chartSelections.lora.field)) {
+      chartSelections.lora.field = numericFields.includes('temperature')
+        ? 'temperature'
+        : numericFields[0];
+    }
+
+    tabs.innerHTML = numericFields.map(f => `
+      <button type="button" class="field-tab${f === chartSelections.lora.field ? ' active' : ''}"
+        data-field="${f}" onclick="selectLoraField('${f}')">${fieldLabel(f)}</button>
+    `).join('');
+
+    loadHistory('lora');
+  }
+
+  function selectLoraDevice(name) {
+    selectedLoraDevice = name;
+    chartSelections.lora.device = name;
+    const device = devicesData.find(d => d.name === name);
+    document.querySelectorAll('.lora-row').forEach(row => {
+      row.classList.toggle('selected', row.dataset.device === name);
+    });
+    renderLoraDetail(device);
+    document.getElementById('lora-detail-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function selectLoraField(field) {
+    chartSelections.lora.field = field;
+    document.querySelectorAll('#lora-field-tabs .field-tab').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.field === field);
+    });
+    loadHistory('lora');
+  }
+
+  function renderDevices(devices) {
+    const zigbee = devicesForProtocol('zigbee');
+    const lora = devicesForProtocol('lora');
+
+    document.getElementById('devices-zigbee').innerHTML = zigbee.length
+      ? zigbee.map(renderDeviceCard).join('')
+      : '<div class="empty-state">Aucun appareil Zigbee — en attente de zigbee2mqtt</div>';
+
+    document.getElementById('devices-lora').innerHTML = renderLoraTable(lora);
+
+    if (selectedLoraDevice && lora.some(d => d.name === selectedLoraDevice)) {
+      renderLoraDetail(lora.find(d => d.name === selectedLoraDevice));
+    } else {
+      selectedLoraDevice = '';
+      chartSelections.lora.device = '';
+      document.getElementById('lora-detail-panel').classList.remove('visible');
+    }
+  }
+
+  function saveChartSelection(protocol) {
+    chartSelections[protocol] = {
+      device: document.getElementById('sel-device-' + protocol).value,
+      field: document.getElementById('sel-field-' + protocol).value,
+    };
+  }
+
+  function updateChartSelectors(protocol, devices) {
+    if (protocol === 'lora') return;
+
+    const selDevice = document.getElementById('sel-device-' + protocol);
+    const selField = document.getElementById('sel-field-' + protocol);
+    const saved = chartSelections[protocol];
+    const protocolDevices = devices.filter(d => deviceProtocol(d) === protocol);
+
+    selDevice.innerHTML = '<option value="">— Appareil —</option>' +
+      protocolDevices.map(d => `<option value="${d.name}">${d.display_name || d.name}</option>`).join('');
+
+    if (saved.device && protocolDevices.some(d => d.name === saved.device)) {
+      selDevice.value = saved.device;
+    } else {
+      selDevice.value = '';
+      saved.field = '';
+    }
+
+    updateFieldSelector(protocol, saved.field);
+    chartSelections[protocol] = {
+      device: selDevice.value,
+      field: selField.value,
+    };
+
+    if (selDevice.value && selField.value) {
+      loadHistory(protocol);
+    }
+  }
+
+  function updateFieldSelector(protocol, preserveField) {
+    const selDevice = document.getElementById('sel-device-' + protocol);
+    const selField = document.getElementById('sel-field-' + protocol);
+    const deviceName = selDevice.value;
+    const prevField = preserveField !== undefined ? preserveField : selField.value;
+    const device = devicesData.find(d => d.name === deviceName);
+    const fields = device
+      ? Object.keys(device.state || {}).filter(f => NUMERIC_FIELDS.has(f))
+      : [];
+
+    selField.innerHTML = '<option value="">— Mesure —</option>' +
+      fields.map(f => `<option value="${f}">${fieldLabel(f)}</option>`).join('');
+
+    if (prevField && fields.includes(prevField)) {
+      selField.value = prevField;
+    } else {
+      selField.value = '';
+    }
+  }
+
+  function onDeviceChange(protocol) {
+    chartSelections[protocol].field = '';
+    updateFieldSelector(protocol, '');
+    saveChartSelection(protocol);
+    loadHistory(protocol);
+  }
+
+  function onFieldChange(protocol) {
+    saveChartSelection(protocol);
+    loadHistory(protocol);
+  }
+
+  async function loadHistory(protocol) {
+    const device = protocol === 'lora'
+      ? chartSelections.lora.device
+      : document.getElementById('sel-device-' + protocol).value;
+    const field = protocol === 'lora'
+      ? chartSelections.lora.field
+      : document.getElementById('sel-field-' + protocol).value;
+    const empty = document.getElementById('chart-empty-' + protocol);
+    const wrap = document.getElementById('chart-wrap-' + protocol);
+
+    chartSelections[protocol] = { device, field };
+
+    if (!device || !field) {
+      empty.style.display = 'block';
+      empty.textContent = protocol === 'lora'
+        ? 'Sélectionnez une mesure'
+        : 'Sélectionnez un appareil et une mesure';
+      wrap.classList.add('hidden');
+      const chart = historyCharts[protocol];
+      if (chart) {
+        chart.data.datasets[0].data = [];
+        chart.update();
+      }
+      return;
+    }
+
+    if (!historyCharts[protocol]) {
+      initHistoryCharts();
+    }
+    const chart = historyCharts[protocol];
+    if (!chart) {
+      empty.style.display = 'block';
+      empty.textContent = 'Graphique indisponible (Chart.js)';
+      wrap.classList.add('hidden');
+      return;
+    }
+
+    try {
+      const period = chartPeriods[protocol];
+      const r = await fetch(`/capteurs/metrics/history?device=${encodeURIComponent(device)}&field=${encodeURIComponent(field)}&period=${period}`);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const pts = await r.json();
+      const unit = FIELD_UNITS[field] || '';
+      const data = pts
+        .map(p => ({ x: new Date(p.t), y: Number(p.v) }))
+        .filter(p => !Number.isNaN(p.y));
+
+      chart.data.datasets[0].label = fieldLabel(field);
+      chart.data.datasets[0].data = data;
+      chart.options.scales.y.ticks.callback = v => v + (unit ? ' ' + unit : '');
+
+      const hasData = data.length > 0;
+      empty.style.display = hasData ? 'none' : 'block';
+      empty.textContent = hasData ? '' : 'Aucune donnée pour cette période';
+      wrap.classList.toggle('hidden', !hasData);
+
+      if (hasData) {
+        requestAnimationFrame(() => {
+          chart.resize();
+          chart.update();
+        });
+      } else {
+        chart.update();
+      }
+    } catch (e) {
+      console.error('loadHistory', protocol, e);
+      empty.style.display = 'block';
+      empty.textContent = 'Erreur de chargement du graphique';
+      wrap.classList.add('hidden');
+    }
+  }
+
+  function setPeriod(protocol, period, btn) {
+    document.querySelectorAll('.period-btn[data-protocol="' + protocol + '"]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    chartPeriods[protocol] = period;
+    loadHistory(protocol);
+  }
+
+  async function setState(device, field, state, btn) {
+    const fbId = `fb-${device}-${field}`;
+    btn.disabled = true;
+    try {
+      const r = await fetch(`/capteurs/set/${encodeURIComponent(device)}?field=${field}&state=${state}`);
+      feedback(fbId, r.ok);
+      if (r.ok) setTimeout(refresh, 800);
+    } catch {
+      feedback(fbId, false);
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function feedback(fbId, ok) {
+    const el = document.getElementById(fbId);
+    if (!el) return;
+    el.textContent = ok ? '✓ OK' : '✗ Erreur';
+    el.className = 'fb ' + (ok ? 'fb-ok' : 'fb-err');
+    setTimeout(() => { el.textContent = ''; el.className = 'fb'; }, 3000);
+  }
+
+  let xsenseResetPoll = null;
+
+  function updateXsenseResetUi(reset) {
+    const btn = document.getElementById('xsense-reset-btn');
+    const statusEl = document.getElementById('xsense-reset-status');
+    if (!reset) {
+      statusEl.textContent = '';
+      return;
+    }
+    if (reset.running) {
+      btn.disabled = true;
+      const current = reset.device ? ' — ' + reset.device : '';
+      statusEl.textContent =
+        'Import historique : ' + reset.devices_done + '/' + reset.devices_total +
+        ' capteur(s), ' + reset.points + ' point(s)' +
+        (reset.pages ? ', page ' + reset.pages : '') + current;
+      return;
+    }
+    btn.disabled = false;
+    if (reset.error) {
+      statusEl.textContent = 'Erreur import : ' + reset.error;
+      return;
+    }
+    if (reset.devices_done > 0 || reset.points > 0) {
+      statusEl.textContent =
+        'Historique mis à jour : ' + reset.points + ' point(s) sur ' + reset.devices_done + ' capteur(s)';
+    } else {
+      statusEl.textContent = '';
+    }
+  }
+
+  async function resetXsenseHistory() {
+    if (!confirm(
+      'Télécharger et remplacer l\'historique X-Sense sur 1 an ?\n' +
+      'Les anciennes métriques des thermo-hygromètres seront supprimées. Cela peut prendre plusieurs minutes.'
+    )) {
+      return;
+    }
+
+    const btn = document.getElementById('xsense-reset-btn');
+    btn.disabled = true;
+    document.getElementById('xsense-reset-status').textContent = 'Démarrage…';
+
+    try {
+      const r = await fetch('/capteurs/xsense/reset-history', { method: 'POST' });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || d.message || r.status);
+      pollXsenseResetStatus();
+    } catch (e) {
+      btn.disabled = false;
+      document.getElementById('xsense-reset-status').textContent = 'Erreur : ' + e.message;
+    }
+  }
+
+  async function pollXsenseResetStatus() {
+    if (xsenseResetPoll) clearInterval(xsenseResetPoll);
+
+    const tick = async () => {
+      try {
+        const r = await fetch('/capteurs/xsense/reset-history/status');
+        const reset = await r.json();
+        updateXsenseResetUi(reset);
+        if (!reset.running) {
+          clearInterval(xsenseResetPoll);
+          xsenseResetPoll = null;
+          if (!reset.error) refresh();
+        }
+      } catch (e) {
+        clearInterval(xsenseResetPoll);
+        xsenseResetPoll = null;
+        document.getElementById('xsense-reset-status').textContent = 'Erreur statut : ' + e.message;
+        document.getElementById('xsense-reset-btn').disabled = false;
+      }
+    };
+
+    await tick();
+    xsenseResetPoll = setInterval(tick, 2000);
+  }
+
+  async function loadStatus() {
+    try {
+      const r = await fetch('/capteurs/status');
+      const d = await r.json();
+      const dot = d.mqtt_connected
+        ? '<span style="color:#73bf69">●</span>'
+        : '<span style="color:#f2495c">●</span>';
+      const label = d.mqtt_connected ? 'MQTT connecté' : 'MQTT déconnecté';
+      document.getElementById('mqtt-status').innerHTML = dot + ' ' + label;
+
+      const xs = d.xsense_cloud || {};
+      const xsEl = document.getElementById('xsense-status');
+      const resetBtn = document.getElementById('xsense-reset-btn');
+      if (!xs.enabled) {
+        xsEl.textContent = 'Cloud X-Sense : désactivé';
+        resetBtn.hidden = true;
+      } else {
+        resetBtn.hidden = false;
+        if (xs.connected) {
+          xsEl.innerHTML = '<span style="color:#ff9830">●</span> Cloud X-Sense : ' + xs.device_count + ' capteur(s)';
+        } else {
+          xsEl.innerHTML = '<span style="color:#f2495c">●</span> Cloud X-Sense : ' + (xs.error || 'déconnecté');
+        }
+        updateXsenseResetUi(xs.reset);
+        if (xs.reset && xs.reset.running && !xsenseResetPoll) {
+          pollXsenseResetStatus();
+        }
+      }
+    } catch {
+      document.getElementById('mqtt-status').textContent = 'Statut MQTT indisponible';
+    }
+  }
+
+  function scrollToHashSection() {
+    applyHashFilter();
+    const hash = getActiveHash();
+    if (hash) {
+      const el = document.getElementById('section-' + hash);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  async function refresh() {
+    try {
+      const r = await fetch('/capteurs/devices');
+      if (!r.ok) throw new Error(r.status);
+      devicesData = await r.json();
+      renderDevices(devicesData);
+      updateChartSelectors('zigbee', devicesData);
+      document.getElementById('last-update').textContent =
+        'Mis à jour : ' + new Date().toLocaleTimeString();
+    } catch (e) {
+      console.error('refresh', e);
+      document.getElementById('last-update').textContent = 'Erreur de connexion';
+      document.getElementById('devices-zigbee').innerHTML =
+        '<div class="empty-state">Impossible de charger les appareils</div>';
+      document.getElementById('devices-lora').innerHTML =
+        '<div class="empty-state">Impossible de charger les appareils</div>';
+    }
+  }
+
+  loadStatus();
+  refresh().then(() => initHistoryCharts());
+  scrollToHashSection();
+  window.addEventListener('hashchange', scrollToHashSection);
+  setInterval(refresh, 10000);
+  setInterval(loadStatus, 30000);
+</script>
+</body>
+</html>

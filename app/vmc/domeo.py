@@ -16,9 +16,9 @@ from functools import wraps
 
 logger = logging.getLogger(__name__)
 
-DOMEO_IP = os.environ.get("DOMEO_IP", "192.168.1.97")
-DOMEO_PORT = os.environ.get("DOMEO_PORT", 8899)
-MONGO_ADDRESS = os.environ.get("MONGO_ADDRESS", "mongodb://db:27017")
+DOMEO_IP = os.environ.get("DOMEO_IP")
+DOMEO_PORT = os.environ.get("DOMEO_PORT")
+MONGO_ADDRESS = os.environ.get("MONGO_ADDRESS")
 MODBUS_CONFIGFILE = Path(__file__).parent / "config/domeo210_modbus.yml"
 
 
@@ -46,9 +46,9 @@ def decode(name, available_values, modbus_response):
             value = "not found in datasheet"
         unit = ""
     else:
-        if name in ("UNBALANCE AIRFLOW SELECTION", "DEPHASAGE DES DEBITS"):
+        if name == "UNBALANCE AIRFLOW SELECTION":
             value = (
-                modbus_response - (2**16) if modbus_response > 32767 else modbus_response
+                modbus_response - (2**16) if modbus_response > 15 else modbus_response
             )
         elif name in (
             "TEMPERATURE Tin PRE-HEATING BATTERY",
@@ -112,16 +112,59 @@ def switch_coil(coil_address: int):
             client.write_coil(address=coil_address, value=False)
 
 
+STANDBY_METRIC = "ACTIVATION MODE STANBY/ABSENCE"
+BYPASS_STATE_METRIC = "STATE OF BYPASS"
+BYPASS_MANUAL_METRIC = "MANUAL BYPASS"
+BOOST_METRIC = "TYPE OF CONTROL"
+BOOST_REGISTER_ON = 5
+
+
+def build_status_doc(data: list[dict], date: datetime.datetime | None = None) -> dict:
+    by_name = {d["name"]: d for d in data}
+    standby = by_name.get(STANDBY_METRIC, {})
+    bypass_state = by_name.get(BYPASS_STATE_METRIC, {})
+    bypass_manual = by_name.get(BYPASS_MANUAL_METRIC, {})
+    boost = by_name.get(BOOST_METRIC, {})
+    return {
+        "date": date or datetime.datetime.now(tz=datetime.timezone.utc),
+        "standby": {
+            "active": standby.get("register") == 1,
+            "register": standby.get("register"),
+            "value": standby.get("value"),
+        },
+        "bypass": {
+            "active": bypass_state.get("value") == "ACTIVED",
+            "register": bypass_state.get("register"),
+            "value": bypass_state.get("value"),
+        },
+        "bypass_manual": {
+            "active": bypass_manual.get("value") == "ACTIVED",
+            "register": bypass_manual.get("register"),
+            "value": bypass_manual.get("value"),
+        },
+        "boost": {
+            "active": boost.get("register") == BOOST_REGISTER_ON,
+            "register": boost.get("register"),
+            "value": boost.get("value"),
+        },
+    }
+
+
+def save_status(data: list[dict], date: datetime.datetime | None = None, *, client=None):
+    doc = build_status_doc(data, date)
+    if client is not None:
+        client.domeo210.status.insert_one(doc)
+        return
+    with connect_mongo() as mongo:
+        mongo.domeo210.status.insert_one(doc)
+
+
 def save(data):
+    now = datetime.datetime.now(tz=datetime.timezone.utc)
     with connect_mongo() as client:
         db = client.domeo210
-        collection = db.metrics
-        collection.insert_many(
-            [
-                {"date": datetime.datetime.now(tz=datetime.timezone.utc), **d}
-                for d in data
-            ]
-        )
+        db.metrics.insert_many([{"date": now, **d} for d in data])
+        save_status(data, now, client=client)
 
 
 def request_domeo(func):

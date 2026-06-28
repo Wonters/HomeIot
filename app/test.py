@@ -1,6 +1,6 @@
 import pprint
 from pymongo.collection import ObjectId
-from domeo import connect_mongo, retrieve, save
+from vmc.domeo import connect_mongo, retrieve, save
 
 
 def collect(filters: dict = {}, fields: dict = {}):

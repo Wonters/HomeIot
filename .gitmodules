@@ -1,0 +1,6 @@
+[submodule "firmwares/zigbee-tic-linky"]
+	path = firmwares/zigbee-tic-linky
+	url = git@github.com:Wonters/Zigbee-tic-linky.git
+[submodule "firmwares/zigbee-relay-router"]
+	path = firmwares/zigbee-relay-router
+	url = git@github.com:Wonters/Zigbee-relay-router.git

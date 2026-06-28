@@ -1,0 +1,12 @@
+{
+    "0x744dbdfffe607d24": {
+        "state": "OFF",
+        "state_relay": "OFF",
+        "linkquality": 196
+    },
+    "0x744dbdfffe600e66": {
+        "analog_output_10": 10,
+        "linkquality": 196,
+        "intensity": 0
+    }
+}

@@ -20,6 +20,7 @@ advanced:
   external_converters:
     - esp32h2.js
     - linky.js
+    - relay.js
     - temperature.js
 disable_tuya_default_response: false
 version: 5

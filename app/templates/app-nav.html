@@ -1,0 +1,54 @@
+<style>
+  .hiot-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: #0c0d10;
+    border-bottom: 1px solid #2d3038;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .hiot-nav-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    border: 1px solid #2d3038;
+    background: #181b1f;
+    color: #d0d2d8;
+    text-decoration: none;
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .hiot-nav-back:hover {
+    border-color: #5794f2;
+    color: #fff;
+    background: rgba(87, 148, 242, .12);
+  }
+  .hiot-nav-brand {
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    color: #6c7080;
+    text-decoration: none;
+  }
+  .hiot-nav-brand:hover { color: #5794f2; }
+  .hiot-nav-sep { color: #3d4250; font-size: .75rem; }
+  .hiot-nav-app {
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    color: #fff;
+  }
+</style>
+<nav class="hiot-nav">
+  <a class="hiot-nav-back" href="/" title="Retour à l'accueil" aria-label="Retour à l'accueil">←</a>
+  <a class="hiot-nav-brand" href="/">HomeIot</a>
+  <span class="hiot-nav-sep">/</span>
+  <span class="hiot-nav-app">{{APP_TITLE}}</span>
+</nav>

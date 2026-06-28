@@ -1,14 +1,28 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.10-slim-2023-07-31
+FROM debian:trixie-slim
 
-COPY ./requirements.txt /app/requirements.txt
+ENV PYTHONUNBUFFERED=1 \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    UV_PYTHON_INSTALL_DIR=/opt/python \
+    UV_PROJECT_ENVIRONMENT=/opt/venv \
+    PATH="/opt/venv/bin:${PATH}"
 
-RUN apt-get update && apt-get install -y cron
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY ./app /app
-COPY ./start.sh /start-with-cron.sh
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-RUN chmod +x /app/retrieve.sh /app/watchdog.sh /start-with-cron.sh && python /app/cron.py
+WORKDIR /app
 
-CMD ["/start-with-cron.sh"]
+COPY pyproject.toml uv.lock ./
+RUN uv python install 3.14 \
+    && uv sync --frozen --no-install-project --no-dev
 
+COPY app/ ./
+COPY bin/ bin/
+COPY bin/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 8000
+CMD ["/entrypoint.sh"]
