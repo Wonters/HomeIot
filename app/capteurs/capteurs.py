@@ -19,7 +19,7 @@ from .xsense_cloud import (
     last_sync_time as xsense_last_sync,
     start_history_reset,
 )
-from .store import connect_mongo
+from .store import connect_mongo, load_metric_history
 
 DASHBOARD_PATH = Path(__file__).parent / "dashboard.html"
 
@@ -194,27 +194,6 @@ def get_metrics(device: str = "", field: str = ""):
     return _json_response(docs)
 
 
-def _load_metric_history(client, device: str, field: str, since: datetime, max_points: int = 300) -> list[dict]:
-    query = {"device": device, "field": field, "date": {"$gte": since}}
-    projection = {"date": 1, "value": 1, "_id": 0}
-    total = client.capteurs.metrics.count_documents(query)
-    if total <= max_points:
-        return list(client.capteurs.metrics.find(query, projection).sort("date", 1))
-
-    step = max(1, total // max_points)
-    docs: list[dict] = []
-    for index, doc in enumerate(client.capteurs.metrics.find(query, projection).sort("date", 1)):
-        if index % step == 0:
-            docs.append(doc)
-    latest = client.capteurs.metrics.find_one(
-        query,
-        projection,
-        sort=[("date", -1)],
-    )
-    if latest and (not docs or docs[-1]["date"] != latest["date"]):
-        docs.append(latest)
-    return docs
-
 
 @router.get("/metrics/history")
 def get_metric_history(
@@ -231,7 +210,7 @@ def get_metric_history(
         since = now - timedelta(days=1)
 
     with connect_mongo() as client:
-        docs = _load_metric_history(client, device, field, since)
+        docs = load_metric_history(client, device, field, since)
 
     points = [{"t": d["date"], "v": d["value"]} for d in docs]
     return _json_response(points)

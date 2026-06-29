@@ -23,6 +23,7 @@ XSENSE_PASSWORD = os.environ.get("XSENSE_PASSWORD", "")
 XSENSE_CLOUD_ENABLED = os.environ.get("XSENSE_CLOUD_ENABLED", "true").lower() in ("1", "true", "yes")
 POLL_INTERVAL = int(os.environ.get("XSENSE_POLL_INTERVAL", "60"))
 REFRESH_WAIT_SEC = float(os.environ.get("XSENSE_REFRESH_WAIT", "4"))
+HISTORY_BACKFILL_INTERVAL = int(os.environ.get("XSENSE_HISTORY_BACKFILL_INTERVAL", "900"))
 HISTORY_DAYS = int(os.environ.get("XSENSE_HISTORY_DAYS", "365"))
 MAX_HISTORY_PAGES = int(os.environ.get("XSENSE_HISTORY_MAX_PAGES", "400"))
 STALE_SAMPLE_MINUTES = int(os.environ.get("XSENSE_STALE_SAMPLE_MINUTES", "5"))
@@ -38,6 +39,7 @@ _connected = False
 _last_sync: datetime | None = None
 _last_error: str | None = None
 _device_count = 0
+_last_backfill_at: datetime | None = None
 
 _reset_thread: threading.Thread | None = None
 _reset_status: dict = {
@@ -203,12 +205,32 @@ def _read_station_state(api: XSense, station):
 
 def _last_metric_at(device_id: str) -> datetime | None:
     with connect_mongo() as client:
-        doc = client[DB_NAME].metrics.find_one(
-            {"device": device_id, "field": "temperature"},
-            sort=[("date", -1)],
-            projection={"date": 1},
+        doc = client[DB_NAME].devices.find_one(
+            {"_id": device_id},
+            projection={"last_seen": 1},
         )
-    return _as_utc(doc["date"]) if doc else None
+    return _as_utc(doc.get("last_seen")) if doc else None
+
+
+def _latest_stored_fields(device_id: str) -> dict:
+    with connect_mongo() as client:
+        doc = client[DB_NAME].devices.find_one(
+            {"_id": device_id},
+            projection={"state": 1, "last_seen": 1},
+        )
+    if not doc:
+        return {}
+    state = doc.get("state") or {}
+    fields = {
+        key: state[key]
+        for key in ("temperature", "humidity", "battery", "online")
+        if key in state
+    }
+    if sample := state.get("sample_time"):
+        fields["sample_time"] = sample
+    elif last_seen := doc.get("last_seen"):
+        fields["sample_time"] = _as_utc(last_seen).strftime("%Y%m%d%H%M%S")
+    return fields
 
 
 def _append_new_history_metrics(device_id: str, metrics: list[dict]) -> int:
@@ -250,6 +272,27 @@ def _sync_temperature_device(
     with connect_mongo() as client:
         doc = client[DB_NAME].devices.find_one({"_id": device_id}, {"state": 1})
     current = (doc or {}).get("state", {})
+    current_sample_at = _parse_sample_time(current.get("sample_time"))
+
+    if sample_at and current_sample_at and sample_at < current_sample_at:
+        logger.warning(
+            "X-Sense %s: mesure cloud régressive ignorée (%s < %s)",
+            device_id,
+            sample_at.isoformat(),
+            current_sample_at.isoformat(),
+        )
+        stored = _latest_stored_fields(device_id)
+        if stored:
+            merge_device_state(
+                device_id,
+                stored,
+                meta,
+                only_if_changed=False,
+                seen_at=_parse_sample_time(stored.get("sample_time")),
+            )
+        else:
+            upsert_device_snapshot(device_id, device_meta=meta)
+        return
 
     new_sample = fields.get("sample_time")
     old_sample = current.get("sample_time")
@@ -412,15 +455,28 @@ def _supplement_stale_fields(
     fields: dict,
     *,
     sync_at: datetime,
+    fetch_history: bool = True,
 ) -> dict:
     device_id = _device_id(station.sn, device.sn)
     sample_at = _parse_sample_time(fields.get("sample_time"))
     last_metric_at = _last_metric_at(device_id)
 
-    if sample_at and last_metric_at and last_metric_at >= sample_at:
+    if last_metric_at and (sample_at is None or last_metric_at > sample_at):
+        stored = _latest_stored_fields(device_id)
+        if stored:
+            stored_at = _parse_sample_time(stored.get("sample_time"))
+            if stored_at and (sample_at is None or stored_at >= sample_at):
+                fields = {**fields, **stored}
+                sample_at = stored_at
+
+    if not fetch_history:
         return fields
 
-    if sample_at and (sync_at - sample_at) < timedelta(minutes=STALE_SAMPLE_MINUTES):
+    best_at = sample_at
+    if last_metric_at and (best_at is None or last_metric_at > best_at):
+        best_at = last_metric_at
+
+    if best_at and (sync_at - best_at) < timedelta(minutes=STALE_SAMPLE_MINUTES):
         return fields
 
     since = last_metric_at or (sync_at - timedelta(hours=6))
@@ -444,6 +500,11 @@ def _supplement_stale_fields(
 
     history_fields = _latest_history_fields(metrics)
     if not history_fields:
+        stored = _latest_stored_fields(device_id)
+        if stored:
+            stored_at = _parse_sample_time(stored.get("sample_time"))
+            if stored_at and (sample_at is None or stored_at >= sample_at):
+                return {**fields, **stored}
         return fields
 
     history_sample = _parse_sample_time(history_fields.get("sample_time"))
@@ -455,6 +516,12 @@ def _supplement_stale_fields(
                 history_sample.isoformat(),
             )
         return {**fields, **history_fields}
+
+    stored = _latest_stored_fields(device_id)
+    if stored:
+        stored_at = _parse_sample_time(stored.get("sample_time"))
+        if stored_at and (sample_at is None or stored_at >= sample_at):
+            return {**fields, **stored}
     return fields
 
 
@@ -567,7 +634,7 @@ def start_history_reset() -> tuple[bool, str]:
     return True, f"Téléchargement de {HISTORY_DAYS} jour(s) d'historique démarré"
 
 
-def _sync_devices(api: XSense) -> int:
+def _sync_devices(api: XSense, *, fetch_history: bool = False) -> int:
     count = 0
     sync_at = datetime.now(timezone.utc)
     for house in api.houses.values():
@@ -596,6 +663,7 @@ def _sync_devices(api: XSense) -> int:
                         device,
                         fields,
                         sync_at=sync_at,
+                        fetch_history=fetch_history,
                     )
                     if not fields and not meta.get("location"):
                         continue
@@ -641,32 +709,50 @@ def _connect(api: XSense):
 
 
 def _poll_once():
-    global _connected, _last_sync, _last_error, _device_count, _api
+    global _connected, _last_sync, _last_error, _device_count, _api, _last_backfill_at
 
     if not is_enabled():
         return
 
+    now = datetime.now(timezone.utc)
+    fetch_history = (
+        _last_backfill_at is None
+        or (now - _last_backfill_at).total_seconds() >= HISTORY_BACKFILL_INTERVAL
+    )
+    if fetch_history:
+        _last_backfill_at = now
+
+    started = time.monotonic()
     with _lock:
         try:
             if _api is None:
                 _api = XSense()
                 _connect(_api)
-            count = _sync_devices(_api)
+            count = _sync_devices(_api, fetch_history=fetch_history)
             _connected = True
             _last_sync = datetime.now(timezone.utc)
             _last_error = None
             _device_count = count
-            logger.info("X-Sense cloud sync: %s device(s)", count)
+            logger.info(
+                "X-Sense cloud sync: %s device(s) in %.1fs%s",
+                count,
+                time.monotonic() - started,
+                " (+history)" if fetch_history else "",
+            )
         except SessionExpired:
             try:
                 _api.refresh()
                 _api.load_aws()
-                count = _sync_devices(_api)
+                count = _sync_devices(_api, fetch_history=fetch_history)
                 _connected = True
                 _last_sync = datetime.now(timezone.utc)
                 _last_error = None
                 _device_count = count
-                logger.info("X-Sense cloud sync after refresh: %s device(s)", count)
+                logger.info(
+                    "X-Sense cloud sync after refresh: %s device(s) in %.1fs",
+                    count,
+                    time.monotonic() - started,
+                )
             except Exception as exc:
                 _connected = False
                 _last_error = str(exc)
@@ -689,8 +775,10 @@ def _poll_once():
 
 def _run_loop():
     while not _stop_event.is_set():
+        started = time.monotonic()
         _poll_once()
-        if _stop_event.wait(POLL_INTERVAL):
+        delay = max(0.0, POLL_INTERVAL - (time.monotonic() - started))
+        if _stop_event.wait(delay):
             break
 
 

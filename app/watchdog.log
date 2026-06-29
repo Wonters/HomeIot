@@ -16149,3 +16149,491 @@ TypeError: can't compare offset-naive and offset-aware datetimes
 2026-06-28T20:18:59Z INFO watchdog completed
 2026-06-28T20:19:11Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
 2026-06-28T20:19:11Z INFO retrieve completed
+2026-06-28T20:20:00Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:20:00Z INFO watchdog completed
+2026-06-28T20:20:12Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:20:12Z INFO retrieve completed
+2026-06-28T20:20:15Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:21:00Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:21:00Z INFO watchdog completed
+2026-06-28T20:21:12Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:21:12Z INFO retrieve completed
+2026-06-28T20:22:00Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:22:00Z INFO watchdog completed
+2026-06-28T20:22:05Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:22:13Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:22:13Z INFO retrieve completed
+2026-06-28T20:23:00Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:23:00Z INFO watchdog completed
+2026-06-28T20:23:13Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:23:13Z INFO retrieve completed
+2026-06-28T20:23:55Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:24:00Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:24:00Z INFO watchdog completed
+2026-06-28T20:24:14Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:24:14Z INFO retrieve completed
+2026-06-28T20:25:01Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:25:01Z INFO watchdog completed
+2026-06-28T20:25:14Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:25:14Z INFO retrieve completed
+2026-06-28T20:25:46Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:26:01Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:26:01Z INFO watchdog completed
+2026-06-28T20:26:15Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:26:15Z INFO retrieve completed
+2026-06-28T20:27:01Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:27:01Z INFO watchdog completed
+2026-06-28T20:27:16Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:27:16Z INFO retrieve completed
+2026-06-28T20:27:36Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:28:01Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:28:01Z INFO watchdog completed
+2026-06-28T20:28:16Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:28:16Z INFO retrieve completed
+2026-06-28T20:29:01Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:29:01Z INFO watchdog completed
+2026-06-28T20:29:17Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:29:17Z INFO retrieve completed
+2026-06-28T20:29:27Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:30:02Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:30:02Z INFO watchdog completed
+2026-06-28T20:30:17Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:30:17Z INFO retrieve completed
+2026-06-28T20:31:02Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:31:02Z INFO watchdog completed
+2026-06-28T20:31:16Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:31:18Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:31:18Z INFO retrieve completed
+2026-06-28T20:32:02Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:32:02Z INFO watchdog completed
+2026-06-28T20:32:19Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:32:19Z INFO retrieve completed
+2026-06-28T20:33:02Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:33:02Z INFO watchdog completed
+2026-06-28T20:33:06Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:33:19Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:33:19Z INFO retrieve completed
+2026-06-28T20:34:02Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:34:02Z INFO watchdog completed
+2026-06-28T20:34:20Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:34:20Z INFO retrieve completed
+2026-06-28T20:34:56Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:35:03Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:35:03Z INFO watchdog completed
+2026-06-28T20:35:20Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:35:20Z INFO retrieve completed
+2026-06-28T20:36:03Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:36:03Z INFO watchdog completed
+2026-06-28T20:36:21Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:36:21Z INFO retrieve completed
+2026-06-28T20:36:46Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:37:03Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:37:03Z INFO watchdog completed
+2026-06-28T20:37:21Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:37:21Z INFO retrieve completed
+2026-06-28T20:38:03Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:38:03Z INFO watchdog completed
+2026-06-28T20:38:22Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:38:22Z INFO retrieve completed
+2026-06-28T20:38:36Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:39:03Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:39:03Z INFO watchdog completed
+2026-06-28T20:39:23Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:39:23Z INFO retrieve completed
+2026-06-28T20:40:04Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:40:04Z INFO watchdog completed
+2026-06-28T20:40:23Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:40:23Z INFO retrieve completed
+2026-06-28T20:40:26Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:41:04Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:41:04Z INFO watchdog completed
+2026-06-28T20:41:24Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:41:24Z INFO retrieve completed
+2026-06-28T20:42:05Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:42:05Z INFO watchdog completed
+2026-06-28T20:42:16Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:42:24Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:42:24Z INFO retrieve completed
+2026-06-28T20:43:05Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:43:05Z INFO watchdog completed
+2026-06-28T20:43:25Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:43:25Z INFO retrieve completed
+2026-06-28T20:44:05Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:44:05Z INFO watchdog completed
+2026-06-28T20:44:06Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:44:26Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:44:26Z INFO retrieve completed
+2026-06-28T20:45:05Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:45:05Z INFO watchdog completed
+2026-06-28T20:45:26Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:45:26Z INFO retrieve completed
+2026-06-28T20:45:56Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:46:05Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:46:05Z INFO watchdog completed
+2026-06-28T20:46:27Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:46:27Z INFO retrieve completed
+2026-06-28T20:47:05Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:47:05Z INFO watchdog completed
+2026-06-28T20:47:27Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:47:27Z INFO retrieve completed
+2026-06-28T20:47:46Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:48:06Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:48:06Z INFO watchdog completed
+2026-06-28T20:48:28Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:48:28Z INFO retrieve completed
+2026-06-28T20:49:06Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:49:06Z INFO watchdog completed
+2026-06-28T20:49:28Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:49:28Z INFO retrieve completed
+2026-06-28T20:49:36Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:50:06Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:50:06Z INFO watchdog completed
+2026-06-28T20:50:29Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:50:29Z INFO retrieve completed
+2026-06-28T20:51:06Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:51:06Z INFO watchdog completed
+2026-06-28T20:51:27Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:51:30Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:51:30Z INFO retrieve completed
+2026-06-28T20:52:07Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:52:07Z INFO watchdog completed
+2026-06-28T20:52:30Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:52:30Z INFO retrieve completed
+2026-06-28T20:53:07Z INFO bypass=False  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_off)
+2026-06-28T20:53:07Z INFO watchdog completed
+2026-06-28T20:53:17Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:53:31Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:53:31Z INFO retrieve completed
+2026-06-28T20:53:34Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:54:07Z INFO bypass=True  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_saas_warmer)
+2026-06-28T20:54:07Z INFO watchdog completed
+2026-06-28T20:54:31Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:54:31Z INFO retrieve completed
+2026-06-28T20:55:07Z INFO bypass=True  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_saas_warmer)
+2026-06-28T20:55:07Z INFO watchdog completed
+2026-06-28T20:55:07Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:55:32Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:55:32Z INFO retrieve completed
+2026-06-28T20:56:07Z INFO bypass=True  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_saas_warmer)
+2026-06-28T20:56:07Z INFO watchdog completed
+2026-06-28T20:56:33Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:56:33Z INFO retrieve completed
+2026-06-28T20:56:58Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:57:08Z INFO bypass=True  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_saas_warmer)
+2026-06-28T20:57:08Z INFO watchdog completed
+2026-06-28T20:57:33Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:57:34Z INFO retrieve completed
+2026-06-28T20:58:08Z INFO bypass=True  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_saas_warmer)
+2026-06-28T20:58:08Z INFO watchdog completed
+2026-06-28T20:58:34Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:58:34Z INFO retrieve completed
+2026-06-28T20:58:49Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T20:59:08Z INFO bypass=True  saas=33.5°C  kitchen=28.9°C  airflow 120→120 m³/h (bypass_saas_warmer)
+2026-06-28T20:59:08Z INFO watchdog completed
+2026-06-28T20:59:11Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T20:59:11Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T20:59:12Z INFO Supervisor started (interval=1 min)
+2026-06-28T20:59:12Z INFO MQTT connected, subscribed to zigbee2mqtt/+/+
+2026-06-28T20:59:12Z INFO MQTT subscribed to homeassistant X-Sense topics
+2026-06-28T20:59:13Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:59:13Z INFO retrieve completed
+2026-06-28T20:59:23Z ERROR X-Sense cloud sync failed
+Traceback (most recent call last):
+  File "/app/capteurs/xsense_cloud.py", line 654, in _poll_once
+    count = _sync_devices(_api)
+  File "/app/capteurs/xsense_cloud.py", line 592, in _sync_devices
+    fields = _supplement_stale_fields(
+        api,
+    ...<4 lines>...
+        sync_at=sync_at,
+    )
+  File "/app/capteurs/xsense_cloud.py", line 418, in _supplement_stale_fields
+    last_metric_at = _last_metric_at(device_id)
+  File "/app/capteurs/xsense_cloud.py", line 205, in _last_metric_at
+    with connect_mongo() as client:
+         ~~~~~~~~~~~~~^^
+  File "/opt/python/cpython-3.14.6-linux-x86_64-gnu/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/app/capteurs/store.py", line 17, in connect_mongo
+    @contextmanager
+             ^^^^^^
+NameError: name 'MongoClient' is not defined
+2026-06-28T20:59:23Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T20:59:24Z INFO Supervisor started (interval=1 min)
+2026-06-28T20:59:24Z INFO MQTT connected, subscribed to zigbee2mqtt/+/+
+2026-06-28T20:59:24Z INFO MQTT subscribed to homeassistant X-Sense topics
+2026-06-28T20:59:24Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T20:59:25Z INFO retrieve completed
+2026-06-28T21:00:20Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T21:00:20Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:00:20Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:00:21Z INFO Supervisor started (interval=1 min)
+2026-06-28T21:00:21Z INFO MQTT connected, subscribed to zigbee2mqtt/+/+
+2026-06-28T21:00:21Z INFO MQTT subscribed to homeassistant X-Sense topics
+2026-06-28T21:00:21Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:00:21Z INFO retrieve completed
+2026-06-28T21:00:52Z INFO X-Sense SBS50139A686E_00000001: 240 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:00:52Z INFO X-Sense SBS50139A686E_00000001: historique récent utilisé (2026-06-28T20:37:00+00:00)
+2026-06-28T21:00:56Z WARNING X-Sense SBS50139A686E_00000001: mesure cloud ancienne (2026-06-28T20:37:00+00:00, âge 23 min)
+2026-06-28T21:01:15Z INFO X-Sense SBS50139A686E_00000002: 240 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:01:15Z INFO X-Sense SBS50139A686E_00000002: historique récent utilisé (2026-06-28T20:37:00+00:00)
+2026-06-28T21:01:18Z WARNING X-Sense SBS50139A686E_00000002: mesure cloud ancienne (2026-06-28T20:37:00+00:00, âge 23 min)
+2026-06-28T21:01:31Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:01:31Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:01:33Z INFO Supervisor started (interval=1 min)
+2026-06-28T21:01:33Z INFO MQTT connected, subscribed to zigbee2mqtt/+/+
+2026-06-28T21:01:33Z INFO MQTT subscribed to homeassistant X-Sense topics
+2026-06-28T21:01:33Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:01:33Z INFO retrieve completed
+2026-06-28T21:02:48Z INFO X-Sense SBS50139A686E_00000003: 240 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:02:48Z INFO X-Sense SBS50139A686E_00000003: historique récent utilisé (2026-06-28T20:37:00+00:00)
+2026-06-28T21:02:52Z WARNING X-Sense SBS50139A686E_00000003: mesure cloud ancienne (2026-06-28T20:37:00+00:00, âge 24 min)
+2026-06-28T21:03:06Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:03:06Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:03:07Z INFO Supervisor started (interval=1 min)
+2026-06-28T21:03:07Z INFO MQTT connected, subscribed to zigbee2mqtt/+/+
+2026-06-28T21:03:07Z INFO MQTT subscribed to homeassistant X-Sense topics
+2026-06-28T21:03:08Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:03:08Z INFO retrieve completed
+2026-06-28T21:04:18Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:04:19Z INFO Supervisor started (interval=1 min)
+2026-06-28T21:04:19Z INFO MQTT connected, subscribed to zigbee2mqtt/+/+
+2026-06-28T21:04:19Z INFO MQTT subscribed to homeassistant X-Sense topics
+2026-06-28T21:04:20Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:04:20Z INFO retrieve completed
+2026-06-28T21:04:49Z INFO bypass=True  saas=33.5°C  kitchen=29.4°C  airflow 120→120 m³/h (bypass_saas_warmer)
+2026-06-28T21:04:49Z INFO watchdog completed
+2026-06-28T21:05:20Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:05:20Z INFO retrieve completed
+2026-06-28T21:05:50Z INFO bypass=True  saas=33.5°C  kitchen=29.4°C  airflow 120→120 m³/h (bypass_saas_warmer)
+2026-06-28T21:05:50Z INFO watchdog completed
+2026-06-28T21:05:59Z INFO X-Sense SBS50139A686E_00000004: 240 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:05:59Z INFO X-Sense SBS50139A686E_00000004: historique récent utilisé (2026-06-28T20:37:00+00:00)
+2026-06-28T21:06:02Z WARNING X-Sense SBS50139A686E_00000004: mesure cloud ancienne (2026-06-28T20:37:00+00:00, âge 27 min)
+2026-06-28T21:06:21Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:06:21Z INFO retrieve completed
+2026-06-28T21:06:22Z INFO X-Sense SBS50139A686E_00000005: 240 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:06:22Z INFO X-Sense SBS50139A686E_00000005: historique récent utilisé (2026-06-28T20:37:00+00:00)
+2026-06-28T21:06:25Z WARNING X-Sense SBS50139A686E_00000005: mesure cloud ancienne (2026-06-28T20:37:00+00:00, âge 27 min)
+2026-06-28T21:06:43Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T21:06:50Z INFO bypass=True  saas=29.8°C  kitchen=29.4°C  airflow 120→120 m³/h (bypass_saas_warmer)
+2026-06-28T21:06:50Z INFO watchdog completed
+2026-06-28T21:07:22Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:07:22Z INFO retrieve completed
+2026-06-28T21:07:50Z INFO bypass=True  saas=29.8°C  kitchen=29.4°C  airflow 120→120 m³/h (bypass_saas_warmer)
+2026-06-28T21:07:50Z INFO watchdog completed
+2026-06-28T21:08:07Z INFO X-Sense SBS50139A686E_00000001: 60 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:08:07Z INFO X-Sense SBS50139A686E_00000001: historique récent utilisé (2026-06-28T21:07:00+00:00)
+2026-06-28T21:08:22Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:08:22Z INFO retrieve completed
+2026-06-28T21:08:30Z INFO X-Sense SBS50139A686E_00000002: 60 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:08:30Z INFO X-Sense SBS50139A686E_00000002: historique récent utilisé (2026-06-28T21:07:00+00:00)
+2026-06-28T21:08:50Z INFO bypass=True  saas=29.8°C  kitchen=29.3°C  airflow 120→120 m³/h (bypass_saas_warmer)
+2026-06-28T21:08:50Z INFO watchdog completed
+2026-06-28T21:08:54Z INFO X-Sense SBS50139A686E_00000003: 60 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:08:54Z INFO X-Sense SBS50139A686E_00000003: historique récent utilisé (2026-06-28T21:07:00+00:00)
+2026-06-28T21:09:17Z INFO X-Sense SBS50139A686E_00000004: 60 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:09:17Z INFO X-Sense SBS50139A686E_00000004: historique récent utilisé (2026-06-28T21:07:00+00:00)
+2026-06-28T21:09:23Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:09:23Z INFO retrieve completed
+2026-06-28T21:09:39Z INFO X-Sense SBS50139A686E_00000005: 60 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:09:39Z INFO X-Sense SBS50139A686E_00000005: historique récent utilisé (2026-06-28T21:07:00+00:00)
+2026-06-28T21:09:50Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 120→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:09:50Z INFO watchdog completed
+2026-06-28T21:10:00Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T21:10:23Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:10:23Z INFO retrieve completed
+2026-06-28T21:10:51Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:10:51Z INFO watchdog completed
+2026-06-28T21:11:24Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:11:24Z INFO retrieve completed
+2026-06-28T21:11:51Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:11:51Z INFO watchdog completed
+2026-06-28T21:12:24Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:12:25Z INFO retrieve completed
+2026-06-28T21:12:42Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T21:12:51Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:12:51Z INFO watchdog completed
+2026-06-28T21:13:25Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:13:25Z INFO retrieve completed
+2026-06-28T21:13:51Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:13:51Z INFO watchdog completed
+2026-06-28T21:14:26Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:14:26Z INFO retrieve completed
+2026-06-28T21:14:51Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:14:51Z INFO watchdog completed
+2026-06-28T21:15:26Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:15:26Z INFO retrieve completed
+2026-06-28T21:15:51Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:15:51Z INFO watchdog completed
+2026-06-28T21:15:57Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T21:16:27Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:16:27Z INFO retrieve completed
+2026-06-28T21:16:52Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:16:52Z INFO watchdog completed
+2026-06-28T21:17:28Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:17:28Z INFO retrieve completed
+2026-06-28T21:17:52Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:17:52Z INFO watchdog completed
+2026-06-28T21:18:28Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:18:28Z INFO retrieve completed
+2026-06-28T21:18:52Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:18:52Z INFO watchdog completed
+2026-06-28T21:19:14Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T21:19:29Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:19:29Z INFO retrieve completed
+2026-06-28T21:19:52Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:19:52Z INFO watchdog completed
+2026-06-28T21:20:30Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:20:30Z INFO retrieve completed
+2026-06-28T21:20:52Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:20:52Z INFO watchdog completed
+2026-06-28T21:21:30Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:21:30Z INFO retrieve completed
+2026-06-28T21:21:53Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:21:53Z INFO watchdog completed
+2026-06-28T21:22:30Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T21:22:31Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:22:31Z INFO retrieve completed
+2026-06-28T21:22:53Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:22:53Z INFO watchdog completed
+2026-06-28T21:23:31Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:23:31Z INFO retrieve completed
+2026-06-28T21:23:53Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:23:53Z INFO watchdog completed
+2026-06-28T21:24:32Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:24:32Z INFO retrieve completed
+2026-06-28T21:24:53Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:24:53Z INFO watchdog completed
+2026-06-28T21:25:32Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:25:33Z INFO retrieve completed
+2026-06-28T21:25:44Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T21:25:53Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:25:53Z INFO watchdog completed
+2026-06-28T21:26:33Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:26:33Z INFO retrieve completed
+2026-06-28T21:26:54Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:26:54Z INFO watchdog completed
+2026-06-28T21:27:34Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:27:34Z INFO retrieve completed
+2026-06-28T21:27:54Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:27:54Z INFO watchdog completed
+2026-06-28T21:28:34Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:28:34Z INFO retrieve completed
+2026-06-28T21:28:54Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:28:54Z INFO watchdog completed
+2026-06-28T21:29:00Z INFO X-Sense cloud sync: 11 device(s)
+2026-06-28T21:29:35Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:29:35Z INFO retrieve completed
+2026-06-28T21:29:54Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:29:54Z INFO watchdog completed
+2026-06-28T21:30:36Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:30:36Z INFO retrieve completed
+2026-06-28T21:30:54Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:30:54Z INFO watchdog completed
+2026-06-28T21:32:05Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:32:06Z INFO Supervisor started (interval=1 min)
+2026-06-28T21:32:06Z INFO MQTT connected, subscribed to zigbee2mqtt/+/+
+2026-06-28T21:32:06Z INFO MQTT subscribed to homeassistant X-Sense topics
+2026-06-28T21:32:07Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:32:07Z INFO retrieve completed
+2026-06-28T21:33:17Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:33:17Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:33:18Z INFO MQTT connected, subscribed to zigbee2mqtt/+/+
+2026-06-28T21:33:18Z INFO Supervisor started (interval=1 min)
+2026-06-28T21:33:18Z INFO MQTT subscribed to homeassistant X-Sense topics
+2026-06-28T21:33:19Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:33:19Z INFO retrieve completed
+2026-06-28T21:33:48Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:33:48Z INFO watchdog completed
+2026-06-28T21:34:19Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:34:19Z INFO retrieve completed
+2026-06-28T21:34:49Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:34:49Z INFO watchdog completed
+2026-06-28T21:35:20Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:35:20Z INFO retrieve completed
+2026-06-28T21:35:42Z INFO X-Sense cloud sync: 11 device(s) in 143.5s (+history)
+2026-06-28T21:35:49Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:35:49Z INFO watchdog completed
+2026-06-28T21:36:21Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:36:21Z INFO retrieve completed
+2026-06-28T21:36:49Z INFO bypass=True  saas=29.0°C  kitchen=29.3°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:36:49Z INFO watchdog completed
+2026-06-28T21:37:16Z INFO X-Sense cloud sync: 11 device(s) in 95.0s
+2026-06-28T21:37:21Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:37:21Z INFO retrieve completed
+2026-06-28T21:38:41Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:39:12Z INFO Supervisor started (interval=1 min)
+2026-06-28T21:39:12Z INFO MQTT connected, subscribed to zigbee2mqtt/+/+
+2026-06-28T21:39:12Z INFO MQTT subscribed to homeassistant X-Sense topics
+2026-06-28T21:39:13Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:39:13Z INFO retrieve completed
+2026-06-28T21:39:26Z INFO X-Sense SBS50139A686E_00000001: 60 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:39:26Z INFO X-Sense SBS50139A686E_00000001: historique récent utilisé (2026-06-28T21:37:00+00:00)
+2026-06-28T21:39:28Z INFO X-Sense SBS50139A686E_00000002: 58 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:39:28Z INFO X-Sense SBS50139A686E_00000002: historique récent utilisé (2026-06-28T21:36:00+00:00)
+2026-06-28T21:39:31Z INFO X-Sense SBS50139A686E_00000003: 58 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:39:31Z INFO X-Sense SBS50139A686E_00000003: historique récent utilisé (2026-06-28T21:36:00+00:00)
+2026-06-28T21:39:33Z INFO X-Sense SBS50139A686E_00000004: 60 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:39:33Z INFO X-Sense SBS50139A686E_00000004: historique récent utilisé (2026-06-28T21:37:00+00:00)
+2026-06-28T21:39:35Z INFO X-Sense SBS50139A686E_00000005: 60 point(s) ajouté(s) depuis l'historique cloud
+2026-06-28T21:39:35Z INFO X-Sense SBS50139A686E_00000005: historique récent utilisé (2026-06-28T21:37:00+00:00)
+2026-06-28T21:39:37Z INFO X-Sense cloud sync: 11 device(s) in 24.6s (+history)
+2026-06-28T21:39:37Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:39:37Z WARNING MQTT disconnected: Normal disconnection
+2026-06-28T21:39:38Z INFO Supervisor started (interval=1 min)
+2026-06-28T21:39:39Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:39:39Z INFO retrieve completed
+2026-06-28T21:39:51Z INFO X-Sense cloud sync: 11 device(s) in 13.0s (+history)
+2026-06-28T21:40:08Z INFO bypass=True  saas=24.8°C  kitchen=29.2°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:40:08Z INFO watchdog completed
+2026-06-28T21:40:39Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:40:39Z INFO retrieve completed
+2026-06-28T21:40:43Z INFO X-Sense cloud sync: 11 device(s) in 5.0s
+2026-06-28T21:41:09Z INFO bypass=True  saas=24.8°C  kitchen=29.2°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:41:09Z INFO watchdog completed
+2026-06-28T21:41:40Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:41:40Z INFO retrieve completed
+2026-06-28T21:41:43Z INFO X-Sense cloud sync: 11 device(s) in 5.0s
+2026-06-28T21:42:09Z INFO bypass=True  saas=24.8°C  kitchen=29.2°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:42:09Z INFO watchdog completed
+2026-06-28T21:42:41Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:42:41Z INFO retrieve completed
+2026-06-28T21:42:43Z INFO X-Sense cloud sync: 11 device(s) in 5.0s
+2026-06-28T21:43:09Z INFO bypass=True  saas=24.8°C  kitchen=29.2°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:43:09Z INFO watchdog completed
+2026-06-28T21:43:41Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:43:41Z INFO retrieve completed
+2026-06-28T21:43:43Z INFO X-Sense cloud sync: 11 device(s) in 5.0s
+2026-06-28T21:44:09Z INFO bypass=True  saas=24.8°C  kitchen=29.2°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:44:09Z INFO watchdog completed
+2026-06-28T21:44:42Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:44:42Z INFO retrieve completed
+2026-06-28T21:44:43Z INFO X-Sense cloud sync: 11 device(s) in 5.0s
+2026-06-28T21:45:09Z INFO bypass=True  saas=24.8°C  kitchen=29.2°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:45:09Z INFO watchdog completed
+2026-06-28T21:45:42Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:45:42Z INFO retrieve completed
+2026-06-28T21:45:43Z INFO X-Sense cloud sync: 11 device(s) in 4.9s
+2026-06-28T21:46:09Z INFO bypass=True  saas=24.8°C  kitchen=29.2°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-28T21:46:09Z INFO watchdog completed
+2026-06-28T21:46:43Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-28T21:46:43Z INFO retrieve completed
+2026-06-28T21:46:43Z INFO X-Sense cloud sync: 11 device(s) in 5.0s
+2026-06-29T08:00:29Z INFO Supervisor started (interval=1 min)
+2026-06-29T08:00:29Z INFO MQTT connected, subscribed to zigbee2mqtt/+/+
+2026-06-29T08:00:29Z INFO MQTT subscribed to homeassistant X-Sense topics
+2026-06-29T08:00:30Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-29T08:00:30Z INFO retrieve completed
+2026-06-29T08:01:00Z INFO bypass=False  saas=24.8°C  kitchen=29.2°C  airflow 150→120 m³/h (bypass_off)
+2026-06-29T08:01:00Z INFO watchdog completed
+2026-06-29T08:01:31Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-29T08:01:31Z INFO retrieve completed
+2026-06-29T08:01:50Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-29T08:01:58Z INFO X-Sense SBS50139A686E_00000001: 314 point(s) ajouté(s) depuis l'historique cloud
+2026-06-29T08:02:00Z INFO bypass=True  saas=24.8°C  kitchen=29.2°C  airflow 120→150 m³/h (bypass_saas_cooler)
+2026-06-29T08:02:00Z INFO watchdog completed
+2026-06-29T08:02:32Z INFO TYPE OF HEAT RECOVERY:16 => Not found in datasheet
+2026-06-29T08:02:32Z INFO retrieve completed
+2026-06-29T08:03:00Z INFO bypass=True  saas=24.8°C  kitchen=29.2°C  airflow 150→150 m³/h (bypass_saas_cooler)
+2026-06-29T08:03:00Z INFO watchdog completed

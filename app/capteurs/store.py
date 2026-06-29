@@ -14,6 +14,14 @@ NUMERIC_FIELDS = {
 }
 
 
+def ensure_indexes():
+    with connect_mongo() as client:
+        client[DB_NAME].metrics.create_index(
+            [("device", 1), ("field", 1), ("date", -1)],
+            background=True,
+        )
+
+
 @contextmanager
 def connect_mongo():
     with MongoClient(MONGO_ADDRESS) as client:
@@ -99,6 +107,33 @@ def merge_device_state(
         if metrics:
             db.metrics.insert_many(metrics)
         db.devices.update_one({"_id": device}, {"$set": update}, upsert=True)
+
+
+def load_metric_history(
+    client,
+    device: str,
+    field: str,
+    since: datetime,
+    *,
+    db_name: str = DB_NAME,
+    max_points: int = 300,
+) -> list[dict]:
+    query = {"device": device, "field": field, "date": {"$gte": since}}
+    projection = {"date": 1, "value": 1, "_id": 0}
+    db = client[db_name]
+    total = db.metrics.count_documents(query)
+    if total <= max_points:
+        return list(db.metrics.find(query, projection).sort("date", 1))
+
+    step = max(1, total // max_points)
+    docs: list[dict] = []
+    for index, doc in enumerate(db.metrics.find(query, projection).sort("date", 1)):
+        if index % step == 0:
+            docs.append(doc)
+    latest = db.metrics.find_one(query, projection, sort=[("date", -1)])
+    if latest and (not docs or docs[-1]["date"] != latest["date"]):
+        docs.append(latest)
+    return docs
 
 
 def replace_device_metrics(device: str, metrics: list[dict]):

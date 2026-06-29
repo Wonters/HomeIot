@@ -1,12 +1,12 @@
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, Response
 from pymongo.collection import ObjectId
 
-from capteurs.store import connect_mongo as connect_capteurs_mongo
+from capteurs.store import connect_mongo as connect_capteurs_mongo, load_metric_history
 from capteurs.xsense_devices import device_measurement_time, find_saas_device
 from nav import inject_app_nav
 from vmc.domeo import connect_mongo as connect_vmc_mongo
@@ -95,15 +95,14 @@ def get_comparison_temperatures(period: str = "day"):
         if saas_device:
             device_id = saas_device["_id"]
             xsense_saas["label"] = _device_label(saas_device)
-            docs = list(client.capteurs.metrics.find(
-                {
-                    "device": device_id,
-                    "field": "temperature",
-                    "date": {"$gte": since},
-                },
-                {"date": 1, "value": 1, "_id": 0},
-            ).sort("date", 1))
-            xsense_saas["points"] = _points(_downsample(docs))
+            docs = load_metric_history(
+                client,
+                device_id,
+                "temperature",
+                since,
+                max_points=MAX_POINTS,
+            )
+            xsense_saas["points"] = _points(docs)
 
     return _json_response({
         "period": period,
@@ -117,6 +116,16 @@ def get_comparison_temperatures(period: str = "day"):
             "xsense_saas": XSENSE_SAAS_COLOR,
         },
     })
+
+
+def _as_utc(dt):
+    if dt is None:
+        return None
+    if isinstance(dt, str):
+        dt = datetime.fromisoformat(dt.replace("Z", "+00:00"))
+    if dt.tzinfo is None:
+        return dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc)
 
 
 @router.get("/latest")
@@ -140,16 +149,23 @@ def get_latest_values():
         if saas_device:
             device_id = saas_device["_id"]
             state = saas_device.get("state") or {}
-            doc = client.capteurs.metrics.find_one(
+            metric = client.capteurs.metrics.find_one(
                 {"device": device_id, "field": "temperature"},
                 sort=[("date", -1)],
             )
-            value = state.get("temperature")
-            if value is None and doc:
-                value = doc["value"]
-            meas_date = device_measurement_time(saas_device)
-            if meas_date is None and doc:
-                meas_date = doc["date"]
+            state_date = device_measurement_time(saas_device)
+            if state_date:
+                state_date = _as_utc(state_date)
+            state_value = state.get("temperature")
+
+            value = state_value
+            meas_date = state_date
+            if metric:
+                metric_date = _as_utc(metric["date"])
+                if meas_date is None or metric_date > meas_date:
+                    value = metric["value"]
+                    meas_date = metric_date
+
             if value is not None:
                 result["xsense_saas"] = {
                     "label": _device_label(saas_device),
