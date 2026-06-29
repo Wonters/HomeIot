@@ -11,7 +11,11 @@
       --border: #2d3038;
       --text: #d0d2d8;
       --text-dim: #6c7080;
+      --green: #73bf69;
       --blue: #5794f2;
+      --orange: #ff9830;
+      --purple: #b877d9;
+      --yellow: #fade2a;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -19,132 +23,327 @@
       color: var(--text);
       font-family: system-ui, sans-serif;
       min-height: 100vh;
-      padding: 24px;
-    }
-    header {
-      max-width: 720px;
-      margin: 0 auto 32px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border);
-    }
-    header h1 {
-      font-size: 1.6rem;
-      letter-spacing: .06em;
-      color: #fff;
-      margin-bottom: 6px;
-    }
-    header p {
-      font-size: .9rem;
-      color: var(--text-dim);
     }
     main {
-      max-width: 720px;
+      max-width: 960px;
       margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .page-header h1 {
+      font-size: 1.3rem;
+      letter-spacing: .05em;
+      color: #fff;
+    }
+    #last-update {
+      font-size: .75rem;
+      color: var(--text-dim);
+    }
+    .section {
+      margin-bottom: 28px;
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
     }
     .section-label {
       font-size: .65rem;
       text-transform: uppercase;
       letter-spacing: .1em;
       color: var(--text-dim);
-      margin-bottom: 14px;
     }
-    .apps {
+    .section-link {
+      font-size: .72rem;
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .section-link:hover { text-decoration: underline; }
+    .cards {
       display: grid;
       gap: 12px;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     }
-    .app-card {
-      display: block;
+    .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
-      text-decoration: none;
-      color: inherit;
-      transition: border-color .2s, transform .15s, box-shadow .2s;
+      border-radius: 6px;
+      padding: 14px 16px;
+      min-height: 92px;
     }
-    .app-card:hover {
-      border-color: var(--blue);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+    .card.wide {
+      grid-column: span 2;
     }
-    .app-icon {
+    .card.hero {
+      border-left: 3px solid var(--blue);
+    }
+    .card.vmc-temp {
+      border-left: 3px solid var(--green);
+    }
+    .card.ext {
+      border-left: 3px solid var(--orange);
+    }
+    .card.int {
+      border-left: 3px solid var(--purple);
+    }
+    .card-title {
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    .card-value {
       font-size: 1.8rem;
-      margin-bottom: 12px;
-      line-height: 1;
-    }
-    .app-name {
-      font-size: 1rem;
       font-weight: 600;
       color: #fff;
-      margin-bottom: 6px;
+      line-height: 1;
     }
-    .app-desc {
-      font-size: .8rem;
+    .card-value.sm {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .card-unit {
+      font-size: .85rem;
       color: var(--text-dim);
-      line-height: 1.4;
+      margin-left: 3px;
+    }
+    .card-sub {
+      font-size: .68rem;
+      color: var(--text-dim);
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+    .card-age { font-size: .68rem; color: var(--text-dim); margin-top: 4px; }
+    .card-age.stale { color: var(--orange); }
+    .mode-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .mode-badge {
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+      color: var(--text-dim);
+      background: rgba(108, 112, 128, .08);
+    }
+    .mode-badge.on {
+      color: var(--green);
+      border-color: var(--green);
+      background: rgba(115, 191, 105, .12);
+    }
+    .mode-badge.on.boost {
+      color: var(--yellow);
+      border-color: var(--yellow);
+      background: rgba(250, 222, 42, .12);
+    }
+    .mode-badge.on.standby {
+      color: var(--purple);
+      border-color: var(--purple);
+      background: rgba(184, 119, 217, .12);
+    }
+    .error-banner {
+      display: none;
+      background: rgba(242, 73, 92, .1);
+      border: 1px solid rgba(242, 73, 92, .35);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: .78rem;
+      color: #f2495c;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 520px) {
+      .card.wide { grid-column: span 1; }
+      .cards { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
-
-<header>
-  <h1>HomeIot</h1>
-  <p>Tableau de bord central des applications domotiques.</p>
-</header>
+{{NAV}}
 
 <main>
-  <div class="section-label">Vue d'ensemble</div>
-  <div class="apps">
-    <a class="app-card" href="/dashboard/">
-      <div class="app-icon">📈</div>
-      <div class="app-name">Température extérieur</div>
-      <div class="app-desc">X-Sense SAAS et VMC Tout — comparaison des mesures extérieures.</div>
-    </a>
+  <div class="page-header">
+    <h1>Vue d'ensemble</h1>
+    <div id="last-update">chargement…</div>
   </div>
 
-  <div class="section-label" style="margin-top: 28px">Applications</div>
-  <div class="apps">
-    <a class="app-card" href="/vmc/">
-      <div class="app-icon">🌀</div>
-      <div class="app-name">VMC</div>
-      <div class="app-desc">Ventilation DOMEO210 — températures, débits et commandes.</div>
-    </a>
-  </div>
+  <div class="error-banner" id="error-banner">Impossible de charger les données</div>
 
-  <div class="section-label" style="margin-top: 28px">Capteurs</div>
-  <div class="apps">
-    <a class="app-card" href="/capteurs/#zigbee">
-      <div class="app-icon">📡</div>
-      <div class="app-name">Capteurs Zigbee</div>
-      <div class="app-desc">Capteurs et actionneurs Zigbee — via zigbee2mqtt.</div>
-    </a>
-    <a class="app-card" href="/capteurs/#lora">
-      <div class="app-icon">🛡️</div>
-      <div class="app-name">X-Sense (LoRa)</div>
-      <div class="app-desc">Détecteurs fumée et thermo-hygromètres — base SBS50 / cloud.</div>
-    </a>
-  </div>
+  <section class="section">
+    <div class="section-head">
+      <div class="section-label">VMC</div>
+      <a class="section-link" href="/vmc/">Détails →</a>
+    </div>
+    <div class="cards">
+      <div class="card wide">
+        <div class="card-title">État actuel</div>
+        <div>
+          <span class="card-value" id="vmc-airflow">—</span><span class="card-unit">m³/h</span>
+        </div>
+        <div class="mode-badges">
+          <span class="mode-badge" id="badge-boost">Boost</span>
+          <span class="mode-badge" id="badge-bypass">Bypass</span>
+          <span class="mode-badge" id="badge-standby">Standby</span>
+        </div>
+      </div>
+      <div class="card vmc-temp">
+        <div class="card-title">Tint</div>
+        <span class="card-value" id="vmc-tint">—</span><span class="card-unit">°C</span>
+        <div class="card-age" id="vmc-tint-age"></div>
+      </div>
+      <div class="card vmc-temp">
+        <div class="card-title">Timp</div>
+        <span class="card-value" id="vmc-timp">—</span><span class="card-unit">°C</span>
+        <div class="card-age" id="vmc-timp-age"></div>
+      </div>
+    </div>
+  </section>
 
-  <div class="section-label" style="margin-top: 28px">Infrastructure</div>
-  <div class="apps">
-    <a class="app-card external-link" href="http://localhost:8001/" target="_blank" rel="noopener noreferrer" data-port="8001">
-      <div class="app-icon">🐝</div>
-      <div class="app-name">Zigbee2MQTT</div>
-      <div class="app-desc">Interface web — appairage, carte réseau et journaux.</div>
-    </a>
-    <a class="app-card external-link" href="http://localhost:3000/" target="_blank" rel="noopener noreferrer" data-port="3000">
-      <div class="app-icon">📊</div>
-      <div class="app-name">Grafana</div>
-      <div class="app-desc">Tableaux de bord — visualisation et commandes VMC.</div>
-    </a>
-  </div>
-  <script>
-    document.querySelectorAll('.external-link[data-port]').forEach(function (el) {
-      el.href = location.protocol + '//' + location.hostname + ':' + el.dataset.port + '/';
-    });
-  </script>
+  <section class="section">
+    <div class="section-head">
+      <div class="section-label">Maison</div>
+      <a class="section-link" href="/capteurs/#lora">Capteurs LoRa →</a>
+    </div>
+    <div class="cards">
+      <div class="card hero wide">
+        <div class="card-title">Température actuelle</div>
+        <span class="card-value" id="maison-actuelle">—</span><span class="card-unit">°C</span>
+        <div class="card-sub" id="maison-actuelle-label">—</div>
+        <div class="card-age" id="maison-actuelle-age"></div>
+      </div>
+      <div class="card ext">
+        <div class="card-title">Extérieur</div>
+        <span class="card-value" id="maison-ext">—</span><span class="card-unit">°C</span>
+        <div class="card-sub" id="maison-ext-label">SAAS LoRa</div>
+        <div class="card-age" id="maison-ext-age"></div>
+      </div>
+      <div class="card int">
+        <div class="card-title">Intérieur</div>
+        <span class="card-value" id="maison-int">—</span><span class="card-unit">°C</span>
+        <div class="card-sub" id="maison-int-label">Kitchen LoRa</div>
+        <div class="card-age" id="maison-int-age"></div>
+      </div>
+    </div>
+  </section>
 </main>
+
+<script>
+  function fmtTemp(v) {
+    return typeof v === 'number' ? v.toFixed(1) : '—';
+  }
+
+  function ageMinutes(iso) {
+    if (!iso) return null;
+    return Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  }
+
+  function ageLabel(iso) {
+    const mins = ageMinutes(iso);
+    if (mins === null) return '';
+    if (mins < 2) return 'à l\'instant';
+    if (mins < 60) return `il y a ${mins} min`;
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return m ? `il y a ${h} h ${m} min` : `il y a ${h} h`;
+  }
+
+  function setAge(id, iso, staleMins) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const label = ageLabel(iso);
+    el.textContent = label;
+    const mins = ageMinutes(iso);
+    el.classList.toggle('stale', mins !== null && staleMins !== null && mins > staleMins);
+  }
+
+  function setModeBadge(id, active, onClass) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const base = id.replace('badge-', '');
+    const label = base.charAt(0).toUpperCase() + base.slice(1);
+    el.textContent = active ? label + ' ON' : label + ' OFF';
+    el.className = 'mode-badge' + (active ? ' on' + (onClass ? ' ' + onClass : '') : '');
+  }
+
+  function renderReading(prefix, reading, staleMins) {
+    const valueEl = document.getElementById(prefix);
+    const labelEl = document.getElementById(prefix + '-label');
+    const ageEl = document.getElementById(prefix + '-age');
+    if (!reading) {
+      if (valueEl) valueEl.textContent = '—';
+      if (labelEl && prefix !== 'maison-actuelle') labelEl.textContent = '—';
+      if (ageEl) ageEl.textContent = '';
+      return;
+    }
+    if (valueEl) valueEl.textContent = fmtTemp(reading.value);
+    if (labelEl && reading.label) labelEl.textContent = reading.label;
+    if (ageEl) setAge(prefix + '-age', reading.date, staleMins);
+  }
+
+  async function refresh() {
+    const banner = document.getElementById('error-banner');
+    try {
+      const res = await fetch('/home/summary');
+      if (!res.ok) throw new Error(res.status);
+      const data = await res.json();
+      banner.style.display = 'none';
+
+      const vmc = data.vmc || {};
+      const airflow = vmc.airflow?.value;
+      document.getElementById('vmc-airflow').textContent =
+        typeof airflow === 'number' ? Math.round(airflow) : '—';
+
+      const modes = vmc.modes || {};
+      setModeBadge('badge-boost', !!modes.boost?.active, 'boost');
+      setModeBadge('badge-bypass', !!modes.bypass?.active, '');
+      setModeBadge('badge-standby', !!modes.standby?.active, 'standby');
+
+      document.getElementById('vmc-tint').textContent = fmtTemp(vmc.tint?.value);
+      document.getElementById('vmc-timp').textContent = fmtTemp(vmc.timp?.value);
+      setAge('vmc-tint-age', vmc.tint?.date, 5);
+      setAge('vmc-timp-age', vmc.timp?.date, 5);
+
+      const maison = data.maison || {};
+      renderReading('maison-actuelle', maison.actuelle, 30);
+      renderReading('maison-ext', maison.exterieur, 30);
+      renderReading('maison-int', maison.interieur, 30);
+      if (maison.exterieur?.label) {
+        document.getElementById('maison-ext-label').textContent = maison.exterieur.label;
+      }
+      if (maison.interieur?.label) {
+        document.getElementById('maison-int-label').textContent = maison.interieur.label;
+      }
+
+      document.getElementById('last-update').textContent =
+        'Mis à jour : ' + new Date().toLocaleTimeString();
+    } catch {
+      banner.style.display = 'block';
+      document.getElementById('last-update').textContent = 'Erreur de connexion';
+    }
+  }
+
+  refresh();
+  setInterval(refresh, 30000);
+</script>
 
 </body>
 </html>

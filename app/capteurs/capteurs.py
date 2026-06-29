@@ -25,7 +25,7 @@ DASHBOARD_PATH = Path(__file__).parent / "dashboard.html"
 
 
 def _dashboard_html() -> str:
-    return inject_app_nav(DASHBOARD_PATH.read_text(), "Capteurs")
+    return inject_app_nav(DASHBOARD_PATH.read_text(), "Capteurs", active="capteurs")
 
 router = APIRouter()
 

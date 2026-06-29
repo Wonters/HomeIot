@@ -104,3 +104,4 @@ Le **mode pont / AP** sur le WS8100 (tout le monde en `192.168.1.*`) n'est **pas
 
 - ELFIN EW11 (Modbus VMC) : `192.168.3.11:8899` — voir [README](../../README.md)
 - VMC / free cooling : [app/vmc/docs/freecooling.md](../../app/vmc/docs/freecooling.md)
+- VMC / contrôles Modbus (boost, bypass) : [app/vmc/docs/controles-modbus.md](../../app/vmc/docs/controles-modbus.md)

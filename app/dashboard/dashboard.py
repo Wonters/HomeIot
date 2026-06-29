@@ -14,6 +14,7 @@ from vmc.domeo import connect_mongo as connect_vmc_mongo
 DASHBOARD_HTML = inject_app_nav(
     (Path(__file__).parent / "dashboard.html").read_text(),
     "Température extérieur",
+    active="dashboard",
 )
 
 router = APIRouter()

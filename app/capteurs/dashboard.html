@@ -534,6 +534,10 @@
     const hash = getActiveHash();
     document.getElementById('section-zigbee').style.display = !hash || hash === 'zigbee' ? '' : 'none';
     document.getElementById('section-lora').style.display = !hash || hash === 'lora' ? '' : 'none';
+    const activeHash = hash || 'zigbee';
+    document.querySelectorAll('.hiot-nav-dropdown a[href*="#zigbee"], .hiot-nav-dropdown a[href*="#lora"]').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href').endsWith('#' + activeHash));
+    });
   }
 
   function renderDeviceCard(d) {

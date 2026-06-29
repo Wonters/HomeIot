@@ -112,6 +112,17 @@
       border-color: var(--border);
       background: rgba(108, 112, 128, .08);
     }
+    .mode-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+    .boost-badge.on {
+      color: #fade2a;
+      border-color: #fade2a;
+      background: rgba(250, 222, 42, .12);
+    }
 
     /* Commands */
     .cmd-btn {
@@ -270,7 +281,10 @@
   <div class="card gauge-wrap">
     <div class="card-title-row">
       <div class="card-title">Débit actuel</div>
-      <span id="bypass-state-badge" class="bypass-badge off">Bypass OFF</span>
+      <div class="mode-badges">
+        <span id="boost-state-badge" class="bypass-badge off">Boost OFF</span>
+        <span id="bypass-state-badge" class="bypass-badge off">Bypass OFF</span>
+      </div>
     </div>
     <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg">
       <path d="M10,65 A50,50 0 0,1 110,65" fill="none" stroke="#2d3038" stroke-width="10" stroke-linecap="round"/>
@@ -285,6 +299,7 @@
   <div class="card">
     <div class="card-title">Type de contrôle</div>
     <div class="card-value" id="v-control" style="font-size:1rem; margin-top:10px; word-break:break-word;">—</div>
+    <p class="config-hint">Indicateur Modbus interne. L'état boost est déduit du débit actuel (badge Boost).</p>
   </div>
   <div class="card">
     <div class="card-title">Déphasage débits</div>
@@ -340,6 +355,7 @@
   </div>
   <div class="card">
     <div class="card-title">Bypass</div>
+    <p class="config-hint">État = clapet physique. En mode SWITCH (après boost), la 1ʳᵉ activation réactive le bypass auto.</p>
     <button class="cmd-btn" id="btn-bypass" onclick="cmd('/vmc/change/bypass', this, 'fb-bypass')">BYPASS</button>
     <div class="fb" id="fb-bypass"></div>
   </div>
@@ -600,12 +616,32 @@
     }
   }
 
+  function setModeBadge(id, on, onLabel, offLabel, onClass) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = on ? onLabel : offLabel;
+    el.className = 'bypass-badge ' + (on ? onClass : 'off');
+  }
+
+  function applyModeButtons(modes) {
+    if (!modes) return;
+    setCmdBtn('btn-standby', !!modes.standby?.active);
+    setCmdBtn('btn-bypass', !!modes.bypass?.active);
+    setCmdBtn('btn-boost', !!modes.boost?.active);
+    setModeBadge('bypass-state-badge', !!modes.bypass?.active, 'Bypass ON', 'Bypass OFF', 'on');
+    setModeBadge('boost-state-badge', !!modes.boost?.active, 'Boost ON', 'Boost OFF', 'on boost-badge');
+  }
+
   /* ── Metrics refresh ── */
   async function refresh() {
     try {
-      const r = await fetch('/vmc/metrics/latest');
-      if (!r.ok) throw new Error(r.status);
-      const d = await r.json();
+      const [metricsRes, statusRes] = await Promise.all([
+        fetch('/vmc/metrics/latest'),
+        fetch('/vmc/status'),
+      ]);
+      if (!metricsRes.ok) throw new Error(metricsRes.status);
+      const d = await metricsRes.json();
+      const status = statusRes.ok ? await statusRes.json() : null;
 
       setText('v-timp', fmtTemp(d['TEMPERATURE Timp']?.value));
       setText('v-text', fmtTemp(d['TEMPERATURE Text']?.value));
@@ -616,10 +652,7 @@
       setText('gauge-val', af ?? '—');
       updateGauge(af, 0, 210);
 
-      const bypassOn = d['STATE OF BYPASS']?.value === 'ACTIVED';
-      const bypassBadge = document.getElementById('bypass-state-badge');
-      bypassBadge.textContent = bypassOn ? 'Bypass ON' : 'Bypass OFF';
-      bypassBadge.className = 'bypass-badge ' + (bypassOn ? 'on' : 'off');
+      applyModeButtons(status?.modes);
 
       setText('v-control',   d['TYPE OF CONTROL']?.value  ?? '—');
       setText('v-dephasage', d['UNBALANCE AIRFLOW SELECTION']?.value ?? '—');
@@ -632,12 +665,6 @@
       setText('v-motor-extract', fmtRpm(d['EXTRACT MOTOR SPEED']?.value));
       setText('v-motor-input', fmtRpm(d['INPUT MOTOR SPEED']?.value));
 
-      const stReg = d['ACTIVATION MODE STANBY/ABSENCE']?.register;
-      setCmdBtn('btn-standby', stReg === 1 || stReg === true);
-
-      const byVal = d['MANUAL BYPASS']?.value;
-      setCmdBtn('btn-bypass', byVal === 'ACTIVED');
-
       const autoVal = d['BYPASS AUTO CONTROL']?.value;
       setCmdBtn('btn-bypass-auto', autoVal === 'ACTIVED');
 
@@ -645,9 +672,6 @@
       const tintMini = d['BYPASS AUTO: Tint MINI']?.value;
       if (textMini != null) document.getElementById('cfg-text-mini').value = textMini;
       if (tintMini != null) document.getElementById('cfg-tint-mini').value = tintMini;
-
-      const ctReg = d['TYPE OF CONTROL']?.register;
-      setCmdBtn('btn-boost', ctReg === 5);
 
       // Current settings
       const curAf  = d['LOW AIRFLOW SETTING']?.value;
@@ -733,12 +757,18 @@
     setTimeout(() => { el.textContent = ''; el.className = 'fb'; }, 3000);
   }
 
+  async function refreshAfterCmd() {
+    await refresh();
+    setTimeout(refresh, 2000);
+    setTimeout(refresh, 5000);
+  }
+
   async function cmd(url, btn, fbId) {
     btn.disabled = true;
     try {
       const r = await fetch(url);
       feedback(fbId, r.ok);
-      if (r.ok) setTimeout(refresh, 1200);
+      if (r.ok) await refreshAfterCmd();
     } catch { feedback(fbId, false); }
     finally { btn.disabled = false; }
   }
@@ -749,7 +779,7 @@
     try {
       const r = await fetch(`${url}?value=${val}`);
       feedback(fbId, r.ok);
-      if (r.ok) setTimeout(refresh, 1200);
+      if (r.ok) await refreshAfterCmd();
     } catch { feedback(fbId, false); }
     finally { btn.disabled = false; }
   }
@@ -771,7 +801,7 @@
         : '/vmc/config/bypass_auto_tint_mini';
       const r = await fetch(`${endpoint}?value=${value}`);
       feedback(fbId, r.ok);
-      if (r.ok) setTimeout(refresh, 1200);
+      if (r.ok) await refreshAfterCmd();
     } catch {
       feedback(fbId, false);
     } finally {

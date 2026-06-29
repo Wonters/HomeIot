@@ -9,12 +9,13 @@ from pymongo.collection import ObjectId
 
 from nav import inject_app_nav
 from supervisor import is_running as supervisor_running
-from .domeo import connect_mongo, connect_modbus, switch_coil, request_domeo
+from .domeo import connect_mongo, connect_modbus, switch_coil, request_domeo, toggle_boost, toggle_manual_bypass
 from .settings import get_vmc_config
 
 DASHBOARD_HTML = inject_app_nav(
     (Path(__file__).parent / "dashboard.html").read_text(),
     "VMC",
+    active="vmc",
 )
 
 router = APIRouter()
@@ -117,26 +118,19 @@ def change_standby():
 @router.get("/change/bypass")
 @request_domeo
 def change_bypass():
-    switch_coil(coil_address=9)
+    with connect_modbus() as client:
+        toggle_manual_bypass(client)
 
 
 @router.get("/change/boost")
 @request_domeo
 def change_boost():
     """
-    Activate or deactivate boost.
-    Doesn't work reading AIRFLOW SET holding register, value stay at 0.
-    Use TYPE OF CONTROL to get boost state:
-    4 = PROPOSIONAL 0 - 10V => BOOST OFF
-    5 = SWITCH ON/OFF => BOOST ON
+    Active/désactive le boost via AIRFLOW SET (holding reg 15).
+    État déduit du débit actuel vs réglages bas/boost (pas de registre d'état fiable).
     """
     with connect_modbus() as client:
-        value = int(client.read_input_registers(address=10).registers[0])
-        print(value)
-        if value == 4:
-            client.write_register(address=15, value=1)
-        else:
-            client.write_register(address=15, value=0)
+        toggle_boost(client)
 
 
 @router.get("/change/airflow")

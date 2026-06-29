@@ -147,6 +147,7 @@ Bypass auto envisagé uniquement si l’intérieur dépasse ce seuil (défaut 24
 ## Configuration dans HomeIot
 
 - **Dashboard VMC** (`/vmc/`) : cartes Tout, Timp, Text, Tint ; badge **STATE OF BYPASS** ; section bypass auto (Text MINI, Tint MINI)
+- **Boost, standby, registres Modbus** : [controles-modbus.md](controles-modbus.md)
 - **API** :
   - `GET /vmc/change/bypass_auto` — bascule BYPASS AUTO CONTROL
   - `GET /vmc/config/bypass_auto_text_mini?value=…`
