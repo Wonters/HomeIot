@@ -171,7 +171,7 @@ def get_latest_metrics():
             }},
         ]
         result = {}
-        for doc in client.capteurs.metrics.aggregate(pipeline):
+        for doc in client.capteurs.metrics.aggregate(pipeline, allowDiskUse=True):
             device = doc["_id"]["device"]
             field = doc["_id"]["field"]
             result.setdefault(device, {})[field] = {

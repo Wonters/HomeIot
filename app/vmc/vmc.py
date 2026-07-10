@@ -55,7 +55,7 @@ def get_latest_metrics():
                 "unit": doc.get("unit", ""),
                 "date": doc["date"],
             }
-            for doc in client.domeo210.metrics.aggregate(pipeline)
+            for doc in client.domeo210.metrics.aggregate(pipeline, allowDiskUse=True)
         }
         return Response(
             media_type="application/json",

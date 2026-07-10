@@ -64,6 +64,8 @@ services:
     image: koenkk/zigbee2mqtt:latest
     container_name: zigbee2mqtt
     restart: unless-stopped
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
     depends_on:
       - core-mosquitto
     ports:
