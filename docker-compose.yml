@@ -70,8 +70,6 @@ services:
       - core-mosquitto
     ports:
       - "0.0.0.0:8001:8080"
-    devices:
-      - /dev/ttyACM0:/dev/ttyACM0
     volumes:
       - ./config/zigbee2mqtt:/app/data
     environment:
